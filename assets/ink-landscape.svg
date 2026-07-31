@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice">
+<defs>
+  <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4e493c"/><stop offset=".48" stop-color="#282922"/><stop offset="1" stop-color="#171914"/></linearGradient>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" seed="8"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .18 0"/></filter>
+  <filter id="blur"><feGaussianBlur stdDeviation="2"/></filter>
+  <linearGradient id="fade" x1="0" x2="1"><stop stop-color="#080a08" stop-opacity=".95"/><stop offset=".5" stop-color="#151712" stop-opacity=".25"/><stop offset="1" stop-color="#090a08" stop-opacity=".95"/></linearGradient>
+</defs>
+<rect width="1536" height="1024" fill="url(#paper)"/>
+<rect width="1536" height="1024" filter="url(#grain)" opacity=".85"/>
+<g fill="#151813" opacity=".95">
+  <path d="M0 220L105 135l62 96 88-73 83 116 102-154 86 157 76-76 92 88 109-166 84 143 83-109 93 119 78-63 104 148 94-178 126 187v654H0z"/>
+  <path d="M0 438l95-79 76 53 86-118 106 126 93-74 77 93 102-112 88 104 104-88 86 91 104-134 98 122 104-88 102 97 125-89 130 128v553H0z" opacity=".8"/>
+</g>
+<g fill="#0a0d0a">
+  <path d="M0 635c80-44 119-158 206-211 53-32 101-24 142 0 51 30 83 21 116-39 38-69 98-108 160-83 73 29 91 105 132 146 46 45 99 33 146-4 72-57 123-55 179 15 43 54 89 62 133 12 60-67 117-78 183-22 62 53 91 126 159 151v424H0z"/>
+  <path d="M0 773c99-88 180-103 261-45 73 52 153 58 231 5 90-61 180-49 267 35 86 83 184 73 290-12 100-80 211-73 324 20 52 43 106 67 163 71v177H0z" opacity=".9"/>
+</g>
+<g stroke="#d9d5bd" stroke-width="7" opacity=".34" filter="url(#blur)">
+  <path d="M123 260c-13 70-8 126-35 190-15 35-29 71-34 128"/>
+  <path d="M1318 276c-20 66-36 123-51 184-12 46-28 89-47 131"/>
+  <path d="M1387 312c-9 62-26 115-34 176-4 33-11 66-23 101"/>
+  <path d="M257 330c-5 48-22 92-28 137"/>
+</g>
+<g fill="#050705" opacity=".95">
+  <path d="M0 872c33-107 68-160 105-160 34 0 53 50 68 160z"/><path d="M74 879c18-129 45-207 82-207 41 0 65 76 84 207z"/><path d="M1280 878c18-130 43-211 77-211 41 0 71 77 91 211z"/><path d="M1371 886c15-151 40-240 77-240 39 0 65 87 88 240z"/>
+</g>
+<rect width="1536" height="1024" fill="url(#fade)"/>
+</svg>
