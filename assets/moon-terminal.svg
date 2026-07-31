@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 620" role="img" aria-labelledby="title desc">
+  <title id="title">Moon terminal</title>
+  <desc id="desc">An occult lunar diagram rendered like an old green computer terminal.</desc>
+  <rect width="420" height="620" fill="#07100a"/>
+  <g fill="none" stroke="#d8ffb7" stroke-width="2" opacity=".9">
+    <circle cx="210" cy="215" r="122"/>
+    <circle cx="210" cy="215" r="93" stroke-dasharray="6 8"/>
+    <circle cx="210" cy="215" r="58"/>
+    <path d="M210 72v286M67 215h286M109 114l202 202M311 114L109 316" opacity=".35"/>
+    <path d="M210 157a58 58 0 1 0 0 116c-22-24-22-92 0-116Z" fill="#d8ffb7" opacity=".22"/>
+    <path d="M95 390h230M80 414h260M105 438h210" stroke-dasharray="3 6"/>
+    <path d="M54 525h312v42H54z"/>
+  </g>
+  <g fill="#eaff45" font-family="monospace" font-size="13">
+    <text x="22" y="28">LUNAR DESIRE ENGINE / ONLINE</text>
+    <text x="22" y="52">PHASE: UNRELIABLE</text>
+    <text x="72" y="472">WEALTH IS A PHASE OF THE MOON</text>
+    <text x="92" y="498">OBSERVE // DESIRE // REPEAT</text>
+    <text x="74" y="551">NEXT JACKPOT WINDOW: UNKNOWN</text>
+  </g>
+  <g fill="#d8ffb7">
+    <circle cx="210" cy="72" r="4"/><circle cx="353" cy="215" r="4"/><circle cx="210" cy="358" r="4"/><circle cx="67" cy="215" r="4"/>
+  </g>
+</svg>
