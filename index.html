@@ -1,81 +1,124 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Soft Core World War — Department of Mental Infrastructure.">
-  <title>SOFT CORE WORLD WAR</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Soft Core World War — Department of Mental Infrastructure">
+<title>SOFT CORE WORLD WAR</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:#080806;color:#fff;font-family:"Courier New",monospace}
+  body{overflow-x:auto}
+  .stage{position:relative;width:100vw;min-width:960px;aspect-ratio:3/2;margin:0 auto;background:#080806}
+  .site-image{display:block;width:100%;height:100%;object-fit:fill;user-select:none;-webkit-user-drag:none}
+  .portal{position:absolute;border:0;background:transparent;padding:0;cursor:pointer;border-radius:50%;transition:filter .18s ease}
+  .portal:hover{filter:brightness(1.35) drop-shadow(0 0 12px currentColor)}
+  .portal:focus-visible{outline:3px dashed #fff;outline-offset:5px}
+  .portal-lunar{left:29.4%;top:45.1%;width:13.3%;height:15.9%;color:#f0f}
+  .portal-solar{left:56.4%;top:45.1%;width:13.9%;height:15.9%;color:#ff0}
+  .portal::after{content:"";position:absolute;inset:0;border-radius:50%}
+  .portal.spin::after{animation:portalPulse .7s ease}
+  @keyframes portalPulse{0%{transform:rotate(0) scale(1);box-shadow:0 0 0 transparent}50%{transform:rotate(180deg) scale(1.1);box-shadow:0 0 30px currentColor}100%{transform:rotate(360deg) scale(1);box-shadow:0 0 0 transparent}}
+  .player{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:20;width:190px;border:2px solid #00eaff;background:rgba(0,0,0,.88);box-shadow:0 0 16px rgba(0,234,255,.45);padding:10px;color:#00eaff;font-size:12px;text-shadow:0 0 7px currentColor}
+  .player-title{color:#ff2cff;text-align:center;font-weight:bold;margin-bottom:8px}
+  .screen{border:1px solid #00eaff;background:#020705;padding:7px;margin-bottom:8px;line-height:1.35}
+  .track{color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .meter{height:8px;border:1px solid #ffea00;margin:7px 0;overflow:hidden}
+  .meter span{display:block;width:5%;height:100%;background:#ffea00;transition:width .1s linear}
+  .controls{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .controls button{font:inherit;color:#ffea00;background:#111;border:1px solid #ffea00;padding:7px 3px;cursor:pointer}
+  .controls button:hover{background:#ffea00;color:#000}
+  .volume{width:100%;accent-color:#ff2cff;margin-top:8px}
+  .hint{margin-top:6px;color:#7fff6a;font-size:10px;text-align:center}
+  @media(max-width:900px){.player{position:absolute;right:12px;top:690px;transform:none;width:170px}}
+</style>
 </head>
 <body>
-  <div class="waterfall" aria-hidden="true"></div>
-  <div class="scanlines" aria-hidden="true"></div>
-
-  <main class="page-shell">
-    <header class="masthead">
-      <p class="department">WELCOME TO THE DEPARTMENT OF MENTAL INFRASTRUCTURE, HELPING!</p>
-      <h1>SOFT CORE<br>WORLD WAR</h1>
-      <div class="status-line">
-        <span>TRANSMISSION 001</span>
-        <span id="clock">00:00:00</span>
-        <span>LOW CORTISOL NETWORK</span>
-      </div>
-    </header>
-
-    <section class="dispatch" aria-labelledby="dispatch-title">
-      <div class="dispatch-copy">
-        <p class="eyebrow">FIELD NOTE / JULY 2026</p>
-        <h2 id="dispatch-title">THE WAR IS SOFT.<br>THE CONSEQUENCES ARE PHYSICAL.</h2>
-        <p>
-          The old institutions still glow, but mostly as user interfaces. Wealth moves through memes,
-          desire moves through feeds, and everyone is waiting for a jackpot large enough to become a person.
-        </p>
-        <p>
-          This is an archive for luxury inflation, collective hallucination, internet folklore, machine taste,
-          and the quiet spiritual violence of having twenty tabs open forever.
-        </p>
-        <button class="frequency-button" id="frequencyButton" type="button">CHANGE FREQUENCY</button>
-      </div>
-
-      <a class="artifact artifact-one" href="#jackpot-age" aria-label="Open Jackpot Age transmission">
-        <img src="assets/moon-terminal.svg" alt="A lunar terminal diagram">
-        <span>01 / JACKPOT AGE</span>
-      </a>
-
-      <a class="artifact artifact-two" href="#taste-check" aria-label="Open Taste Check transmission">
-        <img src="assets/low-cortisol-dance.svg" alt="A low-resolution dancing figure">
-        <span>02 / TASTE CHECK</span>
-      </a>
-    </section>
-
-    <section class="transmissions">
-      <article id="jackpot-age">
-        <p class="eyebrow">TRANSMISSION 01</p>
-        <h3>THE JACKPOT AGE</h3>
-        <p>
-          When ordinary participation stops producing dignity, rational people begin acting irrationally.
-          They do not want ten percent more life. They want escape velocity. The median collapses while the
-          dream survives as a screenshot of somebody else's winning trade.
-        </p>
-      </article>
-
-      <article id="taste-check">
-        <p class="eyebrow">TRANSMISSION 02</p>
-        <h3>PERFORM THE TASTE CHECK</h3>
-        <p>
-          Markets pretend to be mathematics, but the decisive variable is often aesthetic coordination:
-          what the crowd is ready to desire before it has language for the desire. The taste check is not
-          prophecy. It is listening for the frequency before the speakers turn on.
-        </p>
-      </article>
-    </section>
-
-    <footer>
-      <p>© <span id="year"></span> SOFT CORE WORLD WAR</p>
-      <p>NO NORMAL FUTURES // ONLY INTERFACES</p>
-    </footer>
-  </main>
-
-  <script src="script.js"></script>
+<main class="stage" aria-label="Soft Core World War">
+  <img class="site-image" src="data:image/webp;base64,UklGRqraBQBXRUJQVlA4IJ7aBQDQmgKdASoABgQBPpFInUmnIqKhIqoYLAscBoJZq3Rv2h2gUoJf+P///////7...TRUNCATED..." alt="Soft Core World War Department of Mental Infrastructure portal page">
+  <button class="portal portal-lunar" type="button" aria-label="Rotate the lunar portal"></button>
+  <button class="portal portal-solar" type="button" aria-label="Rotate the solar portal"></button>
+</main>
+<aside class="player" aria-label="Music player">
+  <div class="player-title">SCWW RADIO</div>
+  <div class="screen">
+    <div>NOW PLAYING:</div>
+    <div class="track">MENTAL INFRASTRUCTURE DRONE</div>
+    <div class="meter"><span id="meterBar"></span></div>
+    <div id="playerStatus">SIGNAL: DORMANT</div>
+  </div>
+  <div class="controls">
+    <button id="playButton" type="button">▶ PLAY</button>
+    <button id="stopButton" type="button">■ STOP</button>
+  </div>
+  <input class="volume" id="volume" type="range" min="0" max="0.3" step="0.01" value="0.08" aria-label="Volume">
+  <div class="hint">GENERATIVE PORTAL AUDIO</div>
+</aside>
+<script>
+  document.querySelectorAll('.portal').forEach((portal) => {
+    portal.addEventListener('click', () => {
+      portal.classList.remove('spin');
+      void portal.offsetWidth;
+      portal.classList.add('spin');
+      setTimeout(() => portal.classList.remove('spin'), 720);
+    });
+  });
+  let audioContext;
+  let master;
+  let nodes = [];
+  let meterTimer;
+  const playButton = document.getElementById('playButton');
+  const stopButton = document.getElementById('stopButton');
+  const status = document.getElementById('playerStatus');
+  const meter = document.getElementById('meterBar');
+  const volume = document.getElementById('volume');
+  function startRadio() {
+    if (audioContext) return;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    audioContext = new AudioCtx();
+    master = audioContext.createGain();
+    master.gain.value = Number(volume.value);
+    master.connect(audioContext.destination);
+    [55, 82.41, 110].forEach((frequency, index) => {
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.type = index === 1 ? 'triangle' : 'sine';
+      oscillator.frequency.value = frequency;
+      oscillator.detune.value = index * 5 - 4;
+      gain.gain.value = index === 0 ? 0.42 : 0.18;
+      oscillator.connect(gain).connect(master);
+      oscillator.start();
+      nodes.push(oscillator, gain);
+    });
+    const lfo = audioContext.createOscillator();
+    const lfoGain = audioContext.createGain();
+    lfo.frequency.value = 0.09;
+    lfoGain.gain.value = 0.025;
+    lfo.connect(lfoGain).connect(master.gain);
+    lfo.start();
+    nodes.push(lfo, lfoGain);
+    status.textContent = 'SIGNAL: RECEIVING';
+    playButton.textContent = '◉ LIVE';
+    meterTimer = setInterval(() => {
+      meter.style.width = (15 + Math.random() * 80) + '%';
+    }, 120);
+  }
+  function stopRadio() {
+    if (!audioContext) return;
+    nodes.forEach(node => { try { if (node.stop) node.stop(); } catch (e) {} });
+    audioContext.close();
+    audioContext = null;
+    nodes = [];
+    clearInterval(meterTimer);
+    meter.style.width = '5%';
+    status.textContent = 'SIGNAL: DORMANT';
+    playButton.textContent = '▶ PLAY';
+  }
+  playButton.addEventListener('click', startRadio);
+  stopButton.addEventListener('click', stopRadio);
+  volume.addEventListener('input', () => {
+    if (master) master.gain.value = Number(volume.value);
+  });
+</script>
 </body>
 </html>
