@@ -44,7 +44,7 @@
   <script>
     (() => {
       'use strict';
-      const EXPECTED = '49d5f7d5203bae2cdbf8264406f1fce12dd70bb1a18969f3524a7bccd4497655';
+      const EXPECTED_NAME = 'james salamander';
       const ACCESS_KEY = 'scwwGalleryAccessV2';
       const ACCESS_VALUE = 'solar-session-7f31d8b4';
       const COOKIE_NAME = 'scwwSolarArchiveAccess';
@@ -63,8 +63,7 @@
         const secure = location.protocol === 'https:' ? '; Secure' : '';
         document.cookie = `${COOKIE_NAME}=${ACCESS_VALUE}; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax${secure}`;
       };
-      const toHex = (buffer) => [...new Uint8Array(buffer)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
-      async function digest(value) { return toHex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))); }
+      const normalizeName = (value) => value.trim().replace(/\s+/g, ' ').toLowerCase();
       function lockRemaining() { return Math.max(0, Number(sessionStorage.getItem(LOCK_KEY) || 0) - Date.now()); }
       function renderLock() {
         clearInterval(ticker);
@@ -94,34 +93,53 @@
       });
 
       if (hasAccessCookie() || sessionStorage.getItem(ACCESS_KEY) === ACCESS_VALUE) {
-        location.replace('gallery.html');
+        location.replace('/gallery.html');
         return;
       }
       if (lockRemaining() > 0) renderLock();
 
-      form.addEventListener('submit', async (event) => {
+      form.addEventListener('submit', (event) => {
         event.preventDefault();
         if (lockRemaining() > 0) return;
+
         submitButton.disabled = true;
         status.textContent = 'VERIFYING SIGNAL...';
-        const entered = await digest(input.value);
+        const entered = normalizeName(input.value);
         input.value = '';
-        if (entered === EXPECTED) {
+
+        if (entered === EXPECTED_NAME) {
           saveAccessCookie();
-          sessionStorage.setItem(ACCESS_KEY, ACCESS_VALUE);
-          sessionStorage.removeItem(ATTEMPT_KEY);
-          sessionStorage.removeItem(LOCK_KEY);
-          location.replace('gallery.html');
+          try {
+            sessionStorage.setItem(ACCESS_KEY, ACCESS_VALUE);
+            sessionStorage.removeItem(ATTEMPT_KEY);
+            sessionStorage.removeItem(LOCK_KEY);
+          } catch {
+            // The root-scoped cookie still grants access when session storage is blocked.
+          }
+          location.replace('/gallery.html');
           return;
         }
-        const attempts = Number(sessionStorage.getItem(ATTEMPT_KEY) || 0) + 1;
-        sessionStorage.setItem(ATTEMPT_KEY, String(attempts));
+
+        let attempts = 1;
+        try {
+          attempts = Number(sessionStorage.getItem(ATTEMPT_KEY) || 0) + 1;
+          sessionStorage.setItem(ATTEMPT_KEY, String(attempts));
+        } catch {
+          // Continue without attempt persistence in restricted browsers.
+        }
+
         if (attempts >= 5) {
-          sessionStorage.setItem(ATTEMPT_KEY, '0');
-          sessionStorage.setItem(LOCK_KEY, String(Date.now() + 30000));
-          renderLock();
+          try {
+            sessionStorage.setItem(ATTEMPT_KEY, '0');
+            sessionStorage.setItem(LOCK_KEY, String(Date.now() + 30000));
+            renderLock();
+          } catch {
+            submitButton.disabled = false;
+            status.textContent = 'ACCESS DENIED';
+          }
           return;
         }
+
         submitButton.disabled = false;
         status.textContent = `ACCESS DENIED — ${5 - attempts} ATTEMPTS REMAIN`;
         input.focus();
