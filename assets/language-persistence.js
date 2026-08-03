@@ -1,18 +1,29 @@
-(()=>{
+(() => {
   'use strict';
-  const KEY='scwwLanguageV1';
-  const button=document.getElementById('languageSwitch');
-  if(!button||typeof renderLanguage!=='function')return;
 
-  try{
-    const saved=localStorage.getItem(KEY);
-    if(saved==='en'||saved==='fr'){
-      language=saved;
+  const STORAGE_KEY = 'scwwLanguageV1';
+  const languageButton = document.getElementById('languageSwitch');
+
+  if (!languageButton || typeof renderLanguage !== 'function') {
+    return;
+  }
+
+  try {
+    const savedLanguage = localStorage.getItem(STORAGE_KEY);
+
+    if (savedLanguage === 'en' || savedLanguage === 'fr') {
+      language = savedLanguage;
       renderLanguage();
     }
-  }catch{}
+  } catch {
+    // Local storage may be unavailable in privacy-restricted browsers.
+  }
 
-  button.addEventListener('click',()=>{
-    try{localStorage.setItem(KEY,language)}catch{}
+  languageButton.addEventListener('click', () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, language);
+    } catch {
+      // The language switch still works for the current page without storage.
+    }
   });
 })();
