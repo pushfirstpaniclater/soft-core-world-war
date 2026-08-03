@@ -43,109 +43,53 @@
 
     const style = document.createElement('style');
     style.textContent = `
-      .scww-physical-button {
-        position: relative !important;
-        z-index: 2 !important;
-        display: inline-grid !important;
-        place-items: center !important;
-        min-width: 230px !important;
-        min-height: 82px !important;
-        margin: 24px 12px 34px !important;
-        padding: 18px 30px !important;
-        border: 11px solid #232323 !important;
-        border-radius: 20px !important;
-        color: #fff8dc !important;
+      .button-92 {
+        --c: #fff;
+        display: inline-block;
+        margin: 18px 10px;
+        padding: 0.1em 0.3em;
+        border: none;
+        color: #0000;
         background:
-          radial-gradient(circle at 50% 25%, #ffc0b8 0 5%, #ff2f24 22%, #bd0505 58%, #5c0000 100%) !important;
-        box-shadow:
-          inset 0 6px 8px rgba(255, 255, 255, 0.72),
-          inset 0 -13px 15px rgba(45, 0, 0, 0.88),
-          0 9px 0 #080808,
-          0 14px 0 #4a4a4a,
-          0 20px 28px rgba(0, 0, 0, 0.92),
-          0 0 34px rgba(255, 0, 0, 0.72) !important;
-        font: 900 24px/1 "Arial Black", Impact, sans-serif !important;
-        letter-spacing: 0.08em !important;
-        text-decoration: none !important;
+          linear-gradient(90deg, #0000 33%, #fff5, #0000 67%)
+            var(--_p, 100%) / 300% no-repeat,
+          #004dff;
+        font: bold 2rem/1.25 "Lucida Console", Monaco, "Courier New", monospace;
+        text-decoration: none;
         text-shadow:
-          0 3px 0 #4c0000,
-          0 0 8px rgba(255, 255, 255, 0.72) !important;
-        cursor: pointer !important;
-        transform: translateY(0) !important;
-        transition:
-          transform 90ms ease,
-          box-shadow 90ms ease,
-          filter 120ms ease !important;
+          calc(var(--_i, -1) * 0.08em) -0.01em 0 var(--c),
+          calc(var(--_i, -1) * -0.08em) 0.01em 2px #0004;
+        cursor: pointer;
+        transform: perspective(500px) rotateY(calc(20deg * var(--_i, -1)));
+        outline-offset: 0.1em;
+        transition: 0.3s;
       }
 
-      .scww-physical-button::before {
-        content: '';
-        position: absolute;
-        inset: -20px;
-        z-index: -1;
-        border: 3px solid #8a8a8a;
-        border-radius: 28px;
-        background:
-          linear-gradient(145deg, #8d8d8d 0%, #3b3b3b 24%, #0a0a0a 58%, #5a5a5a 100%);
-        box-shadow:
-          inset 0 2px 1px rgba(255, 255, 255, 0.45),
-          inset 0 -3px 3px rgba(0, 0, 0, 0.8),
-          0 8px 18px rgba(0, 0, 0, 0.9);
+      .button-92:hover,
+      .button-92:focus-visible {
+        --_p: 0%;
+        --_i: 1;
       }
 
-      .scww-physical-button::after {
-        content: 'PRESS TO ENTER';
-        position: absolute;
-        left: 50%;
-        bottom: -36px;
-        transform: translateX(-50%);
-        width: max-content;
-        color: #ffe900;
-        font: 700 11px/1 "Courier New", monospace;
-        letter-spacing: 0.18em;
-        text-shadow: 1px 1px #000;
-      }
-
-      .scww-physical-button:hover {
-        color: #fff !important;
-        filter: brightness(1.25) saturate(1.18) !important;
-        box-shadow:
-          inset 0 6px 8px rgba(255, 255, 255, 0.82),
-          inset 0 -13px 15px rgba(45, 0, 0, 0.8),
-          0 9px 0 #080808,
-          0 14px 0 #4a4a4a,
-          0 20px 34px rgba(0, 0, 0, 0.95),
-          0 0 48px rgba(255, 35, 35, 1) !important;
-      }
-
-      .scww-physical-button:active {
-        transform: translateY(9px) !important;
-        box-shadow:
-          inset 0 4px 12px rgba(55, 0, 0, 0.95),
-          inset 0 -4px 7px rgba(255, 255, 255, 0.18),
-          0 1px 0 #080808,
-          0 5px 0 #4a4a4a,
-          0 9px 14px rgba(0, 0, 0, 0.9) !important;
-      }
-
-      .scww-physical-button:focus-visible {
-        outline: 4px solid #26ecff !important;
-        outline-offset: 10px !important;
+      .button-92:active {
+        color: var(--c);
+        text-shadow: none;
+        box-shadow: inset 0 0 0 999px #0005;
+        transition: 0s;
       }
 
       @media (max-width: 620px) {
-        .scww-physical-button {
-          min-width: 198px !important;
-          min-height: 72px !important;
-          font-size: 20px !important;
+        .button-92 {
+          font-size: 1.45rem;
+          margin: 14px 6px;
         }
       }
     `;
     document.head.append(style);
 
     portalLinks.forEach((link) => {
-      link.classList.add('scww-physical-button');
-      link.classList.remove('news-link');
+      link.classList.remove('news-link', 'scww-physical-button');
+      link.classList.add('button-92');
     });
   }
 
