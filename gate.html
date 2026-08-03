@@ -61,7 +61,7 @@
       const hasAccessCookie = () => document.cookie.split('; ').some((entry) => entry === `${COOKIE_NAME}=${ACCESS_VALUE}`);
       const saveAccessCookie = () => {
         const secure = location.protocol === 'https:' ? '; Secure' : '';
-        document.cookie = `${COOKIE_NAME}=${ACCESS_VALUE}; Max-Age=${COOKIE_MAX_AGE}; Path=/soft-core-world-war/; SameSite=Lax${secure}`;
+        document.cookie = `${COOKIE_NAME}=${ACCESS_VALUE}; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax${secure}`;
       };
       const toHex = (buffer) => [...new Uint8Array(buffer)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
       async function digest(value) { return toHex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))); }
