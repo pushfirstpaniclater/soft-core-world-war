@@ -41,10 +41,14 @@
       return;
     }
 
+    const sitePalette = ['#ff2929', '#ff46ff', '#ffe900', '#26ecff', '#54ff3d'];
+    const selectedColor = sitePalette[Math.floor(Math.random() * sitePalette.length)];
+
     const style = document.createElement('style');
     style.textContent = `
       .button-92 {
         --c: #fff;
+        --button-color: ${selectedColor};
         display: inline-block;
         margin: 18px 10px;
         padding: 0.1em 0.3em;
@@ -53,7 +57,7 @@
         background:
           linear-gradient(90deg, #0000 33%, #fff5, #0000 67%)
             var(--_p, 100%) / 300% no-repeat,
-          #004dff;
+          var(--button-color);
         font: bold 2rem/1.25 "Lucida Console", Monaco, "Courier New", monospace;
         text-decoration: none;
         text-shadow:
