@@ -44,67 +44,101 @@
     const style = document.createElement('style');
     style.textContent = `
       .scww-physical-button {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 152px;
-        min-height: 48px;
-        margin-top: 12px;
-        padding: 11px 18px 9px;
-        border: 3px solid #360000;
-        border-radius: 8px;
-        color: #fff8dc;
+        position: relative !important;
+        z-index: 2 !important;
+        display: inline-grid !important;
+        place-items: center !important;
+        min-width: 230px !important;
+        min-height: 82px !important;
+        margin: 24px 12px 34px !important;
+        padding: 18px 30px !important;
+        border: 11px solid #232323 !important;
+        border-radius: 20px !important;
+        color: #fff8dc !important;
         background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.34), transparent 22%),
-          radial-gradient(circle at 50% 28%, #ff5a4d 0 14%, #d41414 45%, #780000 100%);
+          radial-gradient(circle at 50% 25%, #ffc0b8 0 5%, #ff2f24 22%, #bd0505 58%, #5c0000 100%) !important;
         box-shadow:
-          inset 0 2px 2px rgba(255, 255, 255, 0.45),
-          inset 0 -7px 8px rgba(65, 0, 0, 0.7),
-          0 6px 0 #310000,
-          0 9px 13px rgba(0, 0, 0, 0.75),
-          0 0 18px rgba(255, 30, 20, 0.35);
-        font: 900 15px/1 "Lucida Console", Monaco, "Courier New", monospace;
-        letter-spacing: 0.04em;
-        text-decoration: none;
-        text-shadow: 1px 2px 0 #5c0000;
-        cursor: pointer;
-        transform: translateY(0);
+          inset 0 6px 8px rgba(255, 255, 255, 0.72),
+          inset 0 -13px 15px rgba(45, 0, 0, 0.88),
+          0 9px 0 #080808,
+          0 14px 0 #4a4a4a,
+          0 20px 28px rgba(0, 0, 0, 0.92),
+          0 0 34px rgba(255, 0, 0, 0.72) !important;
+        font: 900 24px/1 "Arial Black", Impact, sans-serif !important;
+        letter-spacing: 0.08em !important;
+        text-decoration: none !important;
+        text-shadow:
+          0 3px 0 #4c0000,
+          0 0 8px rgba(255, 255, 255, 0.72) !important;
+        cursor: pointer !important;
+        transform: translateY(0) !important;
         transition:
-          transform 80ms ease,
-          box-shadow 80ms ease,
-          filter 120ms ease;
+          transform 90ms ease,
+          box-shadow 90ms ease,
+          filter 120ms ease !important;
       }
 
       .scww-physical-button::before {
         content: '';
         position: absolute;
-        inset: -8px;
+        inset: -20px;
         z-index: -1;
-        border: 2px solid #111;
-        border-radius: 11px;
-        background: linear-gradient(#555, #151515);
-        box-shadow: inset 0 1px 0 #8d8d8d;
+        border: 3px solid #8a8a8a;
+        border-radius: 28px;
+        background:
+          linear-gradient(145deg, #8d8d8d 0%, #3b3b3b 24%, #0a0a0a 58%, #5a5a5a 100%);
+        box-shadow:
+          inset 0 2px 1px rgba(255, 255, 255, 0.45),
+          inset 0 -3px 3px rgba(0, 0, 0, 0.8),
+          0 8px 18px rgba(0, 0, 0, 0.9);
+      }
+
+      .scww-physical-button::after {
+        content: 'PRESS TO ENTER';
+        position: absolute;
+        left: 50%;
+        bottom: -36px;
+        transform: translateX(-50%);
+        width: max-content;
+        color: #ffe900;
+        font: 700 11px/1 "Courier New", monospace;
+        letter-spacing: 0.18em;
+        text-shadow: 1px 1px #000;
       }
 
       .scww-physical-button:hover {
-        color: #fff;
-        filter: brightness(1.12) saturate(1.12);
+        color: #fff !important;
+        filter: brightness(1.25) saturate(1.18) !important;
+        box-shadow:
+          inset 0 6px 8px rgba(255, 255, 255, 0.82),
+          inset 0 -13px 15px rgba(45, 0, 0, 0.8),
+          0 9px 0 #080808,
+          0 14px 0 #4a4a4a,
+          0 20px 34px rgba(0, 0, 0, 0.95),
+          0 0 48px rgba(255, 35, 35, 1) !important;
       }
 
       .scww-physical-button:active {
-        transform: translateY(5px);
+        transform: translateY(9px) !important;
         box-shadow:
-          inset 0 2px 2px rgba(255, 255, 255, 0.25),
-          inset 0 -3px 5px rgba(65, 0, 0, 0.7),
-          0 1px 0 #310000,
-          0 4px 7px rgba(0, 0, 0, 0.7),
-          0 0 10px rgba(255, 30, 20, 0.25);
+          inset 0 4px 12px rgba(55, 0, 0, 0.95),
+          inset 0 -4px 7px rgba(255, 255, 255, 0.18),
+          0 1px 0 #080808,
+          0 5px 0 #4a4a4a,
+          0 9px 14px rgba(0, 0, 0, 0.9) !important;
       }
 
       .scww-physical-button:focus-visible {
-        outline: 3px solid #ffe900;
-        outline-offset: 7px;
+        outline: 4px solid #26ecff !important;
+        outline-offset: 10px !important;
+      }
+
+      @media (max-width: 620px) {
+        .scww-physical-button {
+          min-width: 198px !important;
+          min-height: 72px !important;
+          font-size: 20px !important;
+        }
       }
     `;
     document.head.append(style);
