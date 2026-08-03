@@ -59,6 +59,53 @@
     }
   }
 
+  function installArchiveLink() {
+    const footer = document.getElementById('footerLinks');
+    const languageButton = document.getElementById('languageSwitch');
+
+    if (!footer) {
+      return;
+    }
+
+    const style = document.createElement('style');
+    style.textContent = `
+      #footerLinks .scww-archive-link {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      #footerLinks .scww-archive-link:hover,
+      #footerLinks .scww-archive-link:focus-visible {
+        color: #ffe900;
+        text-decoration: underline;
+        outline: none;
+      }
+    `;
+    document.head.append(style);
+
+    const render = () => {
+      if (footer.querySelector('.scww-archive-link')) {
+        return;
+      }
+
+      const html = footer.innerHTML;
+      const archivePattern = /\[\s*(ARCHIVES)\s*\]/i;
+
+      if (archivePattern.test(html)) {
+        footer.innerHTML = html.replace(
+          archivePattern,
+          '[ <a class="scww-archive-link" href="news-archive.html">$1</a> ]',
+        );
+      }
+    };
+
+    render();
+
+    if (languageButton) {
+      languageButton.addEventListener('click', () => setTimeout(render, 0));
+    }
+  }
+
   function installPortalButtons() {
     const portalLinks = [
       document.querySelector('a[href="news.html"]'),
@@ -254,6 +301,7 @@
 
   installLanguagePersistence();
   installSecretMagazineLabel();
+  installArchiveLink();
   installPortalButtons();
 
   if (!installRadioCollapse()) {
