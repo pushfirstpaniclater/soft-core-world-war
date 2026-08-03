@@ -31,6 +31,26 @@
     });
   }
 
+  function installSecretMagazineLabel() {
+    const label = document.getElementById('sunCycleLabel');
+    const languageButton = document.getElementById('languageSwitch');
+
+    if (!label) {
+      return;
+    }
+
+    const render = () => {
+      label.textContent = '↑ SECRET MAGAZINE';
+      label.setAttribute('aria-label', 'Secret magazine above');
+    };
+
+    render();
+
+    if (languageButton) {
+      languageButton.addEventListener('click', render);
+    }
+  }
+
   function installPortalButtons() {
     const portalLinks = [
       document.querySelector('a[href="news.html"]'),
@@ -41,8 +61,8 @@
       return;
     }
 
-    const sitePalette = ['#ff2929', '#ff46ff', '#ffe900', '#26ecff', '#54ff3d'];
-    const selectedColor = sitePalette[Math.floor(Math.random() * sitePalette.length)];
+    const palette = ['#ff2929', '#ff46ff', '#ffe900', '#26ecff', '#54ff3d'];
+    const selectedColor = palette[Math.floor(Math.random() * palette.length)];
 
     const style = document.createElement('style');
     style.textContent = `
@@ -224,6 +244,7 @@
   }
 
   installLanguagePersistence();
+  installSecretMagazineLabel();
   installPortalButtons();
 
   if (!installRadioCollapse()) {
