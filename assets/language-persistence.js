@@ -59,6 +59,23 @@
     }
   }
 
+  function installSecretMagazineLink() {
+    const portal = document.getElementById('sunPortal');
+
+    if (!portal || portal.tagName === 'A') {
+      return;
+    }
+
+    const link = document.createElement('a');
+    link.id = portal.id;
+    link.className = portal.className;
+    link.href = '/gate.html';
+    link.setAttribute('aria-label', 'Open the password-gated secret magazine');
+    link.innerHTML = portal.innerHTML;
+
+    portal.replaceWith(link);
+  }
+
   function installArchiveLink() {
     const footer = document.getElementById('footerLinks');
     const languageButton = document.getElementById('languageSwitch');
@@ -313,6 +330,7 @@
 
   installLanguagePersistence();
   installSecretMagazineLabel();
+  installSecretMagazineLink();
   installArchiveLink();
   installPortalButtons();
 
