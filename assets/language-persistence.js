@@ -72,6 +72,10 @@
       #footerLinks .scww-archive-link {
         color: inherit;
         text-decoration: none;
+        cursor: pointer;
+        position: relative;
+        z-index: 50;
+        pointer-events: auto;
       }
 
       #footerLinks .scww-archive-link:hover,
@@ -84,19 +88,27 @@
     document.head.append(style);
 
     const render = () => {
-      if (footer.querySelector('.scww-archive-link')) {
+      const label = footer.textContent || '';
+      const marker = 'ARCHIVES';
+      const index = label.toUpperCase().indexOf(marker);
+
+      if (index === -1) {
         return;
       }
 
-      const html = footer.innerHTML;
-      const archivePattern = /\[\s*(ARCHIVES)\s*\]/i;
+      const before = label.slice(0, index);
+      const after = label.slice(index + marker.length);
+      const link = document.createElement('a');
+      link.className = 'scww-archive-link';
+      link.href = 'news-archive.html';
+      link.textContent = label.slice(index, index + marker.length);
+      link.setAttribute('aria-label', 'Open news archives');
 
-      if (archivePattern.test(html)) {
-        footer.innerHTML = html.replace(
-          archivePattern,
-          '[ <a class="scww-archive-link" href="news-archive.html">$1</a> ]',
-        );
-      }
+      footer.replaceChildren(
+        document.createTextNode(before),
+        link,
+        document.createTextNode(after),
+      );
     };
 
     render();
