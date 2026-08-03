@@ -46,6 +46,14 @@
 
     render();
 
+    if (!document.querySelector('a[href="merch.html"]')) {
+      const merchLink = document.createElement('a');
+      merchLink.href = 'merch.html';
+      merchLink.textContent = 'MERCH!';
+      merchLink.className = 'news-link';
+      label.insertAdjacentElement('afterend', merchLink);
+    }
+
     if (languageButton) {
       languageButton.addEventListener('click', render);
     }
@@ -55,6 +63,7 @@
     const portalLinks = [
       document.querySelector('a[href="news.html"]'),
       document.querySelector('a[href="visual-signal.html"]'),
+      document.querySelector('a[href="merch.html"]'),
     ].filter(Boolean);
 
     if (!portalLinks.length) {
