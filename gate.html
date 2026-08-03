@@ -1,2 +1,286 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><title>SOLAR ACCESS</title><style>*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#050505;color:#ffe900;font-family:"Lucida Console",Monaco,"Courier New",monospace}body{display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,rgba(255,119,0,.24),transparent 32%),#050505}.gate{width:min(92vw,520px);border:2px solid #ffe900;background:rgba(0,0,0,.92);padding:28px;box-shadow:0 0 30px rgba(255,106,0,.55);text-align:center}.sun{width:120px;height:120px;margin:0 auto 20px;border-radius:50%;background:radial-gradient(circle,#fffbd0 0 2%,#ffe66d 8%,#ff9d00 35%,#d93400 68%,#3b0000 100%);box-shadow:0 0 20px #ffcf33,0 0 48px #ff4d00}.gate h1{margin:0 0 8px;color:#ff3b3b;font-size:28px}.gate p{color:#26ecff;line-height:1.5}.gate input{width:100%;padding:13px;background:#090909;border:1px solid #ff46ff;color:#fff;font:inherit;text-align:center;outline:none}.gate button{width:100%;margin-top:12px;padding:13px;background:#111;border:1px solid #ffe900;color:#ffe900;font:inherit;cursor:pointer}.gate button:hover:not(:disabled){background:#ffe900;color:#000}.gate button:disabled{opacity:.45;cursor:not-allowed}.status{min-height:22px;margin-top:12px;color:#ff46ff}.back{display:inline-block;margin-top:16px;color:#54ff3d;text-decoration:none}</style></head><body><main class="gate"><div class="sun"></div><h1>SOLAR ARCHIVE ACCESS</h1><p>ENTER THE NAME OF THE GUARDIAN.</p><form id="gateForm"><input id="password" type="password" autocomplete="current-password" autofocus aria-label="Password" maxlength="80"><button id="submitButton" type="submit">OPEN THE PORTAL</button></form><div class="status" id="status"></div><a class="back" href="index.html">← RETURN TO TRANSMISSION</a></main><script>(()=>{'use strict';const EXPECTED='49d5f7d5203bae2cdbf8264406f1fce12dd70bb1a18969f3524a7bccd4497655';const ACCESS_KEY='scwwGalleryAccessV2';const ACCESS_VALUE='solar-session-7f31d8b4';const ATTEMPT_KEY='scwwGateAttempts';const LOCK_KEY='scwwGateLockUntil';const form=document.getElementById('gateForm'),input=document.getElementById('password'),status=document.getElementById('status'),button=document.getElementById('submitButton');let ticker;const hex=buffer=>[...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,'0')).join('');async function digest(value){return hex(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)))}function lockRemaining(){return Math.max(0,Number(sessionStorage.getItem(LOCK_KEY)||0)-Date.now())}function renderLock(){clearInterval(ticker);const update=()=>{const remaining=lockRemaining();if(remaining<=0){button.disabled=false;status.textContent='';sessionStorage.removeItem(LOCK_KEY);clearInterval(ticker);return}button.disabled=true;status.textContent='PORTAL SEALED: '+Math.ceil(remaining/1000)+'s'};update();ticker=setInterval(update,250)}if(sessionStorage.getItem(ACCESS_KEY)===ACCESS_VALUE)location.replace('gallery.html');if(lockRemaining()>0)renderLock();form.addEventListener('submit',async e=>{e.preventDefault();if(lockRemaining()>0)return;button.disabled=true;status.textContent='VERIFYING SIGNAL...';const entered=await digest(input.value);input.value='';if(entered===EXPECTED){sessionStorage.setItem(ACCESS_KEY,ACCESS_VALUE);sessionStorage.removeItem(ATTEMPT_KEY);sessionStorage.removeItem(LOCK_KEY);location.replace('gallery.html');return}const attempts=Number(sessionStorage.getItem(ATTEMPT_KEY)||0)+1;sessionStorage.setItem(ATTEMPT_KEY,String(attempts));if(attempts>=5){sessionStorage.setItem(ATTEMPT_KEY,'0');sessionStorage.setItem(LOCK_KEY,String(Date.now()+30000));renderLock()}else{button.disabled=false;status.textContent='ACCESS DENIED — '+(5-attempts)+' ATTEMPTS REMAIN';input.focus()}})})();</script><script src="assets/radio.js"></script>
-</body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>SOLAR ACCESS</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: #050505;
+      color: #ffe900;
+      font-family: "Lucida Console", Monaco, "Courier New", monospace;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 25%, rgba(255, 119, 0, 0.24), transparent 32%),
+        #050505;
+    }
+
+    .gate {
+      width: min(92vw, 520px);
+      border: 2px solid #ffe900;
+      background: rgba(0, 0, 0, 0.92);
+      padding: 28px;
+      box-shadow: 0 0 30px rgba(255, 106, 0, 0.55);
+      text-align: center;
+    }
+
+    .sun {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        #fffbd0 0 2%,
+        #ffe66d 8%,
+        #ff9d00 35%,
+        #d93400 68%,
+        #3b0000 100%
+      );
+      box-shadow: 0 0 20px #ffcf33, 0 0 48px #ff4d00;
+    }
+
+    .gate h1 {
+      margin: 0 0 8px;
+      color: #ff3b3b;
+      font-size: 28px;
+    }
+
+    .gate p {
+      color: #26ecff;
+      line-height: 1.5;
+    }
+
+    .password-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+    }
+
+    .gate input {
+      width: 100%;
+      min-width: 0;
+      padding: 13px;
+      background: #090909;
+      border: 1px solid #ff46ff;
+      color: #fff;
+      font: inherit;
+      text-align: center;
+      outline: none;
+    }
+
+    .gate button {
+      margin-top: 12px;
+      padding: 13px;
+      background: #111;
+      border: 1px solid #ffe900;
+      color: #ffe900;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .gate button:hover:not(:disabled) {
+      background: #ffe900;
+      color: #000;
+    }
+
+    .gate button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .password-toggle {
+      width: auto;
+      min-width: 82px;
+      margin-top: 0 !important;
+      border-color: #ff46ff !important;
+      color: #ff46ff !important;
+    }
+
+    .password-toggle:hover {
+      background: #ff46ff !important;
+      color: #000 !important;
+    }
+
+    .submit-button {
+      width: 100%;
+    }
+
+    .status {
+      min-height: 22px;
+      margin-top: 12px;
+      color: #ff46ff;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 16px;
+      color: #54ff3d;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <main class="gate">
+    <div class="sun"></div>
+    <h1>SOLAR ARCHIVE ACCESS</h1>
+    <p>ENTER THE NAME OF THE GUARDIAN.</p>
+
+    <form id="gateForm">
+      <div class="password-row">
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          autofocus
+          aria-label="Password"
+          maxlength="80"
+        >
+        <button
+          class="password-toggle"
+          id="togglePassword"
+          type="button"
+          aria-pressed="false"
+          aria-label="Show password"
+        >
+          SHOW
+        </button>
+      </div>
+
+      <button class="submit-button" id="submitButton" type="submit">
+        OPEN THE PORTAL
+      </button>
+    </form>
+
+    <div class="status" id="status"></div>
+    <a class="back" href="index.html">← RETURN TO TRANSMISSION</a>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const EXPECTED = '49d5f7d5203bae2cdbf8264406f1fce12dd70bb1a18969f3524a7bccd4497655';
+      const ACCESS_KEY = 'scwwGalleryAccessV2';
+      const ACCESS_VALUE = 'solar-session-7f31d8b4';
+      const ATTEMPT_KEY = 'scwwGateAttempts';
+      const LOCK_KEY = 'scwwGateLockUntil';
+
+      const form = document.getElementById('gateForm');
+      const input = document.getElementById('password');
+      const status = document.getElementById('status');
+      const submitButton = document.getElementById('submitButton');
+      const togglePassword = document.getElementById('togglePassword');
+
+      let ticker;
+
+      const toHex = (buffer) =>
+        [...new Uint8Array(buffer)]
+          .map((byte) => byte.toString(16).padStart(2, '0'))
+          .join('');
+
+      async function digest(value) {
+        const encoded = new TextEncoder().encode(value);
+        return toHex(await crypto.subtle.digest('SHA-256', encoded));
+      }
+
+      function lockRemaining() {
+        return Math.max(
+          0,
+          Number(sessionStorage.getItem(LOCK_KEY) || 0) - Date.now(),
+        );
+      }
+
+      function renderLock() {
+        clearInterval(ticker);
+
+        const update = () => {
+          const remaining = lockRemaining();
+
+          if (remaining <= 0) {
+            submitButton.disabled = false;
+            status.textContent = '';
+            sessionStorage.removeItem(LOCK_KEY);
+            clearInterval(ticker);
+            return;
+          }
+
+          submitButton.disabled = true;
+          status.textContent = `PORTAL SEALED: ${Math.ceil(remaining / 1000)}s`;
+        };
+
+        update();
+        ticker = setInterval(update, 250);
+      }
+
+      togglePassword.addEventListener('click', () => {
+        const isVisible = input.type === 'text';
+        input.type = isVisible ? 'password' : 'text';
+        togglePassword.textContent = isVisible ? 'SHOW' : 'HIDE';
+        togglePassword.setAttribute('aria-pressed', String(!isVisible));
+        togglePassword.setAttribute(
+          'aria-label',
+          isVisible ? 'Show password' : 'Hide password',
+        );
+        input.focus();
+      });
+
+      if (sessionStorage.getItem(ACCESS_KEY) === ACCESS_VALUE) {
+        location.replace('gallery.html');
+      }
+
+      if (lockRemaining() > 0) {
+        renderLock();
+      }
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        if (lockRemaining() > 0) {
+          return;
+        }
+
+        submitButton.disabled = true;
+        status.textContent = 'VERIFYING SIGNAL...';
+
+        const entered = await digest(input.value);
+        input.value = '';
+
+        if (entered === EXPECTED) {
+          sessionStorage.setItem(ACCESS_KEY, ACCESS_VALUE);
+          sessionStorage.removeItem(ATTEMPT_KEY);
+          sessionStorage.removeItem(LOCK_KEY);
+          location.replace('gallery.html');
+          return;
+        }
+
+        const attempts = Number(sessionStorage.getItem(ATTEMPT_KEY) || 0) + 1;
+        sessionStorage.setItem(ATTEMPT_KEY, String(attempts));
+
+        if (attempts >= 5) {
+          sessionStorage.setItem(ATTEMPT_KEY, '0');
+          sessionStorage.setItem(LOCK_KEY, String(Date.now() + 30000));
+          renderLock();
+          return;
+        }
+
+        submitButton.disabled = false;
+        status.textContent = `ACCESS DENIED — ${5 - attempts} ATTEMPTS REMAIN`;
+        input.focus();
+      });
+    })();
+  </script>
+  <script src="assets/radio.js"></script>
+</body>
+</html>
