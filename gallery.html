@@ -1,6 +1,692 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><title>SCWW PHOTO ARCHIVE</title><style>
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#eee9df;color:#111;font-family:"Arial Narrow",Arial,Helvetica,sans-serif}body{padding:22px 22px 90px;background-image:linear-gradient(90deg,rgba(255,0,90,.025) 1px,transparent 1px),linear-gradient(rgba(0,180,220,.025) 1px,transparent 1px);background-size:37px 37px}header{position:relative;max-width:1480px;margin:0 auto 70px;min-height:120px;border-top:10px solid #111;padding-top:14px}h1{font-size:clamp(42px,9vw,138px);line-height:.76;letter-spacing:-.075em;text-transform:uppercase;margin:0;font-weight:900;max-width:1000px}.sub{position:absolute;right:0;top:18px;width:190px;font:700 11px/1.2 "Courier New",monospace;text-transform:uppercase;letter-spacing:.14em;transform:rotate(90deg) translateX(100%);transform-origin:top right}.back{position:fixed;left:14px;bottom:14px;z-index:30;background:#111;color:#fff;text-decoration:none;padding:9px 11px;font:700 10px/1 "Courier New",monospace;letter-spacing:.08em}.lock{position:fixed;right:14px;bottom:14px;z-index:30;background:#ff215f;color:#111;border:0;padding:9px 12px;font:900 10px/1 "Courier New",monospace;letter-spacing:.08em;cursor:pointer}.gallery{max-width:1480px;margin:auto;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-flow:dense;gap:clamp(28px,5vw,92px) clamp(16px,3.3vw,56px);align-items:start}.piece{display:block;position:relative;text-decoration:none;color:inherit;overflow:hidden;background:#111;box-shadow:10px 10px 0 rgba(0,0,0,.06);transition:transform .22s ease,box-shadow .22s ease;grid-column:var(--col)/span var(--span);aspect-ratio:var(--ratio);margin-top:var(--lift);transform:rotate(var(--tilt))}.piece img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.92) contrast(1.03);transition:filter .22s ease,transform .3s ease}.piece:hover{transform:translate(-3px,-3px) rotate(0deg);box-shadow:16px 16px 0 rgba(255,33,95,.18)}.piece:hover img{filter:saturate(1.12) contrast(1.08);transform:scale(1.015)}.piece::after{content:attr(data-index);position:absolute;right:5px;bottom:3px;color:#fff;background:#111;padding:2px 4px;font:700 9px/1 "Courier New",monospace;letter-spacing:.08em}.document-piece{grid-column:2/span 9;background:#fff;padding:clamp(14px,2vw,28px);box-shadow:18px 18px 0 rgba(0,0,0,.08);transform:rotate(-.35deg);margin:34px 0 66px;position:relative;z-index:2}.document-piece img{display:block;width:100%;height:auto;object-fit:contain}.empty{grid-column:1/-1;border-top:8px solid #111;padding:40px 0;font:900 clamp(28px,5vw,70px)/.9 Arial,sans-serif;text-transform:uppercase}
-@media(max-width:760px){body{padding:14px 14px 70px}header{margin-bottom:42px;min-height:80px}.sub{display:none}.gallery{grid-template-columns:repeat(6,minmax(0,1fr));gap:34px 14px}.piece{grid-column:var(--mobile-col)/span var(--mobile-span);aspect-ratio:var(--mobile-ratio);margin-top:var(--mobile-lift);transform:none}.piece:hover{transform:translate(-2px,-2px)}.document-piece{grid-column:1/-1;margin:18px 0 34px;padding:10px;transform:none}}
-</style></head><body><button class="lock" id="lock">LOCK</button><header><h1>Solar<br>Archive</h1><div class="sub">Soft Core World War / Private Image Transmission / Sequence 001</div></header><main class="gallery" id="gallery"></main><a class="back" href="index.html">← TRANSMISSION</a><script src="assets/photos/manifest.js"></script><script>(()=>{'use strict';const ACCESS_KEY='scwwGalleryAccessV2';const ACCESS_VALUE='solar-session-7f31d8b4';const COOKIE_NAME='scwwSolarArchiveAccess';const hasCookie=()=>document.cookie.split('; ').some(entry=>entry===`${COOKIE_NAME}=${ACCESS_VALUE}`);if(!hasCookie()&&sessionStorage.getItem(ACCESS_KEY)!==ACCESS_VALUE){location.replace('gate.html');return}sessionStorage.removeItem(ACCESS_KEY);document.getElementById('lock').onclick=()=>{sessionStorage.removeItem(ACCESS_KEY);const secure=location.protocol==='https:'?'; Secure':'';document.cookie=`${COOKIE_NAME}=; Max-Age=0; Path=/; SameSite=Lax${secure}`;location.replace('gate.html')};const root=document.getElementById('gallery');const hash=value=>{let h=2166136261;for(let i=0;i<value.length;i++){h^=value.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};const scramble=files=>files.map(file=>({file,key:hash(`scww-emigre-${file}`)})).sort((a,b)=>a.key-b.key).map(item=>item.file);const layouts=[
-{c:1,s:7,r:1.28,l:0,t:-.6,mc:1,ms:6,mr:1.22,ml:0},{c:9,s:4,r:.72,l:92,t:.8,mc:1,ms:3,mr:.75,ml:0},{c:2,s:4,r:.78,l:-18,t:-1.1,mc:4,ms:3,mr:.88,ml:48},{c:7,s:6,r:1.42,l:58,t:.45,mc:2,ms:5,mr:1.3,ml:0},{c:1,s:3,r:.68,l:84,t:-.9,mc:1,ms:4,mr:.86,ml:0},{c:5,s:5,r:1.05,l:0,t:.7,mc:4,ms:3,mr:.72,ml:68},{c:10,s:3,r:.74,l:136,t:-1.2,mc:1,ms:3,mr:.8,ml:18},{c:2,s:6,r:1.5,l:38,t:.3,mc:2,ms:5,mr:1.38,ml:0},{c:9,s:4,r:.85,l:0,t:-.5,mc:1,ms:4,mr:.92,ml:36},{c:1,s:5,r:.98,l:116,t:1,mc:3,ms:4,mr:1.02,ml:0},{c:7,s:3,r:.66,l:0,t:-.7,mc:1,ms:3,mr:.72,ml:52},{c:10,s:3,r:1.16,l:88,t:.55,mc:4,ms:3,mr:1.12,ml:0},{c:4,s:6,r:.9,l:24,t:-.35,mc:1,ms:6,mr:1.05,ml:0},{c:1,s:4,r:1.38,l:138,t:.9,mc:1,ms:3,mr:1.2,ml:44},{c:6,s:7,r:.82,l:-8,t:-.8,mc:3,ms:4,mr:.84,ml:0},{c:3,s:3,r:.62,l:92,t:.4,mc:1,ms:4,mr:.7,ml:66}];const render=files=>{if(!Array.isArray(files)||!files.length){root.innerHTML='<div class="empty">Archive empty.</div>';return}const safe=files.filter(file=>typeof file==='string'&&!file.includes('..')&&!file.includes('/')&&!file.includes('\\'));const documentFile=safe.find(file=>file.toLowerCase()==='being in place.png');const valid=scramble(safe.filter(file=>file!==documentFile));const addDocument=()=>{if(!documentFile)return;const panel=document.createElement('div');panel.className='document-piece';const img=document.createElement('img');img.loading='lazy';img.alt='Being in Place';img.src='assets/photos/'+encodeURIComponent(documentFile);img.referrerPolicy='no-referrer';panel.append(img);root.append(panel)};valid.forEach((file,index)=>{if(index===5)addDocument();const url='assets/photos/'+encodeURIComponent(file);const layout=layouts[index%layouts.length];const a=document.createElement('a');a.className='piece';a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.referrerPolicy='no-referrer';a.setAttribute('aria-label','Open archive image');a.dataset.index=String(index+1).padStart(2,'0');a.style.setProperty('--col',layout.c);a.style.setProperty('--span',layout.s);a.style.setProperty('--ratio',layout.r);a.style.setProperty('--lift',`${layout.l}px`);a.style.setProperty('--tilt',`${layout.t}deg`);a.style.setProperty('--mobile-col',layout.mc);a.style.setProperty('--mobile-span',layout.ms);a.style.setProperty('--mobile-ratio',layout.mr);a.style.setProperty('--mobile-lift',`${layout.ml}px`);const img=document.createElement('img');img.loading='lazy';img.alt='';img.src=url;img.referrerPolicy='no-referrer';a.append(img);root.append(a)});if(documentFile&&valid.length<6)addDocument();if(!root.children.length)root.innerHTML='<div class="empty">No valid images found.</div>'};if(location.protocol==='file:'){render(window.SCWW_PHOTOS||[])}else{fetch('assets/photos/manifest.json',{cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer'}).then(r=>r.ok?r.json():[]).then(render).catch(()=>render(window.SCWW_PHOTOS||[]))}})();</script><script src="assets/page-autoplay.js"></script><script src="assets/radio.js"></script>
-</body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>SCWW SOLAR ARCHIVE</title>
+  <style>
+    :root {
+      --ink: #0b0b0b;
+      --paper: #efe9dc;
+      --acid: #d8ff00;
+      --signal: #ff2b5f;
+      --cyan: #24e7ff;
+      --orange: #ff6b00;
+      --violet: #6b3cff;
+      --green: #00a85a;
+      --rail: min(92vw, 1500px);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      background: var(--ink);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      color: var(--paper);
+      background:
+        radial-gradient(circle at 18% 8%, rgba(255,43,95,.12), transparent 28rem),
+        radial-gradient(circle at 82% 26%, rgba(36,231,255,.09), transparent 32rem),
+        var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: .16;
+      mix-blend-mode: soft-light;
+      background-image:
+        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 5px 5px, 23px 23px;
+    }
+
+    .masthead {
+      min-height: 92vh;
+      display: grid;
+      align-content: space-between;
+      padding: 18px 18px 26px;
+      background:
+        linear-gradient(90deg, var(--green) 0 31%, var(--paper) 31% 54%, var(--signal) 54% 72%, var(--ink) 72%);
+      color: var(--ink);
+      border-bottom: 14px solid var(--ink);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .masthead::after {
+      content: "LOOKING / RECEIVING / ARRANGING / RETURNING";
+      position: absolute;
+      right: -2px;
+      top: 0;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      height: 100%;
+      padding: 18px 7px;
+      color: var(--paper);
+      background: var(--violet);
+      font: 900 12px/1 "Courier New", monospace;
+      letter-spacing: .18em;
+    }
+
+    .kicker {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: start;
+      font: 900 11px/1.2 "Courier New", monospace;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      padding-right: 34px;
+    }
+
+    .masthead h1 {
+      margin: 8vh 0 0;
+      max-width: 1000px;
+      font-size: clamp(76px, 15vw, 245px);
+      line-height: .69;
+      letter-spacing: -.09em;
+      text-transform: uppercase;
+      font-weight: 950;
+    }
+
+    .masthead h1 span {
+      display: block;
+    }
+
+    .masthead h1 span:nth-child(2) {
+      margin-left: .42em;
+      color: var(--signal);
+      -webkit-text-stroke: 2px var(--ink);
+    }
+
+    .masthead-foot {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 30px;
+      align-items: end;
+      padding-right: 40px;
+      font: 900 clamp(13px, 1.7vw, 23px)/1.05 "Arial Narrow", Arial, sans-serif;
+      text-transform: uppercase;
+    }
+
+    .masthead-foot strong {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 7px 9px;
+    }
+
+    .ticker {
+      position: sticky;
+      top: 0;
+      z-index: 15;
+      overflow: hidden;
+      white-space: nowrap;
+      background: var(--acid);
+      color: var(--ink);
+      border-bottom: 5px solid var(--ink);
+      border-top: 5px solid var(--ink);
+      font: 950 clamp(20px, 3.2vw, 48px)/.9 "Arial Narrow", Arial, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: -.04em;
+    }
+
+    .ticker span {
+      display: inline-block;
+      padding: 12px 0 10px;
+      animation: crawl 22s linear infinite;
+    }
+
+    @keyframes crawl {
+      to { transform: translateX(-50%); }
+    }
+
+    .archive {
+      width: 100%;
+      padding: 11vh 0 28vh;
+    }
+
+    .chapter {
+      width: var(--rail);
+      margin: 0 auto 22vh;
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-auto-rows: minmax(42px, auto);
+      gap: clamp(10px, 1.5vw, 24px);
+      align-items: start;
+      position: relative;
+    }
+
+    .chapter::before {
+      content: attr(data-chapter);
+      position: absolute;
+      left: -1px;
+      top: -54px;
+      color: var(--cyan);
+      font: 900 11px/1 "Courier New", monospace;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .piece {
+      display: block;
+      position: relative;
+      overflow: hidden;
+      background: #111;
+      color: inherit;
+      text-decoration: none;
+      isolation: isolate;
+      transform: translateZ(0);
+    }
+
+    .piece::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      border: var(--border, 2px) solid var(--frame, var(--paper));
+      mix-blend-mode: difference;
+      opacity: .9;
+    }
+
+    .piece::after {
+      content: attr(data-index);
+      position: absolute;
+      z-index: 3;
+      left: 8px;
+      bottom: 7px;
+      padding: 4px 6px 3px;
+      background: var(--label-bg, var(--acid));
+      color: var(--ink);
+      font: 900 10px/1 "Courier New", monospace;
+      letter-spacing: .15em;
+    }
+
+    .piece img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(.9) contrast(1.07);
+      transition: transform .8s cubic-bezier(.2,.7,0,1), filter .5s ease;
+    }
+
+    .piece:hover img {
+      transform: scale(1.035);
+      filter: saturate(1.13) contrast(1.1);
+    }
+
+    .piece.hero {
+      grid-column: 1 / span 9;
+      aspect-ratio: 16 / 9;
+      --frame: var(--signal);
+      --border: 7px;
+    }
+
+    .piece.tall {
+      grid-column: 9 / span 4;
+      aspect-ratio: .64;
+      margin-top: 12vh;
+      --frame: var(--cyan);
+      --label-bg: var(--cyan);
+    }
+
+    .piece.left {
+      grid-column: 1 / span 5;
+      aspect-ratio: 4 / 5;
+      margin-top: 5vh;
+      --frame: var(--orange);
+      --label-bg: var(--orange);
+    }
+
+    .piece.right {
+      grid-column: 7 / span 6;
+      aspect-ratio: 6 / 5;
+      margin-top: -10vh;
+      --frame: var(--acid);
+    }
+
+    .piece.wide {
+      grid-column: 2 / span 10;
+      aspect-ratio: 2.05;
+      margin-top: 7vh;
+      --frame: var(--violet);
+      --border: 8px;
+      --label-bg: var(--violet);
+    }
+
+    .piece.sliver {
+      grid-column: 3 / span 3;
+      aspect-ratio: .52;
+      margin-top: 14vh;
+      --frame: var(--signal);
+    }
+
+    .piece.float {
+      grid-column: 7 / span 5;
+      aspect-ratio: 1.25;
+      margin-top: -3vh;
+      transform: rotate(1.4deg);
+      --frame: var(--green);
+      --label-bg: var(--green);
+    }
+
+    .piece.full {
+      width: 100vw;
+      max-width: none;
+      grid-column: 1 / -1;
+      justify-self: center;
+      aspect-ratio: 2.3;
+      margin: 13vh calc(50% - 50vw) 0;
+      --frame: var(--paper);
+      --border: 0px;
+    }
+
+    .piece.full::after {
+      left: auto;
+      right: 14px;
+      bottom: 14px;
+      font-size: 13px;
+    }
+
+    .signal-card {
+      grid-column: var(--card-col, 1) / span var(--card-span, 5);
+      min-height: var(--card-height, 230px);
+      display: grid;
+      align-content: space-between;
+      padding: clamp(16px, 2.5vw, 38px);
+      background: var(--card-bg, var(--signal));
+      color: var(--card-fg, var(--ink));
+      border: 6px solid var(--ink);
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+
+    .signal-card small {
+      font: 900 10px/1 "Courier New", monospace;
+      letter-spacing: .22em;
+    }
+
+    .signal-card strong {
+      max-width: 800px;
+      font: 950 clamp(34px, 6vw, 92px)/.79 "Arial Narrow", Arial, sans-serif;
+      letter-spacing: -.065em;
+    }
+
+    .signal-card.vertical {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      min-height: 520px;
+      --card-bg: var(--violet);
+      --card-fg: var(--paper);
+      --card-col: 10;
+      --card-span: 3;
+    }
+
+    .signal-card.black {
+      --card-bg: var(--ink);
+      --card-fg: var(--paper);
+      border-color: var(--paper);
+    }
+
+    .signal-card.acid {
+      --card-bg: var(--acid);
+      --card-fg: var(--ink);
+    }
+
+    .document-piece {
+      grid-column: 1 / -1;
+      width: min(100%, 1180px);
+      justify-self: center;
+      margin: 9vh 0 3vh;
+      padding: clamp(14px, 2vw, 24px);
+      background: var(--paper);
+      box-shadow: 24px 24px 0 var(--signal), -15px -15px 0 var(--cyan);
+      transform: rotate(-.45deg);
+    }
+
+    .document-piece img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .endcap {
+      min-height: 80vh;
+      display: grid;
+      place-items: center;
+      padding: 10vw;
+      text-align: center;
+      background: var(--paper);
+      color: var(--ink);
+      border-top: 16px solid var(--signal);
+    }
+
+    .endcap div {
+      font: 950 clamp(54px, 12vw, 190px)/.72 "Arial Narrow", Arial, sans-serif;
+      letter-spacing: -.08em;
+      text-transform: uppercase;
+    }
+
+    .endcap span {
+      display: block;
+      color: var(--signal);
+    }
+
+    .back,
+    .lock {
+      position: fixed;
+      bottom: 14px;
+      z-index: 40;
+      border: 0;
+      padding: 10px 12px;
+      font: 900 10px/1 "Courier New", monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 rgba(0,0,0,.35);
+    }
+
+    .back {
+      left: 14px;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .lock {
+      right: 14px;
+      background: var(--signal);
+      color: var(--ink);
+    }
+
+    .empty {
+      width: var(--rail);
+      margin: 0 auto;
+      padding: 50px;
+      border: 7px solid var(--signal);
+      color: var(--paper);
+      font: 950 clamp(38px, 8vw, 110px)/.8 "Arial Narrow", Arial, sans-serif;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 820px) {
+      .masthead {
+        min-height: 82vh;
+        background: linear-gradient(180deg, var(--green) 0 24%, var(--paper) 24% 58%, var(--signal) 58% 78%, var(--ink) 78%);
+      }
+
+      .masthead h1 {
+        margin-top: 12vh;
+        font-size: clamp(68px, 21vw, 145px);
+      }
+
+      .masthead h1 span:nth-child(2) {
+        margin-left: .14em;
+      }
+
+      .masthead-foot {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .chapter {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 16vh;
+      }
+
+      .chapter::before {
+        top: -38px;
+      }
+
+      .piece.hero,
+      .piece.wide,
+      .piece.full {
+        grid-column: 1 / -1;
+      }
+
+      .piece.tall {
+        grid-column: 4 / span 3;
+        margin-top: 7vh;
+      }
+
+      .piece.left {
+        grid-column: 1 / span 4;
+      }
+
+      .piece.right {
+        grid-column: 2 / span 5;
+        margin-top: 4vh;
+      }
+
+      .piece.sliver {
+        grid-column: 1 / span 3;
+      }
+
+      .piece.float {
+        grid-column: 3 / span 4;
+        margin-top: 3vh;
+        transform: rotate(.5deg);
+      }
+
+      .piece.full {
+        aspect-ratio: 1.25;
+        margin-top: 9vh;
+      }
+
+      .signal-card,
+      .signal-card.vertical {
+        grid-column: 1 / -1;
+        min-height: 170px;
+        writing-mode: initial;
+        transform: none;
+      }
+
+      .document-piece {
+        box-shadow: 10px 10px 0 var(--signal), -7px -7px 0 var(--cyan);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .ticker span { animation: none; }
+      .piece img { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <button class="lock" id="lock">LOCK</button>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span>Soft Core World War / Solar Access</span>
+      <span>Private Image Transmission / Sequence 001</span>
+    </div>
+    <h1><span>Solar</span><span>Archive</span></h1>
+    <div class="masthead-foot">
+      <div>Images are not arranged by date. They are arranged by pressure.</div>
+      <strong>Scroll to receive</strong>
+    </div>
+  </header>
+
+  <div class="ticker" aria-hidden="true">
+    <span>LOOKING IS STEALING ✦ INTERFACE IS INTERFERENCE ✦ EVERYONE IS NOT A DESIGNER ✦ ATTENTION BECOMES ARCHITECTURE ✦ LOOKING IS STEALING ✦ INTERFACE IS INTERFERENCE ✦ EVERYONE IS NOT A DESIGNER ✦ ATTENTION BECOMES ARCHITECTURE ✦ </span>
+  </div>
+
+  <main class="archive" id="gallery"></main>
+
+  <section class="endcap">
+    <div>YOU HAVE REACHED<span>THE SUN</span></div>
+  </section>
+
+  <a class="back" href="index.html">← Transmission</a>
+
+  <script src="assets/photos/manifest.js"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      const ACCESS_KEY = 'scwwGalleryAccessV2';
+      const ACCESS_VALUE = 'solar-session-7f31d8b4';
+      const COOKIE_NAME = 'scwwSolarArchiveAccess';
+      const hasCookie = () => document.cookie
+        .split('; ')
+        .some((entry) => entry === `${COOKIE_NAME}=${ACCESS_VALUE}`);
+
+      if (!hasCookie() && sessionStorage.getItem(ACCESS_KEY) !== ACCESS_VALUE) {
+        location.replace('/gate.html');
+        return;
+      }
+
+      sessionStorage.removeItem(ACCESS_KEY);
+
+      document.getElementById('lock').onclick = () => {
+        sessionStorage.removeItem(ACCESS_KEY);
+        const secure = location.protocol === 'https:' ? '; Secure' : '';
+        document.cookie = `${COOKIE_NAME}=; Max-Age=0; Path=/; SameSite=Lax${secure}`;
+        location.replace('/gate.html');
+      };
+
+      const root = document.getElementById('gallery');
+      const modes = ['hero', 'tall', 'left', 'right', 'wide', 'sliver', 'float', 'full'];
+      const chapterCopy = [
+        ['LOOKING IS STEALING', 'Visual possession begins before ownership.'],
+        ['INTERFACE / INTERFERENCE', 'Every frame edits the world it claims to show.'],
+        ['IMAGES BECOME ROOMS', 'Enter slowly. Exit with something missing.'],
+        ['ATTENTION IS MATERIAL', 'What receives focus becomes structural.'],
+        ['NOT AN ARCHIVE', 'A pressure system disguised as storage.']
+      ];
+
+      const hash = (value) => {
+        let h = 2166136261;
+        for (let i = 0; i < value.length; i += 1) {
+          h ^= value.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        return h >>> 0;
+      };
+
+      const scramble = (files) => files
+        .map((file) => ({ file, key: hash(`scww-scroll-${file}`) }))
+        .sort((a, b) => a.key - b.key)
+        .map((item) => item.file);
+
+      const createCard = (chapterIndex, variant = '') => {
+        const [headline, copy] = chapterCopy[chapterIndex % chapterCopy.length];
+        const card = document.createElement('section');
+        card.className = `signal-card ${variant}`.trim();
+        card.innerHTML = `<small>SCWW / SIGNAL ${String(chapterIndex + 1).padStart(2, '0')}</small><strong>${headline}</strong><small>${copy}</small>`;
+        return card;
+      };
+
+      const createPiece = (file, index, mode) => {
+        const url = `assets/photos/${encodeURIComponent(file)}`;
+        const link = document.createElement('a');
+        link.className = `piece ${mode}`;
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.referrerPolicy = 'no-referrer';
+        link.dataset.index = String(index + 1).padStart(2, '0');
+        link.setAttribute('aria-label', `Open archive image ${index + 1}`);
+
+        const img = document.createElement('img');
+        img.loading = index < 2 ? 'eager' : 'lazy';
+        img.alt = '';
+        img.src = url;
+        img.referrerPolicy = 'no-referrer';
+        link.append(img);
+        return link;
+      };
+
+      const createDocument = (file) => {
+        const panel = document.createElement('section');
+        panel.className = 'document-piece';
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = 'Being in Place';
+        img.src = `assets/photos/${encodeURIComponent(file)}`;
+        img.referrerPolicy = 'no-referrer';
+        panel.append(img);
+        return panel;
+      };
+
+      const render = (files) => {
+        if (!Array.isArray(files) || !files.length) {
+          root.innerHTML = '<div class="empty">Archive empty.</div>';
+          return;
+        }
+
+        const safe = files.filter((file) =>
+          typeof file === 'string' &&
+          !file.includes('..') &&
+          !file.includes('/') &&
+          !file.includes('\\')
+        );
+
+        const documentFile = safe.find((file) => file.toLowerCase() === 'being in place.png');
+        const valid = scramble(safe.filter((file) => file !== documentFile));
+        const groupSize = 6;
+
+        for (let start = 0; start < valid.length; start += groupSize) {
+          const chapterIndex = Math.floor(start / groupSize);
+          const chapter = document.createElement('section');
+          chapter.className = 'chapter';
+          chapter.dataset.chapter = `TRANSMISSION ${String(chapterIndex + 1).padStart(2, '0')} / ${String(Math.ceil(valid.length / groupSize)).padStart(2, '0')}`;
+
+          chapter.append(createCard(chapterIndex, chapterIndex % 3 === 1 ? 'black' : chapterIndex % 3 === 2 ? 'acid' : ''));
+
+          valid.slice(start, start + groupSize).forEach((file, offset) => {
+            const index = start + offset;
+            chapter.append(createPiece(file, index, modes[index % modes.length]));
+          });
+
+          if (chapterIndex % 2 === 0) {
+            chapter.append(createCard(chapterIndex + 1, 'vertical'));
+          }
+
+          if (documentFile && chapterIndex === 1) {
+            chapter.append(createDocument(documentFile));
+          }
+
+          root.append(chapter);
+        }
+
+        if (documentFile && valid.length <= groupSize) {
+          const chapter = root.querySelector('.chapter');
+          if (chapter) chapter.append(createDocument(documentFile));
+        }
+      };
+
+      if (location.protocol === 'file:') {
+        render(window.SCWW_PHOTOS || []);
+      } else {
+        fetch('assets/photos/manifest.json', {
+          cache: 'no-store',
+          credentials: 'omit',
+          referrerPolicy: 'no-referrer'
+        })
+          .then((response) => response.ok ? response.json() : [])
+          .then(render)
+          .catch(() => render(window.SCWW_PHOTOS || []));
+      }
+    })();
+  </script>
+  <script src="assets/page-autoplay.js"></script>
+  <script src="assets/radio.js"></script>
+</body>
+</html>
