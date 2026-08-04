@@ -50,25 +50,47 @@
     portal.replaceWith(link);
   }
 
-  function installArchiveLink() {
+  function installFooterLinks() {
     const footer = document.getElementById('footerLinks');
     const languageButton = document.getElementById('languageSwitch');
     if (!footer) return;
+
     const style = document.createElement('style');
-    style.textContent = '#footerLinks .scww-archive-link{color:inherit;text-decoration:none;cursor:pointer;position:relative;z-index:50;pointer-events:auto}#footerLinks .scww-archive-link:hover,#footerLinks .scww-archive-link:focus-visible{color:#ffe900;text-decoration:underline;outline:none}';
+    style.textContent = '#footerLinks .scww-footer-link{color:inherit;text-decoration:none;cursor:pointer;position:relative;z-index:50;pointer-events:auto}#footerLinks .scww-footer-link:hover,#footerLinks .scww-footer-link:focus-visible{color:#ffe900;text-decoration:underline;outline:none}';
     document.head.append(style);
+
     const render = () => {
-      const label = footer.textContent || '';
-      const marker = 'ARCHIVES';
-      const index = label.toUpperCase().indexOf(marker);
-      if (index === -1) return;
-      const link = document.createElement('a');
-      link.className = 'scww-archive-link';
-      link.href = 'news-archive.html';
-      link.textContent = label.slice(index, index + marker.length);
-      link.setAttribute('aria-label', 'Open news archives');
-      footer.replaceChildren(document.createTextNode(label.slice(0, index)), link, document.createTextNode(label.slice(index + marker.length)));
+      const raw = footer.textContent || '';
+      const label = raw.replace(/MANTRAS/gi, 'UNFILED MATERIAL');
+      const markers = [
+        { text: 'UNFILED MATERIAL', href: 'unfiled-material.html', aria: 'Open unfiled material' },
+        { text: 'ARCHIVES', href: 'news-archive.html', aria: 'Open news archives' },
+      ];
+
+      const upper = label.toUpperCase();
+      const found = markers
+        .map((marker) => ({ ...marker, index: upper.indexOf(marker.text) }))
+        .filter((marker) => marker.index !== -1)
+        .sort((a, b) => a.index - b.index);
+
+      if (!found.length) return;
+
+      const nodes = [];
+      let cursor = 0;
+      found.forEach((marker) => {
+        nodes.push(document.createTextNode(label.slice(cursor, marker.index)));
+        const link = document.createElement('a');
+        link.className = 'scww-footer-link';
+        link.href = marker.href;
+        link.textContent = label.slice(marker.index, marker.index + marker.text.length);
+        link.setAttribute('aria-label', marker.aria);
+        nodes.push(link);
+        cursor = marker.index + marker.text.length;
+      });
+      nodes.push(document.createTextNode(label.slice(cursor)));
+      footer.replaceChildren(...nodes);
     };
+
     render();
     if (languageButton) languageButton.addEventListener('click', () => setTimeout(render, 0));
   }
@@ -171,7 +193,7 @@
   installLanguagePersistence();
   installSecretMagazineLabel();
   installSecretMagazineLink();
-  installArchiveLink();
+  installFooterLinks();
   installPortalButtons();
   installCurrentConditions();
 
