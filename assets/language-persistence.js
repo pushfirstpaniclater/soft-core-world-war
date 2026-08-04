@@ -139,6 +139,8 @@
     };
 
     render();
+    requestAnimationFrame(render);
+    window.addEventListener('load', render, { once: true });
     if (languageButton) languageButton.addEventListener('click', () => setTimeout(render, 0));
   }
 
