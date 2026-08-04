@@ -144,6 +144,22 @@
     if (languageButton) languageButton.addEventListener('click', () => setTimeout(render, 0));
   }
 
+  function installSolarIssue2Portal() {
+    const endcap = document.querySelector('body > .endcap');
+    if (!endcap || endcap.dataset.issue2Ready === 'true') return;
+    endcap.dataset.issue2Ready = 'true';
+    const style = document.createElement('style');
+    style.textContent = '.endcap.scww-issue-two-entry{position:relative;padding:0}.scww-issue-two-link{width:100%;min-height:80vh;display:grid;place-items:center;padding:10vw;color:inherit;text-decoration:none}.scww-issue-two-link:hover,.scww-issue-two-link:focus-visible{background:#101010;color:#f4f4f4;outline:none}.scww-issue-two-link::after{content:"ENTER SOLAR ARCHIVE: ISSUE II";display:block;margin-top:26px;color:#24e7ff;font:900 12px/1.2 "Courier New",monospace;letter-spacing:.18em}';
+    document.head.append(style);
+    endcap.classList.add('scww-issue-two-entry');
+    const link = document.createElement('a');
+    link.className = 'scww-issue-two-link';
+    link.href = 'solar-issue-2-gate.html';
+    link.setAttribute('aria-label', 'Open the password gate for Solar Archive Issue II');
+    while (endcap.firstChild) link.append(endcap.firstChild);
+    endcap.append(link);
+  }
+
   function installRadioCollapse() {
     const radio = document.querySelector('.scww-radio');
     if (!radio || radio.dataset.collapseReady === 'true') return false;
@@ -197,6 +213,7 @@
   installFooterLinks();
   installPortalButtons();
   installCurrentConditions();
+  installSolarIssue2Portal();
 
   if (!installRadioCollapse()) {
     const observer = new MutationObserver(() => {
