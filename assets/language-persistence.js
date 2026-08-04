@@ -131,7 +131,6 @@
       conditions.className = 'current-conditions';
       conditions.innerHTML = `
         <div class="current-condition-line"><span class="current-condition-name">OBJECT OF DESIRE</span> :: <span class="current-condition-value">BALENCIAGA KNIGHT BOOTS</span></div>
-        <div class="current-condition-line"><span class="current-condition-name">MOST IMPORTANT IMAGE</span> :: <span class="current-condition-value">GOLD CHAIN</span></div>
         <div class="current-condition-line"><span class="current-condition-name">MARKET MOOD</span> :: <span class="current-condition-value">PRIVACY</span></div>
         <div class="current-condition-line"><span class="current-condition-name">INTERNET WEATHER</span> :: <span class="current-condition-value">HUMID</span></div>
         <div class="current-condition-line"><span class="current-condition-name">JAMES SALAMANDER STATUS</span> :: <span class="current-condition-value">ON ASSIGNMENT</span></div>`;
