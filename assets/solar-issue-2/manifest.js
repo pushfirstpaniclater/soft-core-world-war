@@ -1,0 +1,1 @@
+window.SCWW_SOLAR_ISSUE_2_PHOTOS = [];
