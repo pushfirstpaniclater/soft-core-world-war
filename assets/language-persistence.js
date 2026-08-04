@@ -104,7 +104,7 @@
     document.head.append(style);
 
     const render = () => {
-      heading.textContent = 'CURRENT CONDITIONS';
+      heading.textContent = 'VIBES';
       heading.className = 'green section';
       conditions.className = 'current-conditions';
       conditions.innerHTML = `
