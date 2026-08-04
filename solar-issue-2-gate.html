@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>SOLAR ARCHIVE II ACCESS</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#fafafa;color:#1600ff;font-family:"Lucida Console",Monaco,"Courier New",monospace}body{display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,rgba(0,212,160,.25),transparent 32%),#fafafa}.gate{width:min(92vw,520px);border:2px solid #1600ff;background:rgba(255,255,255,.94);padding:28px;box-shadow:0 0 30px rgba(0,148,255,.5);text-align:center}.anti-sun{width:120px;height:120px;margin:0 auto 20px;border-radius:50%;background:radial-gradient(circle,#00042f 0 3%,#1600ff 10%,#0094ff 35%,#00d4a0 68%,#d7ffff 100%);box-shadow:0 0 20px #0094ff,0 0 48px #00d4a0}.gate h1{margin:0 0 8px;color:#00a06f;font-size:28px}.gate p{color:#db1800;line-height:1.5}.password-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.gate input{width:100%;min-width:0;padding:13px;background:#fff;border:1px solid #ff57a5;color:#111;font:inherit;text-align:center;outline:none}.gate button{margin-top:12px;padding:13px;background:#f7f7f7;border:1px solid #1600ff;color:#1600ff;font:inherit;cursor:pointer}.gate button:hover:not(:disabled){background:#1600ff;color:#fff}.gate button:disabled{opacity:.45;cursor:not-allowed}.password-toggle{width:auto;min-width:82px;margin-top:0!important;border-color:#ff57a5!important;color:#ff57a5!important}.password-toggle:hover{background:#ff57a5!important;color:#fff!important}.submit-button{width:100%}.status{min-height:22px;margin-top:12px;color:#ff57a5}.back{display:inline-block;margin-top:16px;color:#00a06f;text-decoration:none}
+  </style>
+</head>
+<body>
+  <main class="gate">
+    <div class="anti-sun"></div>
+    <h1>SOLAR ARCHIVE: ISSUE II</h1>
+    <p>ENTER THE NAME OF THE GUARDIAN.</p>
+    <form id="gateForm">
+      <div class="password-row">
+        <input id="password" type="password" autocomplete="current-password" autofocus aria-label="Password" maxlength="80">
+        <button class="password-toggle" id="togglePassword" type="button" aria-pressed="false">SHOW</button>
+      </div>
+      <button class="submit-button" id="submitButton" type="submit">OPEN THE INVERSE PORTAL</button>
+    </form>
+    <div class="status" id="status"></div>
+    <a class="back" href="gallery.html">← RETURN TO ISSUE I</a>
+  </main>
+  <script>
+    (()=>{'use strict';
+      const EXPECTED_NAME='james salamander',ACCESS_KEY='scwwSolarIssue2Access',ACCESS_VALUE='inverse-solar-session-2a90f6',COOKIE_NAME='scwwSolarIssue2Cookie',COOKIE_MAX_AGE=31536000,ATTEMPT_KEY='scwwIssue2Attempts',LOCK_KEY='scwwIssue2LockUntil';
+      const form=document.getElementById('gateForm'),input=document.getElementById('password'),status=document.getElementById('status'),submit=document.getElementById('submitButton'),toggle=document.getElementById('togglePassword');let ticker;
+      const hasCookie=()=>document.cookie.split('; ').some(entry=>entry===`${COOKIE_NAME}=${ACCESS_VALUE}`);
+      const saveCookie=()=>{const secure=location.protocol==='https:'?'; Secure':'';document.cookie=`${COOKIE_NAME}=${ACCESS_VALUE}; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax${secure}`};
+      const normalize=value=>value.trim().replace(/\s+/g,' ').toLowerCase();
+      const remaining=()=>Math.max(0,Number(sessionStorage.getItem(LOCK_KEY)||0)-Date.now());
+      const renderLock=()=>{clearInterval(ticker);const update=()=>{const left=remaining();if(left<=0){submit.disabled=false;status.textContent='';sessionStorage.removeItem(LOCK_KEY);clearInterval(ticker);return}submit.disabled=true;status.textContent=`INVERSE PORTAL SEALED: ${Math.ceil(left/1000)}s`};update();ticker=setInterval(update,250)};
+      toggle.onclick=()=>{const visible=input.type==='text';input.type=visible?'password':'text';toggle.textContent=visible?'SHOW':'HIDE';toggle.setAttribute('aria-pressed',String(!visible));input.focus()};
+      if(hasCookie()||sessionStorage.getItem(ACCESS_KEY)===ACCESS_VALUE){location.replace('/solar-issue-2.html');return}if(remaining()>0)renderLock();
+      form.onsubmit=event=>{event.preventDefault();if(remaining()>0)return;submit.disabled=true;status.textContent='VERIFYING INVERSE SIGNAL...';const entered=normalize(input.value);input.value='';if(entered===EXPECTED_NAME){saveCookie();sessionStorage.setItem(ACCESS_KEY,ACCESS_VALUE);sessionStorage.removeItem(ATTEMPT_KEY);sessionStorage.removeItem(LOCK_KEY);location.replace('/solar-issue-2.html');return}const attempts=Number(sessionStorage.getItem(ATTEMPT_KEY)||0)+1;sessionStorage.setItem(ATTEMPT_KEY,String(attempts));if(attempts>=5){sessionStorage.setItem(ATTEMPT_KEY,'0');sessionStorage.setItem(LOCK_KEY,String(Date.now()+30000));renderLock();return}submit.disabled=false;status.textContent=`ACCESS DENIED — ${5-attempts} ATTEMPTS REMAIN`;input.focus()};
+    })();
+  </script>
+  <script src="assets/radio.js"></script>
+</body>
+</html>
