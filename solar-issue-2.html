@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>SCWW SOLAR ARCHIVE — ISSUE II</title>
+  <style>
+    :root{--ink:#f4f4f4;--paper:#101010;--acid:#2700ff;--signal:#00d4a0;--cyan:#db1800;--orange:#0094ff;--violet:#94c300;--green:#ff57a5;--rail:min(94vw,1560px)}
+    *{box-sizing:border-box}html{background:var(--ink);scroll-behavior:smooth}body{margin:0;min-height:100%;overflow-x:hidden;color:var(--paper);background:radial-gradient(circle at 18% 8%,rgba(0,212,160,.14),transparent 28rem),radial-gradient(circle at 82% 26%,rgba(219,24,0,.1),transparent 32rem),var(--ink);font-family:Arial,Helvetica,sans-serif}
+    body::before{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;opacity:.12;mix-blend-mode:multiply;background-image:linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.025) 1px,transparent 1px);background-size:5px 5px,23px 23px}
+    .masthead{min-height:92vh;display:grid;align-content:space-between;padding:18px 18px 26px;background:linear-gradient(90deg,var(--green) 0 31%,var(--paper) 31% 54%,var(--signal) 54% 72%,var(--ink) 72%);color:var(--ink);border-bottom:14px solid var(--paper);position:relative;overflow:hidden}.masthead::after{content:"THE IMAGE REMEMBERS WHAT THE EYE DISCARDS";position:absolute;right:-2px;top:0;writing-mode:vertical-rl;transform:rotate(180deg);height:100%;padding:18px 7px;color:var(--paper);background:var(--violet);font:900 12px/1 "Courier New",monospace;letter-spacing:.18em}.kicker{display:flex;justify-content:space-between;gap:20px;align-items:start;font:900 11px/1.2 "Courier New",monospace;text-transform:uppercase;letter-spacing:.18em;padding-right:34px}.masthead h1{margin:8vh 0 0;max-width:1100px;font-size:clamp(70px,14vw,225px);line-height:.69;letter-spacing:-.09em;text-transform:uppercase;font-weight:950}.masthead h1 span{display:block}.masthead h1 span:nth-child(2){margin-left:.35em;color:var(--signal);-webkit-text-stroke:2px var(--ink)}.masthead-foot{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end;padding-right:40px;font:900 clamp(13px,1.7vw,23px)/1.05 "Arial Narrow",Arial,sans-serif;text-transform:uppercase}.masthead-foot strong{display:inline-block;background:var(--ink);color:var(--paper);padding:7px 9px}
+    .ticker{position:sticky;top:0;z-index:15;overflow:hidden;white-space:nowrap;background:var(--acid);color:#fff;border-bottom:5px solid var(--paper);border-top:5px solid var(--paper);font:950 clamp(20px,3.2vw,48px)/.9 "Arial Narrow",Arial,sans-serif;text-transform:uppercase;letter-spacing:-.04em}.ticker span{display:inline-block;padding:12px 0 10px;animation:crawl 30s linear infinite}@keyframes crawl{to{transform:translateX(-50%)}}
+    .archive{width:100%;padding:7vh 0 16vh}.chapter{width:var(--rail);margin:0 auto 10vh;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-flow:dense;gap:clamp(8px,1vw,16px);align-items:start}.piece{display:block;position:relative;overflow:hidden;background:#eee;color:inherit;text-decoration:none;isolation:isolate}.piece::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;border:var(--border,2px) solid var(--frame,var(--paper));mix-blend-mode:difference;opacity:.9}.piece::after{content:attr(data-index);position:absolute;z-index:3;left:8px;bottom:7px;padding:4px 6px 3px;background:var(--label-bg,var(--acid));color:#fff;font:900 10px/1 "Courier New",monospace;letter-spacing:.15em}.piece img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(1.07) invert(1) hue-rotate(180deg);transition:transform .8s cubic-bezier(.2,.7,0,1),filter .5s ease}.piece:hover img{transform:scale(1.035);filter:saturate(1.1) contrast(1.1) invert(1) hue-rotate(180deg)}
+    .piece.hero{grid-column:1/span 8;aspect-ratio:16/9;--frame:var(--signal);--border:7px}.piece.tall{grid-column:9/span 4;aspect-ratio:.7;margin-top:4vh;--frame:var(--cyan);--label-bg:var(--cyan)}.piece.left{grid-column:1/span 5;aspect-ratio:4/5;margin-top:2vh;--frame:var(--orange);--label-bg:var(--orange)}.piece.right{grid-column:6/span 7;aspect-ratio:6/5;margin-top:-2vh;--frame:var(--acid)}.piece.wide{grid-column:2/span 10;aspect-ratio:2.05;margin-top:2vh;--frame:var(--violet);--border:8px;--label-bg:var(--violet)}.piece.sliver{grid-column:1/span 3;aspect-ratio:.58;margin-top:4vh;--frame:var(--signal)}.piece.float{grid-column:4/span 5;aspect-ratio:1.25;margin-top:1vh;transform:rotate(-.6deg);--frame:var(--green);--label-bg:var(--green)}.piece.full{width:100vw;max-width:none;grid-column:1/-1;justify-self:center;aspect-ratio:2.3;margin:4vh calc(50% - 50vw) 0;--frame:var(--paper);--border:0}.piece.pair-a{grid-column:1/span 6;aspect-ratio:1.1}.piece.pair-b{grid-column:7/span 6;aspect-ratio:1.1;margin-top:3vh}.piece.center{grid-column:3/span 8;aspect-ratio:1.45}.piece.edge{grid-column:9/span 4;aspect-ratio:.82;margin-top:-3vh}
+    .empty{width:var(--rail);margin:0 auto;padding:50px;border:7px solid var(--signal);background:rgba(255,255,255,.7);color:var(--paper);font:950 clamp(38px,8vw,110px)/.8 "Arial Narrow",Arial,sans-serif;text-transform:uppercase}.empty small{display:block;margin-top:22px;font:900 13px/1.5 "Courier New",monospace;letter-spacing:.08em;color:var(--acid)}
+    .endcap{min-height:80vh;display:grid;place-items:center;padding:10vw;text-align:center;background:var(--paper);color:var(--ink);border-top:16px solid var(--signal)}.endcap div{font:950 clamp(54px,12vw,190px)/.72 "Arial Narrow",Arial,sans-serif;letter-spacing:-.08em;text-transform:uppercase}.endcap span{display:block;color:var(--signal)}
+    .back,.lock{position:fixed;bottom:14px;z-index:40;border:0;padding:10px 12px;font:900 10px/1 "Courier New",monospace;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;cursor:pointer;box-shadow:4px 4px 0 rgba(0,0,0,.25)}.back{left:14px;background:var(--paper);color:var(--ink)}.lock{right:14px;background:var(--signal);color:var(--paper)}
+    @media(max-width:820px){.masthead{min-height:82vh;background:linear-gradient(180deg,var(--green) 0 24%,var(--paper) 24% 58%,var(--signal) 58% 78%,var(--ink) 78%)}.masthead h1{margin-top:12vh;font-size:clamp(62px,19vw,135px)}.chapter{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.piece.hero,.piece.wide,.piece.full,.piece.center{grid-column:1/-1}.piece.tall{grid-column:4/span 3}.piece.left{grid-column:1/span 4}.piece.right{grid-column:2/span 5}.piece.sliver{grid-column:1/span 3}.piece.float{grid-column:3/span 4}.piece.pair-a{grid-column:1/span 3}.piece.pair-b{grid-column:4/span 3}.piece.edge{grid-column:3/span 4}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.ticker span{animation:none}.piece img{transition:none}}
+  </style>
+</head>
+<body>
+  <button class="lock" id="lock">LOCK</button>
+  <header class="masthead">
+    <div class="kicker"><span>ISSUE II / INVERSE SOLAR FIELD</span><span>POST-IMAGE DEPARTMENT</span></div>
+    <h1><span>Solar</span><span>Archive II</span></h1>
+    <div class="masthead-foot"><div>THE IMAGE REMEMBERS WHAT THE EYE DISCARDS</div><strong>OPPOSITE COLOR / SAME SIGNAL</strong></div>
+  </header>
+  <div class="ticker" aria-hidden="true"><span>THE NEGATIVE IS ALSO AN ORIGINAL ✦ OPPOSITE COLOR / SAME SIGNAL ✦ POST PICTURES INTO THE INVERSE FIELD ✦ THE IMAGE REMEMBERS WHAT THE EYE DISCARDS ✦ THE NEGATIVE IS ALSO AN ORIGINAL ✦ OPPOSITE COLOR / SAME SIGNAL ✦ POST PICTURES INTO THE INVERSE FIELD ✦ THE IMAGE REMEMBERS WHAT THE EYE DISCARDS ✦ </span></div>
+  <main class="archive" id="gallery"></main>
+  <section class="endcap"><div>YOU HAVE REACHED<span>THE OTHER SUN</span></div></section>
+  <a class="back" href="gallery.html">← Issue I</a>
+  <script src="assets/solar-issue-2/manifest.js"></script>
+  <script>
+    (()=>{'use strict';
+      const ACCESS_KEY='scwwSolarIssue2Access',ACCESS_VALUE='inverse-solar-session-2a90f6',COOKIE_NAME='scwwSolarIssue2Cookie';
+      const hasCookie=()=>document.cookie.split('; ').some(entry=>entry===`${COOKIE_NAME}=${ACCESS_VALUE}`);
+      if(!hasCookie()&&sessionStorage.getItem(ACCESS_KEY)!==ACCESS_VALUE){location.replace('/solar-issue-2-gate.html');return}
+      document.getElementById('lock').onclick=()=>{sessionStorage.removeItem(ACCESS_KEY);const secure=location.protocol==='https:'?'; Secure':'';document.cookie=`${COOKIE_NAME}=; Max-Age=0; Path=/; SameSite=Lax${secure}`;location.replace('/solar-issue-2-gate.html')};
+      const root=document.getElementById('gallery'),modes=['hero','tall','pair-a','pair-b','left','right','center','edge','wide','sliver','float','full'];
+      const hash=value=>{let h=2166136261;for(let i=0;i<value.length;i++){h^=value.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+      const scramble=files=>files.map(file=>({file,key:hash(`inverse-solar-${file}`)})).sort((a,b)=>a.key-b.key).map(item=>item.file);
+      const piece=(file,index,mode)=>{const url=`assets/solar-issue-2/${encodeURIComponent(file)}`;const link=document.createElement('a');link.className=`piece ${mode}`;link.href=url;link.target='_blank';link.rel='noopener noreferrer';link.dataset.index=String(index+1).padStart(2,'0');const img=document.createElement('img');img.loading=index<3?'eager':'lazy';img.alt='';img.src=url;link.append(img);return link};
+      const render=files=>{const safe=(Array.isArray(files)?files:[]).filter(file=>typeof file==='string'&&!file.includes('..')&&!file.includes('/')&&!file.includes('\\')&&!file.startsWith('manifest.'));if(!safe.length){root.innerHTML='<div class="empty">Issue II awaiting images.<small>UPLOAD PICTURES TO assets/solar-issue-2/ THEN ADD THEIR FILENAMES TO manifest.json AND manifest.js</small></div>';return}const valid=scramble(safe);for(let start=0;start<valid.length;start+=8){const chapter=document.createElement('section');chapter.className='chapter';valid.slice(start,start+8).forEach((file,offset)=>chapter.append(piece(file,start+offset,modes[(start+offset)%modes.length])));root.append(chapter)}};
+      if(location.protocol==='file:'){render(window.SCWW_SOLAR_ISSUE_2_PHOTOS||[])}else{fetch('assets/solar-issue-2/manifest.json',{cache:'no-store',credentials:'omit'}).then(r=>r.ok?r.json():[]).then(render).catch(()=>render(window.SCWW_SOLAR_ISSUE_2_PHOTOS||[]))}
+    })();
+  </script>
+  <script src="assets/page-autoplay.js"></script>
+  <script src="assets/radio.js"></script>
+</body>
+</html>
