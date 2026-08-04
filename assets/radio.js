@@ -2,7 +2,7 @@
   'use strict';
 
   const languageScript = document.createElement('script');
-  languageScript.src = '/assets/language-persistence.js';
+  languageScript.src = '/assets/language-persistence.js?v=20260804-0820';
   languageScript.async = true;
   document.head.append(languageScript);
 
