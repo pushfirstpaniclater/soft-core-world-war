@@ -8,7 +8,7 @@
 
   const STATE_KEY = 'scwwRadioStateV1';
   const tracks = [
-    { title: 'MENTAL INFRASTRUCTURE DRONE', type: 'portal' },
+    { title: 'EVANESCENT FEELINGS', type: 'audio', src: '/assets/music/Evanescent Feelings.mp3' },
     { title: 'PROTECT — IGHT', type: 'audio', src: '/assets/music/protect-ight.mp3' },
     { title: 'I MISS YOU KLICKAUD', type: 'audio', src: '/assets/music/I_Miss_You_KLICKAUD.mp3' },
     { title: "I DON'T KNOW WHEN I'M SUPPOSED TO STOP", type: 'audio', src: "/assets/music/i don't know when i'm supposed to stop.mp3" },
