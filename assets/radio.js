@@ -19,6 +19,7 @@
     { title: 'YEAT — IF WE BEING REAL (SLOWED + REVERB)', type: 'audio', src: '/assets/music/yeat - if we being real (𝙎𝙡𝙤𝙬𝙚𝙙  𝙧𝙚𝙫𝙚𝙧𝙗).mp3' },
     { title: 'KANYE WEST — THE END OF IT', type: 'audio', src: '/assets/music/The End Of It - Kanye West (prod. Kid Cudi).mp3' },
     { title: 'GLOKK40SPAZ ON EARL SWEATSHIRT PRODUCTION', type: 'audio', src: '/assets/music/glokk40spaz on earl sweatshirt production.mp3' },
+    { title: 'MIGOS — FLY WITH A FISH', type: 'audio', src: '/assets/music/Migos - Fly With A Fish (Streets On Lock 2).mp3' },
   ];
 
   const style = document.createElement('style');
