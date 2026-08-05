@@ -19,6 +19,19 @@
     });
   }
 
+  function installHomepageTitle() {
+    const hero = document.querySelector('h1.hero');
+    const languageButton = document.getElementById('languageSwitch');
+    if (!hero) return;
+    const render = () => {
+      hero.textContent = 'WELCOME TO THE DEPARTMENT OF MENTAL INFRASTRUCTURE';
+    };
+    render();
+    requestAnimationFrame(render);
+    window.addEventListener('load', render, { once: true });
+    if (languageButton) languageButton.addEventListener('click', () => setTimeout(render, 0));
+  }
+
   function installSecretMagazineLabel() {
     const label = document.getElementById('sunCycleLabel');
     const languageButton = document.getElementById('languageSwitch');
@@ -208,6 +221,7 @@
   }
 
   installLanguagePersistence();
+  installHomepageTitle();
   installSecretMagazineLabel();
   installSecretMagazineLink();
   installFooterLinks();
