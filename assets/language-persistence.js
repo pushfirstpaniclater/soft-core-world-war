@@ -109,9 +109,11 @@
   }
 
   function installPortalButtons() {
+    const videoLink = document.querySelector('a[href="visual-signal.html"]');
+    if (videoLink) videoLink.textContent = 'BIG VIDEO!';
     const links = [
       document.querySelector('a[href="news.html"]'),
-      document.querySelector('a[href="visual-signal.html"]'),
+      videoLink,
       document.querySelector('a[href="merch.html"]'),
     ].filter(Boolean);
     if (!links.length) return;
