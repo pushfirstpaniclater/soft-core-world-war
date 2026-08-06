@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SCWW MERCH — JAMES SALAMANDER SHIRT</title>
+  <title>SCWW MERCH — OBJECTS OF DESIRE</title>
   <style>
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; background: #070807; color: #fff; font-family: "Lucida Console", Monaco, "Courier New", monospace; }
@@ -12,8 +12,14 @@
     h1 { margin: 0 0 8px; color: #ff46ff; font-size: clamp(28px, 5vw, 56px); text-shadow: 3px 3px #000; }
     .signal { color: #26ecff; margin-bottom: 22px; }
     .product { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr); gap: 28px; align-items: center; border: 2px solid #ffe900; background: rgba(0,0,0,.86); box-shadow: 0 0 28px rgba(255,233,0,.26); padding: 24px; }
+    .product + .product { margin-top: 34px; }
     .mockup { border: 1px solid #26ecff; background: linear-gradient(45deg, rgba(255,70,255,.08), transparent 46%), #0b0c0b; padding: 20px; min-height: 520px; display: grid; place-items: center; }
     .mockup-image { display: block; width: min(100%, 560px); height: auto; object-fit: contain; filter: drop-shadow(0 24px 22px rgba(0,0,0,.75)); }
+    .mockup-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+    .image-slot { position: relative; min-height: 470px; display: grid; place-items: center; overflow: hidden; border: 1px dashed #26ecff; background: #070807; }
+    .image-slot::before { content: attr(data-side); position: absolute; top: 10px; left: 10px; z-index: 1; color: #54ff3d; font-size: 12px; }
+    .image-slot::after { content: 'DROP IMAGE HERE'; color: #ff46ff; font-size: 12px; letter-spacing: .08em; }
+    .slot-image { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 24px 22px rgba(0,0,0,.75)); }
     .details { text-align: left; }
     .edition { color: #54ff3d; margin-bottom: 8px; }
     h2 { margin: 0; color: #fff; font-size: clamp(24px, 4vw, 38px); line-height: 1.1; }
@@ -24,25 +30,46 @@
     .back { display: inline-block; margin-top: 24px; color: #54ff3d; text-decoration: none; }
     .back:hover { text-decoration: underline; }
     @media (max-width: 980px) { main { padding-right: 0; } }
-    @media (max-width: 760px) { .product { grid-template-columns: 1fr; } .details { text-align: center; } .mockup { min-height: 430px; } }
+    @media (max-width: 760px) { .product { grid-template-columns: 1fr; } .details { text-align: center; } .mockup { min-height: 430px; } .image-slot { min-height: 390px; } }
+    @media (max-width: 520px) { .mockup-pair { grid-template-columns: 1fr; } .image-slot { min-height: 420px; } }
   </style>
 </head>
 <body>
   <main>
     <h1>MERCH!</h1>
-    <div class="signal">OFFICIAL SOFT CORE WORLD WAR OBJECT OF DESIRE</div>
+    <div class="signal">OFFICIAL SOFT CORE WORLD WAR OBJECTS OF DESIRE</div>
 
-    <section class="product" aria-labelledby="product-title">
+    <section class="product" aria-labelledby="product-title-1">
       <div class="mockup">
         <img class="mockup-image" src="assets/merch/ChatGPT%20Image%20Aug%203%2C%202026%2C%2002_35_57%20AM.png" alt="White SCWW James Salamander graphic shirt mockup">
       </div>
 
       <div class="details">
         <div class="edition">OBJECT 001 / MOCKUP</div>
-        <h2 id="product-title">JAMES SALAMANDER SHIRT</h2>
+        <h2 id="product-title-1">JAMES SALAMANDER SHIRT</h2>
         <div class="price">$68</div>
         <div class="copy">A white portal-weight shirt carrying James Salamander through the department’s solar field. Wearable mental infrastructure for public transmission.</div>
         <div class="specs">WHITE HEAVYWEIGHT T-SHIRT<br>FULL-FRONT JAMES TRANSMISSION<br>SHORT-SLEEVE SIGNAL GARMENT<br>UNISEX MOCKUP<br>PRICE SIGNAL: $68</div>
+        <div class="status">MOCKUP ONLY — DROP NOT LIVE YET</div>
+      </div>
+    </section>
+
+    <section class="product" aria-labelledby="product-title-2">
+      <div class="mockup mockup-pair">
+        <div class="image-slot" data-side="FRONT">
+          <img class="slot-image" src="assets/merch/boxy-skitzy-tee/front.jpg" alt="Boxy Skitzy Tee front mockup" onerror="this.remove()">
+        </div>
+        <div class="image-slot" data-side="BACK">
+          <img class="slot-image" src="assets/merch/boxy-skitzy-tee/back.jpg" alt="Boxy Skitzy Tee back mockup" onerror="this.remove()">
+        </div>
+      </div>
+
+      <div class="details">
+        <div class="edition">OBJECT 002 / MOCKUP</div>
+        <h2 id="product-title-2">BOXY SKITZY TEE</h2>
+        <div class="price">$68</div>
+        <div class="copy">A boxy two-sided transmission garment built for local pattern recognition. Front signal, back evidence.</div>
+        <div class="specs">BOXY HEAVYWEIGHT T-SHIRT<br>FRONT + BACK GRAPHIC TRANSMISSION<br>SHORT-SLEEVE SIGNAL GARMENT<br>UNISEX MOCKUP<br>PRICE SIGNAL: $68</div>
         <div class="status">MOCKUP ONLY — DROP NOT LIVE YET</div>
       </div>
     </section>
