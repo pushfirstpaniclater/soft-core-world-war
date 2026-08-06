@@ -20,6 +20,8 @@
     .image-slot::before { content: attr(data-side); position: absolute; top: 8px; left: 10px; z-index: 3; color: #54ff3d; font-size: 12px; }
     .image-slot::after { display: none; }
     .slot-image { position: relative; z-index: 2; display: block; width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 16px 16px rgba(0,0,0,.7)); }
+    .zoomable { cursor: zoom-in; transition: filter .15s ease, transform .15s ease; }
+    .zoomable:hover { filter: brightness(1.08) drop-shadow(0 18px 20px rgba(0,0,0,.78)); transform: scale(1.01); }
     .details { text-align: left; }
     .edition { color: #54ff3d; margin-bottom: 8px; }
     h2 { margin: 0; color: #fff; font-size: clamp(24px, 4vw, 38px); line-height: 1.1; }
@@ -29,6 +31,11 @@
     .status { width: 100%; border: 2px solid #ff2929; background: #160000; color: #ff2929; padding: 14px; font: 700 16px/1.2 inherit; text-align: center; }
     .back { display: inline-block; margin-top: 24px; color: #54ff3d; text-decoration: none; }
     .back:hover { text-decoration: underline; }
+    .lightbox { position: fixed; inset: 0; z-index: 10000; display: none; place-items: center; padding: 28px; background: rgba(0,0,0,.94); cursor: zoom-out; }
+    .lightbox.open { display: grid; }
+    .lightbox-image { display: block; max-width: min(94vw, 1400px); max-height: 92vh; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 0 28px rgba(38,236,255,.28)); cursor: default; }
+    .lightbox-close { position: fixed; top: 16px; right: 18px; z-index: 10001; border: 1px solid #ffe900; background: #090909; color: #ffe900; padding: 10px 13px; font: 700 14px/1 inherit; cursor: pointer; }
+    .lightbox-label { position: fixed; left: 18px; bottom: 16px; color: #54ff3d; font-size: 12px; }
     @media (max-width: 980px) { main { padding-right: 0; } }
     @media (max-width: 760px) { .product { grid-template-columns: 1fr; } .details { text-align: center; } .mockup { min-height: 430px; } .mockup-pair { min-height: 0; } }
     @media (max-width: 520px) { .mockup-pair { grid-template-columns: 1fr; } }
@@ -41,7 +48,7 @@
 
     <section class="product" aria-labelledby="product-title-1">
       <div class="mockup">
-        <img class="mockup-image" src="assets/merch/ChatGPT%20Image%20Aug%203%2C%202026%2C%2002_35_57%20AM.png" alt="White SCWW James Salamander graphic shirt mockup">
+        <img class="mockup-image zoomable" src="assets/merch/ChatGPT%20Image%20Aug%203%2C%202026%2C%2002_35_57%20AM.png" alt="White SCWW James Salamander graphic shirt mockup" tabindex="0">
       </div>
 
       <div class="details">
@@ -57,10 +64,10 @@
     <section class="product" aria-labelledby="product-title-2">
       <div class="mockup mockup-pair">
         <div class="image-slot" data-side="FRONT">
-          <img class="slot-image" src="assets/merch/boxy-skitzy-tee/ChatGPT%20Image%20Aug%206%2C%202026%2C%2010_23_44%20AM%20%281%29.png" alt="Boxy Skitzy Tee front mockup" onerror="this.remove()">
+          <img class="slot-image zoomable" src="assets/merch/boxy-skitzy-tee/ChatGPT%20Image%20Aug%206%2C%202026%2C%2010_23_44%20AM%20%281%29.png" alt="Boxy Skitzy Tee front mockup" tabindex="0" onerror="this.remove()">
         </div>
         <div class="image-slot" data-side="BACK">
-          <img class="slot-image" src="assets/merch/boxy-skitzy-tee/ChatGPT%20Image%20Aug%206%2C%202026%2C%2010_23_45%20AM%20%282%29.png" alt="Boxy Skitzy Tee back mockup" onerror="this.remove()">
+          <img class="slot-image zoomable" src="assets/merch/boxy-skitzy-tee/ChatGPT%20Image%20Aug%206%2C%202026%2C%2010_23_45%20AM%20%282%29.png" alt="Boxy Skitzy Tee back mockup" tabindex="0" onerror="this.remove()">
         </div>
       </div>
 
@@ -77,6 +84,56 @@
     <a class="back" href="index.html">← RETURN TO TRANSMISSION</a>
   </main>
 
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Expanded merch image">
+    <button class="lightbox-close" type="button" aria-label="Close expanded image">CLOSE ×</button>
+    <img class="lightbox-image" alt="">
+    <div class="lightbox-label"></div>
+  </div>
+
+  <script>
+    (() => {
+      const lightbox = document.getElementById('lightbox');
+      const expanded = lightbox.querySelector('.lightbox-image');
+      const label = lightbox.querySelector('.lightbox-label');
+      const closeButton = lightbox.querySelector('.lightbox-close');
+      let previousFocus = null;
+
+      function openLightbox(image) {
+        previousFocus = image;
+        expanded.src = image.currentSrc || image.src;
+        expanded.alt = image.alt;
+        label.textContent = image.alt.toUpperCase();
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        closeButton.focus();
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('open');
+        expanded.removeAttribute('src');
+        document.body.style.overflow = '';
+        previousFocus?.focus();
+      }
+
+      document.querySelectorAll('.zoomable').forEach((image) => {
+        image.addEventListener('click', () => openLightbox(image));
+        image.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openLightbox(image);
+          }
+        });
+      });
+
+      closeButton.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (event) => {
+        if (event.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+      });
+    })();
+  </script>
   <script src="assets/page-autoplay.js"></script>
   <script src="assets/radio.js"></script>
 </body>
