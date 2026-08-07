@@ -21,6 +21,7 @@
     oldPlayer.remove();
   }
   document.querySelector('.scww-radio')?.remove();
+  document.querySelector('#scww-webamp-shell')?.remove();
 
   const tracks = [
     { url: '/assets/music/Evanescent Feelings.mp3', metaData: { title: 'EVANESCENT FEELINGS' } },
@@ -40,25 +41,62 @@
 
   const style = document.createElement('style');
   style.textContent = `
-    #scww-webamp-shell{position:fixed;right:12px;top:54px;z-index:9998;width:570px;height:285px;pointer-events:none}
-    #scww-webamp-shell>*{pointer-events:auto}
-    #scww-webamp-label{position:absolute;right:0;top:-22px;color:#54ff3d;background:#050505;border:1px solid #54ff3d;padding:3px 6px;font:10px/1 "Lucida Console",Monaco,"Courier New",monospace;text-shadow:none;letter-spacing:.05em;pointer-events:none}
-    @media(max-width:760px){#scww-webamp-shell{position:absolute;left:50%;right:auto;top:82px;transform:translateX(-50%);width:550px;max-width:100vw;height:285px;transform-origin:top center;scale:.78}#scww-webamp-label{display:none}}
-    @media(max-width:470px){#scww-webamp-shell{scale:.62;top:70px}}
+    #scww-webamp-shell{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:visible}
+    #scww-webamp-stage{position:absolute;inset:0;pointer-events:none;overflow:visible}
+    #scww-webamp-stage>*{pointer-events:auto}
+    #scww-webamp-stage,#scww-webamp-stage *{-webkit-user-select:none;user-select:none}
+    #scww-webamp-toggle{position:fixed;right:12px;top:12px;z-index:10001;pointer-events:auto;border:1px solid #54ff3d;background:#050505;color:#54ff3d;padding:5px 8px;font:10px/1 "Lucida Console",Monaco,"Courier New",monospace;letter-spacing:.05em;cursor:pointer;box-shadow:2px 2px #000}
+    #scww-webamp-toggle:hover,#scww-webamp-toggle:focus-visible{background:#54ff3d;color:#000;outline:none}
+    #scww-webamp-shell.is-minimized #scww-webamp-stage{display:none}
+    @media(max-width:760px){#scww-webamp-toggle{top:8px;right:8px}}
   `;
   document.head.append(style);
 
   const shell = document.createElement('div');
   shell.id = 'scww-webamp-shell';
-  shell.innerHTML = '<div id="scww-webamp-label">SCWW RADIO // WEBAMP + MILKDROP</div>';
+  shell.innerHTML = '<div id="scww-webamp-stage"></div><button id="scww-webamp-toggle" type="button" aria-expanded="true">RADIO — HIDE</button>';
   document.body.append(shell);
+
+  const stage = document.getElementById('scww-webamp-stage');
+  const toggle = document.getElementById('scww-webamp-toggle');
+  let minimized = false;
+  try { minimized = localStorage.getItem('scwwWebampMinimizedV1') === 'true'; } catch {}
+
+  function renderMinimized() {
+    shell.classList.toggle('is-minimized', minimized);
+    toggle.textContent = minimized ? 'RADIO + SHOW' : 'RADIO — HIDE';
+    toggle.setAttribute('aria-expanded', String(!minimized));
+  }
+
+  toggle.addEventListener('click', () => {
+    minimized = !minimized;
+    renderMinimized();
+    try { localStorage.setItem('scwwWebampMinimizedV1', String(minimized)); } catch {}
+  });
+  renderMinimized();
+
+  let previousBodyUserSelect = '';
+  const releaseSelectionLock = () => {
+    document.body.style.userSelect = previousBodyUserSelect;
+    document.body.style.webkitUserSelect = previousBodyUserSelect;
+    window.removeEventListener('pointerup', releaseSelectionLock, true);
+    window.removeEventListener('pointercancel', releaseSelectionLock, true);
+  };
+  stage.addEventListener('pointerdown', () => {
+    previousBodyUserSelect = document.body.style.userSelect || '';
+    document.body.style.userSelect = 'none';
+    document.body.style.webkitUserSelect = 'none';
+    window.addEventListener('pointerup', releaseSelectionLock, true);
+    window.addEventListener('pointercancel', releaseSelectionLock, true);
+  }, true);
 
   (async () => {
     try {
       const mod = await import('https://unpkg.com/webamp@2.3.1/butterchurn');
       const Webamp = mod.default;
       if (!Webamp?.browserIsSupported?.()) {
-        shell.innerHTML = '<div id="scww-webamp-label">SCWW RADIO // WEBAMP UNSUPPORTED</div>';
+        toggle.textContent = 'RADIO // UNSUPPORTED';
+        toggle.disabled = true;
         return;
       }
 
@@ -69,16 +107,16 @@
         zIndex: 9999,
         windowLayout: {
           main: {
-            position: { top: 0, left: 0 },
+            position: { top: 48, left: Math.max(12, window.innerWidth - 570) },
             closed: false,
           },
           playlist: {
-            position: { top: 116, left: 0 },
+            position: { top: 164, left: Math.max(12, window.innerWidth - 570) },
             size: { extraHeight: 1, extraWidth: 0 },
             closed: false,
           },
           milkdrop: {
-            position: { top: 0, left: 275 },
+            position: { top: 48, left: Math.max(287, window.innerWidth - 295) },
             size: { extraHeight: 3, extraWidth: 0 },
             closed: false,
           },
@@ -86,10 +124,11 @@
       });
 
       window.scwwWebamp = webamp;
-      await webamp.renderInto(shell);
+      await webamp.renderInto(stage);
     } catch (error) {
       console.error('SCWW Webamp failed to initialize', error);
-      shell.innerHTML = '<div id="scww-webamp-label">SCWW RADIO // SIGNAL FAILED</div>';
+      toggle.textContent = 'RADIO // SIGNAL FAILED';
+      toggle.disabled = true;
     }
   })();
 })();
