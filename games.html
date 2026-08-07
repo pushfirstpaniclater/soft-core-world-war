@@ -4,16 +4,100 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>SCWW GAMES</title>
+  <link rel="stylesheet" href="https://v8.js-dos.com/latest/js-dos.css">
   <style>
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#080908;color:#fff;font-family:"Lucida Console",Monaco,"Courier New",monospace}body{display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 35%,rgba(255,70,255,.12),transparent 38%),#080908}.wrap{width:min(900px,100%);border:2px solid #26ecff;background:rgba(0,0,0,.9);box-shadow:0 0 28px rgba(38,236,255,.25);padding:34px;text-align:center}h1{margin:0;color:#ff46ff;font-size:clamp(34px,8vw,82px);text-shadow:3px 3px #000}.signal{margin:12px 0 30px;color:#ffe900}.cabinet{border:1px dashed #54ff3d;padding:48px 20px;color:#54ff3d;font-size:clamp(18px,3vw,28px)}.small{margin-top:12px;color:#26ecff;font-size:12px}.back{display:inline-block;margin-top:28px;color:#ffe900;text-decoration:none}.back:hover{text-decoration:underline}</style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#080908;color:#fff;font-family:"Lucida Console",Monaco,"Courier New",monospace}body{padding:24px 320px 54px 24px;background:radial-gradient(circle at 50% 35%,rgba(255,70,255,.12),transparent 38%),#080908}.wrap{width:min(980px,100%);margin:0 auto;border:2px solid #26ecff;background:rgba(0,0,0,.92);box-shadow:0 0 28px rgba(38,236,255,.25);padding:34px;text-align:center}h1{margin:0;color:#ff46ff;font-size:clamp(34px,8vw,82px);text-shadow:3px 3px #000}.signal{margin:12px 0 30px;color:#ffe900}.cabinet{border:1px dashed #54ff3d;padding:18px;color:#54ff3d;text-align:left}.cabinet-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:14px}.game-title{color:#ff46ff;font-size:clamp(18px,3vw,30px);line-height:1.1}.system{color:#26ecff;font-size:11px;margin-top:6px}.badge{border:1px solid #ffe900;color:#ffe900;padding:5px 7px;font-size:10px;white-space:nowrap}.screen-wrap{border:2px solid #222;background:#000;padding:8px}.screen{width:100%;aspect-ratio:4/3;min-height:320px;background:#000;display:grid;place-items:center;position:relative;overflow:hidden}.placeholder{text-align:center;color:#54ff3d;line-height:1.6;padding:24px}.placeholder strong{display:block;color:#ffe900;font-size:18px;margin-bottom:8px}.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.controls button{border:1px solid #26ecff;background:#050505;color:#26ecff;padding:9px 12px;font:12px/1 "Lucida Console",Monaco,"Courier New",monospace;cursor:pointer}.controls button:hover{background:#26ecff;color:#000}.controls button:disabled{opacity:.45;cursor:not-allowed}.status{margin-top:10px;color:#ffe900;font-size:11px;line-height:1.5}.small{margin-top:14px;color:#26ecff;font-size:11px;line-height:1.5}.back{display:inline-block;margin-top:28px;color:#ffe900;text-decoration:none}.back:hover{text-decoration:underline}@media(max-width:1050px){body{padding-right:24px}}@media(max-width:620px){body{padding:10px}.wrap{padding:18px}.screen{min-height:240px}.cabinet-head{display:block}.badge{display:inline-block;margin-top:10px}}
+  </style>
+  <script src="https://v8.js-dos.com/latest/js-dos.js"></script>
 </head>
 <body>
   <main class="wrap">
     <h1>GAMES!</h1>
     <div class="signal">SOFT CORE WORLD WAR INTERACTIVE DEPARTMENT</div>
-    <div class="cabinet">CABINET EMPTY<br><span class="small">NEW SOFTWARE WILL APPEAR HERE.</span></div>
+
+    <section class="cabinet" aria-labelledby="ssf2-title">
+      <div class="cabinet-head">
+        <div>
+          <div class="game-title" id="ssf2-title">SUPER STREET FIGHTER II TURBO</div>
+          <div class="system">CABINET 001 // JS-DOS // DOS PORT</div>
+        </div>
+        <div class="badge" id="bundleBadge">CHECKING BUNDLE...</div>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen" id="dos">
+          <div class="placeholder" id="placeholder">
+            <strong>SUPER STREET FIGHTER II TURBO</strong>
+            INSERT SOFTWARE<br>
+            <span class="small">Expected bundle: assets/games/super-street-fighter-2-turbo.jsdos</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="launchGame" type="button" disabled>▶ LAUNCH CABINET</button>
+        <button id="fullScreen" type="button" disabled>⛶ FULLSCREEN</button>
+      </div>
+      <div class="status" id="gameStatus">SEARCHING FOR LOCAL GAME BUNDLE...</div>
+      <div class="small">The emulator is installed. The commercial game data is not bundled with the site; upload your own legally obtained js-dos bundle at the expected path to activate this cabinet.</div>
+    </section>
+
     <a class="back" href="index.html">← RETURN TO TRANSMISSION</a>
   </main>
+
+  <script>
+  (() => {
+    const BUNDLE = 'assets/games/super-street-fighter-2-turbo.jsdos';
+    const launch = document.getElementById('launchGame');
+    const fullscreen = document.getElementById('fullScreen');
+    const badge = document.getElementById('bundleBadge');
+    const status = document.getElementById('gameStatus');
+    const dosElement = document.getElementById('dos');
+    const placeholder = document.getElementById('placeholder');
+    let player = null;
+
+    async function bundleExists() {
+      try {
+        const res = await fetch(BUNDLE, { method: 'HEAD', cache: 'no-store' });
+        return res.ok;
+      } catch { return false; }
+    }
+
+    async function checkBundle() {
+      const exists = await bundleExists();
+      if (exists) {
+        badge.textContent = 'BUNDLE READY';
+        status.textContent = 'SOFTWARE DETECTED. CABINET READY.';
+        launch.disabled = false;
+      } else {
+        badge.textContent = 'BUNDLE REQUIRED';
+        status.textContent = 'UPLOAD THE .JSDOS BUNDLE TO ACTIVATE CABINET 001.';
+      }
+    }
+
+    launch.addEventListener('click', async () => {
+      launch.disabled = true;
+      status.textContent = 'BOOTING DOS TRANSMISSION...';
+      placeholder?.remove();
+      try {
+        player = Dos(dosElement, { url: BUNDLE, autoStart: true });
+        fullscreen.disabled = false;
+        status.textContent = 'CABINET 001 ONLINE.';
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'BOOT FAILED. VERIFY THE JSDOS BUNDLE.';
+        launch.disabled = false;
+      }
+    });
+
+    fullscreen.addEventListener('click', () => {
+      const target = dosElement;
+      if (target.requestFullscreen) target.requestFullscreen();
+    });
+
+    checkBundle();
+  })();
+  </script>
   <script src="assets/page-autoplay.js"></script>
   <script src="assets/radio.js"></script>
 </body>
