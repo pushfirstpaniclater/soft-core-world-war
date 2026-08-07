@@ -45,9 +45,9 @@
 
       <div class="settings-panel">
         <div class="settings-row">
-          <label class="settings-label volume">VOLUME
-            <input id="gameVolume" type="range" min="0" max="100" step="1" value="80">
-            <span class="settings-value" id="volumeValue">80%</span>
+          <label class="settings-label volume">MASTER VOLUME
+            <input id="gameVolume" type="range" min="0" max="100" step="1" value="25">
+            <span class="settings-value" id="volumeValue">25%</span>
           </label>
           <button id="muteGame" type="button" disabled>🔊 SOUND ON</button>
           <label class="settings-label">ASPECT
@@ -68,7 +68,7 @@
       </div>
 
       <div class="status" id="gameStatus">SCANNING DOSBOX_SSF2T.ZIP...</div>
-      <div class="small">SOURCE: <span class="detected">assets/games/DOSBOX_SSF2T.ZIP</span><br><span id="detectedProgram">ENTRYPOINT: DETECTING...</span><br><span class="saved">SAVE SLOT: SCWW_SSF2T_V1 // BROWSER LOCAL STORAGE</span></div>
+      <div class="small">SOURCE: <span class="detected">assets/games/DOSBOX_SSF2T.ZIP</span><br><span id="detectedProgram">ENTRYPOINT: DETECTING...</span><br><span class="saved">SAVE SLOT: SCWW_SSF2T_V1 // BROWSER LOCAL STORAGE</span><br><span class="saved">AUDIO: BROWSER MASTER GAIN + JS-DOS SAFETY GAIN</span></div>
     </section>
 
     <a class="back" href="index.html">← RETURN TO TRANSMISSION</a>
@@ -79,6 +79,7 @@
     const ZIP_URL = 'assets/games/DOSBOX_SSF2T.ZIP';
     const SAVE_KEY = 'scww-ssf2t-v1';
     const SETTINGS_KEY = 'scwwSsf2tSettingsV1';
+    const VOLUME_FIX_KEY = 'scwwSsf2tHardGainV1';
     const launch = document.getElementById('launchGame');
     const save = document.getElementById('saveGame');
     const fullscreen = document.getElementById('fullScreen');
@@ -101,19 +102,67 @@
     let isMuted = false;
     let isPaused = false;
 
-    let settings = { volume: .8, aspect: '4/3', rendering: 'pixelated', autoSave: true };
+    // Hard audio routing fallback. js-dos exposes setVolume(), but some DOSBox
+    // audio paths can bypass its UI gain. While the game is starting, the first
+    // AudioContext that connects to its destination is captured and a real Web
+    // Audio GainNode is inserted before the speakers. Subsequent connections in
+    // that same context are routed through the same master gain.
+    const NativeAudioNode = window.AudioNode;
+    const nativeConnect = NativeAudioNode?.prototype?.connect;
+    let captureGameAudio = false;
+    let gameAudioContext = null;
+    let gameMasterGain = null;
+    const bypassNodes = new WeakSet();
+
+    if (nativeConnect) {
+      NativeAudioNode.prototype.connect = function(destination, ...args) {
+        const context = this.context;
+        const isDestination = context && destination === context.destination;
+        const shouldCapture = isDestination && !bypassNodes.has(this) && (
+          context === gameAudioContext || (captureGameAudio && !gameAudioContext)
+        );
+
+        if (shouldCapture) {
+          if (!gameAudioContext) gameAudioContext = context;
+          if (context === gameAudioContext) {
+            if (!gameMasterGain) {
+              gameMasterGain = context.createGain();
+              bypassNodes.add(gameMasterGain);
+              gameMasterGain.gain.value = 0.0625;
+              nativeConnect.call(gameMasterGain, context.destination);
+            }
+            return nativeConnect.call(this, gameMasterGain, ...args);
+          }
+        }
+
+        return nativeConnect.call(this, destination, ...args);
+      };
+    }
+
+    let settings = { volume: .0625, aspect: '4/3', rendering: 'pixelated', autoSave: true };
     try { settings = { ...settings, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch {}
     settings.volume = Math.max(0, Math.min(1, Number(settings.volume) || 0));
     if (!['4/3','Fit','AsIs'].includes(settings.aspect)) settings.aspect = '4/3';
     if (!['pixelated','smooth'].includes(settings.rendering)) settings.rendering = 'pixelated';
     settings.autoSave = Boolean(settings.autoSave);
 
+    // One-time safety reset for people who already had the old broken loud
+    // volume value persisted in localStorage.
+    try {
+      if (localStorage.getItem(VOLUME_FIX_KEY) !== '1') {
+        settings.volume = 0.0625;
+        localStorage.setItem(VOLUME_FIX_KEY, '1');
+      }
+    } catch {
+      settings.volume = Math.min(settings.volume, 0.0625);
+    }
+
     const uiToGain = (ui) => {
       const x = Math.max(0, Math.min(100, Number(ui))) / 100;
-      return x * x * x;
+      return x * x;
     };
 
-    const gainToUi = (gain) => Math.round(Math.cbrt(Math.max(0, Math.min(1, Number(gain)))) * 100);
+    const gainToUi = (gain) => Math.round(Math.sqrt(Math.max(0, Math.min(1, Number(gain)))) * 100);
 
     volume.value = gainToUi(settings.volume);
     volumeValue.textContent = Math.round(Number(volume.value)) + '%';
@@ -136,6 +185,17 @@
       mute.disabled = !ready;
     }
 
+    function setHardGain(gain) {
+      if (!gameMasterGain) return;
+      try {
+        const now = gameAudioContext?.currentTime || 0;
+        gameMasterGain.gain.cancelScheduledValues(now);
+        gameMasterGain.gain.setTargetAtTime(isMuted ? 0 : gain, now, 0.015);
+      } catch {
+        gameMasterGain.gain.value = isMuted ? 0 : gain;
+      }
+    }
+
     function applyVolume(uiLevel = Number(volume.value), announce = false) {
       const ui = Math.max(0, Math.min(100, Number(uiLevel)));
       const gain = uiToGain(ui);
@@ -143,18 +203,24 @@
       volumeValue.textContent = Math.round(ui) + '%';
       settings.volume = gain;
 
-      try { player?.setVolume?.(gain); } catch (error) { console.warn('js-dos setVolume failed', error); }
+      // Two independent attenuation layers. Either one alone is enough; together
+      // they guarantee the cabinet cannot remain at full output when the slider
+      // is lowered.
+      try { player?.setVolume?.(isMuted ? 0 : gain); } catch (error) { console.warn('js-dos setVolume failed', error); }
+      setHardGain(gain);
 
       if (ci) {
         try {
           if (isMuted || gain === 0) ci.mute();
           else ci.unmute();
-        } catch (error) { console.warn('js-dos mute state failed', error); }
+        } catch {}
       }
 
       mute.textContent = (isMuted || gain === 0) ? '🔇 MUTED' : '🔊 SOUND ON';
       persistSettings();
-      if (announce && player) status.textContent = 'GAME VOLUME: ' + Math.round(ui) + '%';
+      if (announce && player) {
+        status.textContent = 'MASTER VOLUME: ' + Math.round(ui) + '% // HARD GAIN ' + Math.round(gain * 100) + '%';
+      }
     }
 
     const reapplySavedVolume = () => applyVolume(gainToUi(settings.volume));
@@ -192,7 +258,7 @@
           detectedProgram.textContent = 'ENTRYPOINT: ' + entrypoint.replace(/\//g, '\\');
         }
         badge.textContent = 'ZIP READY';
-        status.textContent = 'SOFTWARE DETECTED. CABINET READY.';
+        status.textContent = 'SOFTWARE DETECTED. CABINET READY. SAFE START VOLUME: ' + volume.value + '%.';
         launch.disabled = false;
       } catch (error) {
         console.error(error);
@@ -215,15 +281,17 @@
 
     launch.addEventListener('click', async () => {
       launch.disabled = true;
-      status.textContent = 'BOOTING DOS TRANSMISSION...';
+      status.textContent = 'BOOTING DOS TRANSMISSION AT ' + volume.value + '% MASTER VOLUME...';
+      captureGameAudio = true;
       try {
         bundleUrl = await makeBundle();
         placeholder?.remove();
+        const initialGain = uiToGain(volume.value);
         player = Dos(dosElement, {
           url: bundleUrl,
           autoStart: true,
           pathPrefix: 'https://v8.js-dos.com/latest/emulators/',
-          volume: settings.volume,
+          volume: initialGain,
           autoSave: settings.autoSave,
           imageRendering: settings.rendering,
           renderAspect: settings.aspect,
@@ -239,7 +307,10 @@
               setControlsReady(true);
               reapplySavedVolume();
               setTimeout(reapplySavedVolume, 150);
-              status.textContent = 'CABINET 001 ONLINE. AUDIO + SAVE STORAGE CONNECTED.';
+              setTimeout(() => { captureGameAudio = false; }, 1500);
+              status.textContent = gameMasterGain
+                ? 'CABINET 001 ONLINE. HARD MASTER GAIN ACTIVE.'
+                : 'CABINET 001 ONLINE. JS-DOS GAIN ACTIVE; AUDIO ROUTE STILL ARMING.';
             }
             if (event === 'bnd-play') setTimeout(reapplySavedVolume, 50);
           }
@@ -247,7 +318,9 @@
         badge.textContent = 'ONLINE';
         reapplySavedVolume();
         setTimeout(reapplySavedVolume, 400);
+        setTimeout(reapplySavedVolume, 1000);
       } catch (error) {
+        captureGameAudio = false;
         console.error(error);
         badge.textContent = 'BOOT ERROR';
         status.textContent = 'BOOT FAILED: ' + (error.message || error);
@@ -267,10 +340,11 @@
       if (isMuted) {
         try { ci?.mute?.(); } catch {}
         try { player?.setVolume?.(0); } catch {}
+        setHardGain(0);
         mute.textContent = '🔇 MUTED';
-        status.textContent = 'GAME AUDIO MUTED.';
+        status.textContent = 'GAME AUDIO HARD MUTED.';
       } else {
-        applyVolume(Number(volume.value) > 0 ? Number(volume.value) : 80, true);
+        applyVolume(Number(volume.value) > 0 ? Number(volume.value) : 25, true);
       }
     });
 
