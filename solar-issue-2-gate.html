@@ -40,7 +40,7 @@
       form.onsubmit=event=>{event.preventDefault();if(remaining()>0)return;submit.disabled=true;status.textContent='VERIFYING INVERSE SIGNAL...';const entered=normalize(input.value);input.value='';if(entered===EXPECTED_NAME){saveCookie();sessionStorage.setItem(ACCESS_KEY,ACCESS_VALUE);sessionStorage.removeItem(ATTEMPT_KEY);sessionStorage.removeItem(LOCK_KEY);location.replace('/solar-issue-2.html');return}const attempts=Number(sessionStorage.getItem(ATTEMPT_KEY)||0)+1;sessionStorage.setItem(ATTEMPT_KEY,String(attempts));if(attempts>=5){sessionStorage.setItem(ATTEMPT_KEY,'0');sessionStorage.setItem(LOCK_KEY,String(Date.now()+30000));renderLock();return}submit.disabled=false;status.textContent=`ACCESS DENIED — ${5-attempts} ATTEMPTS REMAIN`;input.focus()};
     })();
   </script>
-<script src="/assets/radio.js?v=20260807-seamless-v4"></script>
+<script src="/assets/radio.js?v=20260807-seamless-v5"></script>
 <script src="/assets/site-router.js?v=20260807-seamless-v4"></script>
 </body>
 </html>

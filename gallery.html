@@ -56,7 +56,7 @@
       if(location.protocol==='file:'){render(window.SCWW_PHOTOS||[])}else{fetch('assets/photos/manifest.json',{cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer'}).then(response=>response.ok?response.json():[]).then(render).catch(()=>render(window.SCWW_PHOTOS||[]))}
     })();
   </script>
-<script src="/assets/radio.js?v=20260807-seamless-v4"></script>
+<script src="/assets/radio.js?v=20260807-seamless-v5"></script>
 <script src="/assets/site-router.js?v=20260807-seamless-v4"></script>
 </body>
 </html>
