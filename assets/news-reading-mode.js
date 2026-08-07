@@ -62,23 +62,35 @@
     }
 
     .scww-news-reply {
-      display: inline-block;
-      border: 2px solid #26ecff;
-      background: rgba(0,0,0,.82);
-      color: #26ecff;
-      padding: 10px 14px;
-      font: 700 12px/1 "Courier New", monospace;
-      letter-spacing: .06em;
-      text-decoration: none;
-      text-transform: uppercase;
-      box-shadow: 0 0 12px rgba(38,236,255,.22);
+      --c:#fff;
+      --button-color:#26ecff;
+      display:inline-block;
+      margin:18px 10px;
+      padding:.1em .3em;
+      border:none;
+      color:#0000;
+      background:linear-gradient(90deg,#0000 33%,#fff5,#0000 67%) var(--_p,100%)/300% no-repeat,var(--button-color);
+      font:bold 2rem/1.25 "Lucida Console",Monaco,"Courier New",monospace;
+      text-decoration:none;
+      text-shadow:calc(var(--_i,-1)*.08em) -.01em 0 var(--c),calc(var(--_i,-1)*-.08em) .01em 2px #0004;
+      cursor:pointer;
+      transform:perspective(500px) rotateY(calc(20deg*var(--_i,-1)));
+      outline-offset:.1em;
+      transition:.3s;
     }
 
     .scww-news-reply:hover,
     .scww-news-reply:focus-visible {
-      background: #26ecff;
-      color: #050505;
-      outline: none;
+      --_p:0%;
+      --_i:1;
+      outline:none;
+    }
+
+    .scww-news-reply:active {
+      color:var(--c);
+      text-shadow:none;
+      box-shadow:inset 0 0 0 999px #0005;
+      transition:0s;
     }
 
     @media (max-width: 1050px) {
@@ -89,6 +101,13 @@
         writing-mode: horizontal-tb;
         transform: none;
         padding: 9px 10px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .scww-news-reply {
+        font-size:1.45rem;
+        margin:14px 6px;
       }
     }
   `;
