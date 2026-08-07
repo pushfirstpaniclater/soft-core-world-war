@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - assets/radio.js
+      - assets/site-router.js
       - .github/workflows/install-site-radio.yml
   workflow_dispatch:
 
@@ -24,12 +25,17 @@ jobs:
           from pathlib import Path
           import re
 
-          tag = '<script src="/assets/radio.js?v=20260807-persist-v2"></script>'
-          radio_tag = re.compile(
+          radio_tag = '<script src="/assets/radio.js?v=20260807-seamless-v3"></script>'
+          router_tag = '<script src="/assets/site-router.js?v=20260807-seamless-v3"></script>'
+          radio_re = re.compile(
               r'\s*<script\s+src=["\'](?:/|(?:\.\./)*|\./)?assets/radio\.js(?:\?[^"\']*)?["\']\s*></script>\s*',
               re.I,
           )
-          old_autoplay_tag = re.compile(
+          router_re = re.compile(
+              r'\s*<script\s+src=["\'](?:/|(?:\.\./)*|\./)?assets/site-router\.js(?:\?[^"\']*)?["\']\s*></script>\s*',
+              re.I,
+          )
+          old_autoplay_re = re.compile(
               r'\s*<script\s+src=["\'](?:/|(?:\.\./)*|\./)?assets/page-autoplay\.js(?:\?[^"\']*)?["\']\s*></script>\s*',
               re.I,
           )
@@ -40,15 +46,16 @@ jobs:
                   continue
 
               text = page.read_text(encoding='utf-8')
-              cleaned = radio_tag.sub('\n', text)
-              cleaned = old_autoplay_tag.sub('\n', cleaned)
+              cleaned = radio_re.sub('\n', text)
+              cleaned = router_re.sub('\n', cleaned)
+              cleaned = old_autoplay_re.sub('\n', cleaned)
 
               # Games is intentionally silent except for its own cabinet audio.
               if page.as_posix() == 'games.html':
                   updated = cleaned
               elif '</body>' in cleaned.lower():
                   match = re.search(r'</body>', cleaned, flags=re.I)
-                  updated = cleaned[:match.start()] + tag + '\n' + cleaned[match.start():]
+                  updated = cleaned[:match.start()] + radio_tag + '\n' + router_tag + '\n' + cleaned[match.start():]
               else:
                   updated = cleaned
 
@@ -66,7 +73,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add -A -- '*.html' archive
-            git commit -m "install persistent radio on every page except games"
+            git commit -m "install seamless persistent radio except games"
             git push origin HEAD:main
           fi
       - name: Publish current site branch
