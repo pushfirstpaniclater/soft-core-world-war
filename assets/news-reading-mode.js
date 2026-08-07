@@ -56,6 +56,31 @@
       display: block;
     }
 
+    .scww-news-reply-wrap {
+      margin: 32px 0 8px;
+      text-align: center;
+    }
+
+    .scww-news-reply {
+      display: inline-block;
+      border: 2px solid #26ecff;
+      background: rgba(0,0,0,.82);
+      color: #26ecff;
+      padding: 10px 14px;
+      font: 700 12px/1 "Courier New", monospace;
+      letter-spacing: .06em;
+      text-decoration: none;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(38,236,255,.22);
+    }
+
+    .scww-news-reply:hover,
+    .scww-news-reply:focus-visible {
+      background: #26ecff;
+      color: #050505;
+      outline: none;
+    }
+
     @media (max-width: 1050px) {
       .scww-show-radio-tab {
         top: auto;
@@ -68,6 +93,25 @@
     }
   `;
   document.head.append(style);
+
+  const archiveMatch = location.pathname.match(/\/archive\/([^/]+)\.html$/i);
+  if (archiveMatch) {
+    const shell = document.querySelector('.shell') || document.querySelector('main');
+    const title = document.querySelector('h1.hero, h1')?.textContent?.trim();
+    if (shell && title && !document.querySelector('.scww-news-reply')) {
+      const wrap = document.createElement('div');
+      wrap.className = 'scww-news-reply-wrap';
+      const link = document.createElement('a');
+      link.className = 'scww-news-reply';
+      link.textContent = 'REPLY TO THIS TRANSMISSION';
+      const slug = archiveMatch[1];
+      link.href = `../contact.html?view=news&article=${encodeURIComponent(slug)}&subject=${encodeURIComponent(title)}`;
+      wrap.append(link);
+      const footer = shell.querySelector('.footer');
+      if (footer) shell.insertBefore(wrap, footer);
+      else shell.append(wrap);
+    }
+  }
 
   const showTab = document.createElement('button');
   showTab.type = 'button';
