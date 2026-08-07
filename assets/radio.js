@@ -60,6 +60,7 @@
   const anchor = document.getElementById('scww-webamp-anchor');
   const toggle = document.getElementById('scww-webamp-toggle');
   let webampRoot = null;
+  let webampNodes = [];
   let minimized = window.innerWidth < 900;
 
   try {
@@ -70,7 +71,9 @@
   function renderMinimized() {
     toggle.textContent = minimized ? 'RADIO + SHOW' : 'RADIO — HIDE';
     toggle.setAttribute('aria-expanded', String(!minimized));
-    if (webampRoot) webampRoot.style.display = minimized ? 'none' : '';
+    for (const node of webampNodes) {
+      if (node && node.isConnected) node.style.display = minimized ? 'none' : '';
+    }
   }
 
   toggle.addEventListener('click', () => {
@@ -121,8 +124,8 @@
       let node = canvas.parentElement;
       while (node && node !== webampRoot) {
         const rect = node.getBoundingClientRect();
-        const style = getComputedStyle(node);
-        if (rect.width >= 240 && rect.height >= 120 && (style.position === 'absolute' || style.position === 'fixed')) {
+        const nodeStyle = getComputedStyle(node);
+        if (rect.width >= 240 && rect.height >= 120 && (nodeStyle.position === 'absolute' || nodeStyle.position === 'fixed')) {
           node.classList.add('scww-jet-milkdrop');
           return true;
         }
@@ -188,11 +191,41 @@
       window.scwwWebamp = webamp;
 
       const bodyChildrenBeforeRender = new Set(document.body.children);
-      await webamp.renderWhenReady(anchor);
+      const capturedNodes = new Set();
+      const renderObserver = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          for (const node of mutation.addedNodes) {
+            if (
+              node.nodeType === Node.ELEMENT_NODE &&
+              node.parentElement === document.body &&
+              node !== shell &&
+              node.tagName !== 'SCRIPT' &&
+              node.tagName !== 'STYLE'
+            ) {
+              capturedNodes.add(node);
+            }
+          }
+        }
+      });
+      renderObserver.observe(document.body, { childList: true });
 
-      webampRoot = [...document.body.children].find((node) =>
-        !bodyChildrenBeforeRender.has(node) && node !== shell && node.tagName !== 'SCRIPT'
-      ) || document.getElementById('webamp');
+      await webamp.renderWhenReady(anchor);
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      renderObserver.disconnect();
+
+      const diffNodes = [...document.body.children].filter((node) =>
+        !bodyChildrenBeforeRender.has(node) &&
+        node !== shell &&
+        node.tagName !== 'SCRIPT' &&
+        node.tagName !== 'STYLE'
+      );
+
+      webampNodes = [...new Set([...capturedNodes, ...diffNodes])];
+
+      const webampElement = document.getElementById('webamp');
+      webampRoot = webampElement || webampNodes.find((node) =>
+        node.id === 'webamp' || node.querySelector?.('#webamp')
+      ) || webampNodes[0] || null;
 
       if (webampRoot) {
         webampRoot.addEventListener('pointerdown', lockSelectionDuringDrag, true);
@@ -200,7 +233,21 @@
         requestAnimationFrame(decorateMilkdrop);
         setTimeout(decorateMilkdrop, 250);
         setTimeout(decorateMilkdrop, 1000);
-        const observer = new MutationObserver(() => decorateMilkdrop());
+        const observer = new MutationObserver(() => {
+          decorateMilkdrop();
+          for (const node of [...document.body.children]) {
+            if (
+              node !== shell &&
+              node.tagName !== 'SCRIPT' &&
+              node.tagName !== 'STYLE' &&
+              !bodyChildrenBeforeRender.has(node) &&
+              !webampNodes.includes(node)
+            ) {
+              webampNodes.push(node);
+              if (minimized) node.style.display = 'none';
+            }
+          }
+        });
         observer.observe(webampRoot, { childList: true, subtree: true });
       }
 
