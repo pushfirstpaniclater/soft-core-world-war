@@ -122,7 +122,7 @@
       wrap.className = 'scww-news-reply-wrap';
       const link = document.createElement('a');
       link.className = 'scww-news-reply';
-      link.textContent = 'REPLY TO THIS TRANSMISSION';
+      link.textContent = 'REPLY!';
       const slug = archiveMatch[1];
       link.href = `../contact.html?view=news&article=${encodeURIComponent(slug)}&subject=${encodeURIComponent(title)}`;
       wrap.append(link);
