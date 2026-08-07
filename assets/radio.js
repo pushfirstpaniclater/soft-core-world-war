@@ -39,38 +39,35 @@
     { url: '/assets/music/FOUR - FLEXOfficial music Video.mp3', metaData: { artist: 'FOUR', title: 'FLEX' } },
   ];
 
-  const COMFORT_SCALE = 1.18;
-
   const style = document.createElement('style');
   style.textContent = `
     #scww-webamp-shell{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:visible}
-    #scww-webamp-stage{position:fixed;top:42px;right:12px;width:283px;height:720px;pointer-events:none;overflow:visible;zoom:${COMFORT_SCALE};transform-origin:top right}
-    #scww-webamp-stage>*{pointer-events:auto}
-    #scww-webamp-stage,#scww-webamp-stage *{-webkit-user-select:none;user-select:none}
+    #scww-webamp-anchor{position:fixed;top:42px;right:14px;width:275px;height:620px;pointer-events:none;visibility:hidden}
     #scww-webamp-toggle{position:fixed;right:12px;top:12px;z-index:10001;pointer-events:auto;border:1px solid #54ff3d;background:#050505;color:#54ff3d;padding:6px 9px;font:11px/1 "Lucida Console",Monaco,"Courier New",monospace;letter-spacing:.05em;cursor:pointer;box-shadow:2px 2px #000}
     #scww-webamp-toggle:hover,#scww-webamp-toggle:focus-visible{background:#54ff3d;color:#000;outline:none}
-    #scww-webamp-shell.is-minimized #scww-webamp-stage{display:none}
-    @media(max-width:1100px){#scww-webamp-stage{top:40px;right:8px;zoom:1}#scww-webamp-toggle{top:8px;right:8px}}
+    @media(max-width:900px){#scww-webamp-anchor{top:40px;right:8px}#scww-webamp-toggle{top:8px;right:8px}}
   `;
   document.head.append(style);
 
   const shell = document.createElement('div');
   shell.id = 'scww-webamp-shell';
-  shell.innerHTML = '<div id="scww-webamp-stage"></div><button id="scww-webamp-toggle" type="button" aria-expanded="true">RADIO — HIDE</button>';
+  shell.innerHTML = '<div id="scww-webamp-anchor" aria-hidden="true"></div><button id="scww-webamp-toggle" type="button" aria-expanded="true">RADIO — HIDE</button>';
   document.body.append(shell);
 
-  const stage = document.getElementById('scww-webamp-stage');
+  const anchor = document.getElementById('scww-webamp-anchor');
   const toggle = document.getElementById('scww-webamp-toggle');
+  let webampRoot = null;
   let minimized = window.innerWidth < 900;
+
   try {
     const savedMinimized = localStorage.getItem('scwwWebampMinimizedV1');
     if (savedMinimized === 'true' || savedMinimized === 'false') minimized = savedMinimized === 'true';
   } catch {}
 
   function renderMinimized() {
-    shell.classList.toggle('is-minimized', minimized);
     toggle.textContent = minimized ? 'RADIO + SHOW' : 'RADIO — HIDE';
     toggle.setAttribute('aria-expanded', String(!minimized));
+    if (webampRoot) webampRoot.style.display = minimized ? 'none' : '';
   }
 
   toggle.addEventListener('click', () => {
@@ -87,13 +84,14 @@
     window.removeEventListener('pointerup', releaseSelectionLock, true);
     window.removeEventListener('pointercancel', releaseSelectionLock, true);
   };
-  stage.addEventListener('pointerdown', () => {
+
+  const lockSelectionDuringDrag = () => {
     previousBodyUserSelect = document.body.style.userSelect || '';
     document.body.style.userSelect = 'none';
     document.body.style.webkitUserSelect = 'none';
     window.addEventListener('pointerup', releaseSelectionLock, true);
     window.addEventListener('pointercancel', releaseSelectionLock, true);
-  }, true);
+  };
 
   (async () => {
     try {
@@ -136,7 +134,19 @@
       });
 
       window.scwwWebamp = webamp;
-      await webamp.renderInto(stage);
+
+      const bodyChildrenBeforeRender = new Set(document.body.children);
+      await webamp.renderWhenReady(anchor);
+
+      webampRoot = [...document.body.children].find((node) =>
+        !bodyChildrenBeforeRender.has(node) && node !== shell && node.tagName !== 'SCRIPT'
+      ) || document.getElementById('webamp');
+
+      if (webampRoot) {
+        webampRoot.addEventListener('pointerdown', lockSelectionDuringDrag, true);
+      }
+
+      renderMinimized();
     } catch (error) {
       console.error('SCWW Webamp failed to initialize', error);
       toggle.textContent = 'RADIO // SIGNAL FAILED';
