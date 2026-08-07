@@ -67,24 +67,26 @@
   }
   sha256(tripSecret).then((hash) => $('tripCode').textContent = '!' + hash.slice(0, 10).toUpperCase());
 
-  function postHead(post, isReply = false) {
+  function postHead(post, threadId) {
     const head = document.createElement('div'); head.className = 'post-head';
     const s = document.createElement('span'); s.className = 'subject'; s.textContent = post.subject;
     const p = document.createElement('span'); p.className = 'poster'; p.textContent = ` ${post.trip_code}`;
     const d = document.createElement('span'); d.className = 'date'; d.textContent = ` ${new Date(post.created_at).toLocaleString()}`;
     const n = document.createElement('span'); n.className = 'no'; n.textContent = ` No.${post.id}`;
-    head.append(s, document.createTextNode(' '), p, d, n);
-    if (!isReply) {
-      const reply = document.createElement('button'); reply.type = 'button'; reply.className = 'reply-link'; reply.textContent = 'REPLY'; reply.dataset.replyTo = String(post.id);
-      head.append(reply);
-    }
+    const reply = document.createElement('button');
+    reply.type = 'button';
+    reply.className = 'reply-link';
+    reply.textContent = 'REPLY';
+    reply.dataset.replyTo = String(post.id);
+    reply.dataset.threadId = String(threadId);
+    head.append(s, document.createTextNode(' '), p, d, n, reply);
     return head;
   }
 
-  function postNode(post, isReply = false) {
+  function postNode(post, isReply = false, threadId = post.id) {
     const box = document.createElement('article'); box.className = isReply ? 'post reply' : 'post'; box.id = `p${post.id}`;
     const body = document.createElement('div'); body.className = 'message'; body.textContent = post.message;
-    box.append(postHead(post, isReply), body); return box;
+    box.append(postHead(post, threadId), body); return box;
   }
 
   function replyComposer(post) {
@@ -111,8 +113,8 @@
 
   function threadNode(post) {
     const thread = document.createElement('section'); thread.className = 'thread';
-    thread.append(postNode(post, false), replyComposer(post));
-    (post.replies || []).forEach((reply) => thread.append(postNode(reply, true)));
+    thread.append(postNode(post, false, post.id), replyComposer(post));
+    (post.replies || []).forEach((reply) => thread.append(postNode(reply, true, post.id)));
     return thread;
   }
 
@@ -131,10 +133,22 @@
 
   wall.addEventListener('click', (event) => {
     const button = event.target.closest('[data-reply-to]'); if (!button) return;
-    const box = $(`reply-${button.dataset.replyTo}`); if (!box) return;
+    const targetId = button.dataset.replyTo;
+    const threadId = button.dataset.threadId || targetId;
+    const box = $(`reply-${threadId}`); if (!box) return;
     document.querySelectorAll('.reply-box.active').forEach((el) => { if (el !== box) el.classList.remove('active'); });
-    box.classList.toggle('active');
-    if (box.classList.contains('active')) box.querySelector('textarea')?.focus();
+    const target = box.querySelector('.reply-target');
+    const ta = box.querySelector('textarea');
+    if (target) target.textContent = `REPLYING TO No.${targetId}`;
+    if (ta) {
+      ta.placeholder = `>>${targetId}`;
+      if (String(targetId) !== String(threadId)) {
+        const quote = `>>${targetId}`;
+        if (!ta.value.includes(quote)) ta.value = ta.value ? `${quote}\n${ta.value}` : `${quote}\n`;
+      }
+    }
+    box.classList.add('active');
+    ta?.focus();
   });
 
   message.addEventListener('input', () => $('count').textContent = String(message.value.length));
