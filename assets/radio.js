@@ -100,6 +100,9 @@
         return;
       }
 
+      const radioLeft = Math.max(12, window.innerWidth - 287);
+      const visualizerLeft = Math.max(12, radioLeft - 287);
+
       const webamp = new Webamp({
         initialTracks: tracks,
         enableMediaSession: true,
@@ -107,16 +110,16 @@
         zIndex: 9999,
         windowLayout: {
           main: {
-            position: { top: 48, left: Math.max(12, window.innerWidth - 570) },
+            position: { top: 48, left: radioLeft },
             closed: false,
           },
           playlist: {
-            position: { top: 164, left: Math.max(12, window.innerWidth - 570) },
+            position: { top: 164, left: radioLeft },
             size: { extraHeight: 1, extraWidth: 0 },
             closed: false,
           },
           milkdrop: {
-            position: { top: 48, left: Math.max(287, window.innerWidth - 295) },
+            position: { top: 48, left: visualizerLeft },
             size: { extraHeight: 3, extraWidth: 0 },
             closed: false,
           },
