@@ -25,7 +25,7 @@ jobs:
           from pathlib import Path
           import re
 
-          radio_tag = '<script src="/assets/radio.js?v=20260807-seamless-v4"></script>'
+          radio_tag = '<script src="/assets/radio.js?v=20260807-seamless-v5"></script>'
           router_tag = '<script src="/assets/site-router.js?v=20260807-seamless-v4"></script>'
           legacy_style = '<style id="scww-hide-legacy-radio">.player{display:none!important}</style>'
           radio_re = re.compile(
