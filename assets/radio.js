@@ -45,6 +45,9 @@
     #scww-webamp-anchor{position:fixed;top:42px;right:14px;width:275px;height:620px;pointer-events:none;visibility:hidden}
     #scww-webamp-toggle{position:fixed;right:12px;top:12px;z-index:10001;pointer-events:auto;border:1px solid #54ff3d;background:#050505;color:#54ff3d;padding:6px 9px;font:11px/1 "Lucida Console",Monaco,"Courier New",monospace;letter-spacing:.05em;cursor:pointer;box-shadow:2px 2px #000}
     #scww-webamp-toggle:hover,#scww-webamp-toggle:focus-visible{background:#54ff3d;color:#000;outline:none}
+    .scww-jet-milkdrop{overflow:visible!important;box-shadow:0 0 0 1px #0b0d10,0 0 0 3px #57616f,0 8px 24px rgba(0,0,0,.48)!important}
+    .scww-jet-milkdrop::before{content:'JET VISUALIZER';position:absolute;left:-3px;right:-3px;top:-24px;height:22px;display:flex;align-items:center;padding-left:9px;box-sizing:border-box;background:linear-gradient(90deg,#39414e 0%,#202632 72%,#151921 100%);border:1px solid #697487;border-bottom-color:#252a33;color:#d5d8df;font:700 9px/1 Tahoma,Arial,sans-serif;letter-spacing:.12em;text-shadow:1px 1px #000;pointer-events:none;z-index:2147483646}
+    .scww-jet-milkdrop::after{content:'SCWW SIGNAL';position:absolute;right:6px;top:-18px;color:#d2ad43;font:700 8px/1 Tahoma,Arial,sans-serif;letter-spacing:.08em;text-shadow:1px 1px #000;pointer-events:none;z-index:2147483647}
     @media(max-width:900px){#scww-webamp-anchor{top:40px;right:8px}#scww-webamp-toggle{top:8px;right:8px}}
   `;
   document.head.append(style);
@@ -92,6 +95,55 @@
     window.addEventListener('pointerup', releaseSelectionLock, true);
     window.addEventListener('pointercancel', releaseSelectionLock, true);
   };
+
+  function decorateMilkdrop() {
+    if (!webampRoot) return false;
+    if (webampRoot.querySelector('.scww-jet-milkdrop')) return true;
+
+    const direct = webampRoot.querySelector('[data-window-id="milkdrop"], [data-window="milkdrop"], #milkdrop, [id*="milkdrop" i]');
+    if (direct) {
+      const rect = direct.getBoundingClientRect();
+      let target = direct;
+      if (rect.width < 200 || rect.height < 100) {
+        let node = direct.parentElement;
+        while (node && node !== webampRoot) {
+          const r = node.getBoundingClientRect();
+          if (r.width >= 240 && r.height >= 120) { target = node; break; }
+          node = node.parentElement;
+        }
+      }
+      target.classList.add('scww-jet-milkdrop');
+      return true;
+    }
+
+    const canvases = [...webampRoot.querySelectorAll('canvas')];
+    for (const canvas of canvases.reverse()) {
+      let node = canvas.parentElement;
+      while (node && node !== webampRoot) {
+        const rect = node.getBoundingClientRect();
+        const style = getComputedStyle(node);
+        if (rect.width >= 240 && rect.height >= 120 && (style.position === 'absolute' || style.position === 'fixed')) {
+          node.classList.add('scww-jet-milkdrop');
+          return true;
+        }
+        node = node.parentElement;
+      }
+    }
+
+    const textNodes = [...webampRoot.querySelectorAll('*')].filter((node) => /milk\s*drop/i.test(node.textContent || ''));
+    for (const label of textNodes) {
+      let node = label;
+      while (node && node !== webampRoot) {
+        const rect = node.getBoundingClientRect();
+        if (rect.width >= 240 && rect.height >= 120) {
+          node.classList.add('scww-jet-milkdrop');
+          return true;
+        }
+        node = node.parentElement;
+      }
+    }
+    return false;
+  }
 
   (async () => {
     try {
@@ -144,6 +196,12 @@
 
       if (webampRoot) {
         webampRoot.addEventListener('pointerdown', lockSelectionDuringDrag, true);
+        decorateMilkdrop();
+        requestAnimationFrame(decorateMilkdrop);
+        setTimeout(decorateMilkdrop, 250);
+        setTimeout(decorateMilkdrop, 1000);
+        const observer = new MutationObserver(() => decorateMilkdrop());
+        observer.observe(webampRoot, { childList: true, subtree: true });
       }
 
       renderMinimized();
