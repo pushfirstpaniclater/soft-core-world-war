@@ -23,9 +23,7 @@
     const hero = document.querySelector('h1.hero');
     const languageButton = document.getElementById('languageSwitch');
     if (!hero) return;
-    const render = () => {
-      hero.textContent = 'WELCOME TO THE DEPARTMENT OF MENTAL INFRASTRUCTURE';
-    };
+    const render = () => { hero.textContent = 'WELCOME TO THE DEPARTMENT OF MENTAL INFRASTRUCTURE'; };
     render();
     requestAnimationFrame(render);
     window.addEventListener('load', render, { once: true });
@@ -81,6 +79,7 @@
         { text: 'GAMES', href: 'games.html', aria: 'Open games' },
         { text: 'UNFILED MATERIAL', href: 'unfiled-material.html', aria: 'Open unfiled material' },
         { text: 'ARCHIVES', href: 'news-archive.html', aria: 'Open news archives' },
+        { text: 'CONTACT', href: 'contact.html', aria: 'Open public contact wall' },
       ];
 
       const upper = label.toUpperCase();
