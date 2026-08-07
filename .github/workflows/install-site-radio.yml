@@ -18,20 +18,36 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Add shared radio to every page
+      - name: Add shared radio to every page except games
         run: |
           python - <<'PY'
           from pathlib import Path
-          tag = '<script src="assets/radio.js"></script>'
+          import re
+
+          tag = '<script src="/assets/radio.js"></script>'
+          radio_tag = re.compile(r'\s*<script\s+src=["\']/?assets/radio\.js(?:\?[^"\']*)?["\']\s*></script>\s*', re.I)
           changed = []
-          for page in Path('.').glob('*.html'):
+
+          for page in Path('.').rglob('*.html'):
+              if '.git' in page.parts:
+                  continue
+
               text = page.read_text(encoding='utf-8')
-              if tag in text:
-                  continue
-              if '</body>' not in text:
-                  continue
-              page.write_text(text.replace('</body>', tag + '\n</body>', 1), encoding='utf-8')
-              changed.append(str(page))
+              cleaned = radio_tag.sub('\n', text)
+
+              # The games page is intentionally silent so its own audio can own the session.
+              if page.as_posix() == 'games.html':
+                  updated = cleaned
+              elif '</body>' in cleaned.lower():
+                  match = re.search(r'</body>', cleaned, flags=re.I)
+                  updated = cleaned[:match.start()] + tag + '\n' + cleaned[match.start():]
+              else:
+                  updated = cleaned
+
+              if updated != text:
+                  page.write_text(updated, encoding='utf-8')
+                  changed.append(str(page))
+
           print('Updated:', ', '.join(changed) if changed else 'none')
           PY
       - name: Commit page wiring
@@ -41,8 +57,8 @@ jobs:
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add '*.html'
-            git commit -m "wire persistent radio into every page"
+            git add '*.html' 'archive/**/*.html'
+            git commit -m "wire persistent radio across site except games"
             git push origin HEAD:main
           fi
       - name: Publish current site branch
