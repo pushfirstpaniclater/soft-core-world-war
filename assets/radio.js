@@ -42,10 +42,30 @@
   ];
 
   const RADIO_VOLUME_STORAGE_KEY = 'scwwWebampVolumeV1';
+  const RADIO_PLAYBACK_STORAGE_KEY = 'scwwWebampPlaybackV2';
   let radioVolume = 55;
+  let savedPlayback = null;
+  let currentTrackIndex = 0;
+  let lastPersistAt = 0;
+
   try {
     const savedVolume = Number(localStorage.getItem(RADIO_VOLUME_STORAGE_KEY));
     if (Number.isFinite(savedVolume) && savedVolume >= 0 && savedVolume <= 100) radioVolume = savedVolume;
+    const rawPlayback = localStorage.getItem(RADIO_PLAYBACK_STORAGE_KEY);
+    if (rawPlayback) {
+      const parsed = JSON.parse(rawPlayback);
+      const index = Number(parsed?.index);
+      const time = Number(parsed?.time);
+      if (Number.isInteger(index) && index >= 0 && index < tracks.length && Number.isFinite(time) && time >= 0) {
+        savedPlayback = {
+          index,
+          time,
+          playing: parsed?.playing === true,
+          updatedAt: Number(parsed?.updatedAt) || 0,
+        };
+        currentTrackIndex = index;
+      }
+    }
   } catch {}
 
   const style = document.createElement('style');
@@ -121,6 +141,28 @@
     }
   }
 
+  function normalizeTrackPath(url) {
+    try { return decodeURIComponent(new URL(url, location.href).pathname); } catch { return String(url || ''); }
+  }
+
+  function persistPlaybackState(force = false) {
+    if (!webampInstance) return;
+    const now = Date.now();
+    if (!force && now - lastPersistAt < 350) return;
+    lastPersistAt = now;
+    try {
+      const state = webampInstance.store?.getState?.();
+      const time = Math.max(0, Number(state?.media?.timeElapsed) || 0);
+      const playing = webampInstance.getMediaStatus?.() === 'PLAYING';
+      localStorage.setItem(RADIO_PLAYBACK_STORAGE_KEY, JSON.stringify({
+        index: currentTrackIndex,
+        time,
+        playing,
+        updatedAt: now,
+      }));
+    } catch {}
+  }
+
   toggle.addEventListener('click', () => {
     minimized = !minimized;
     renderMinimized();
@@ -131,6 +173,20 @@
   volumeSlider.addEventListener('change', () => applyRadioVolume(volumeSlider.value));
   volumeSlider.addEventListener('pointerdown', (event) => event.stopPropagation());
   volumeSlider.addEventListener('touchstart', (event) => event.stopPropagation(), { passive: true });
+
+  window.addEventListener('pagehide', () => persistPlaybackState(true));
+  window.addEventListener('beforeunload', () => persistPlaybackState(true));
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') persistPlaybackState(true);
+  });
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest?.('a[href]');
+    if (!link) return;
+    try {
+      const destination = new URL(link.href, location.href);
+      if (destination.origin === location.origin && link.target !== '_blank') persistPlaybackState(true);
+    } catch {}
+  }, true);
 
   renderMinimized();
 
@@ -194,6 +250,14 @@
       window.scwwWebamp = webamp;
       applyRadioVolume(radioVolume, false);
 
+      webamp.onTrackDidChange?.((track) => {
+        if (!track?.url) return;
+        const path = normalizeTrackPath(track.url);
+        const index = tracks.findIndex((candidate) => normalizeTrackPath(candidate.url) === path);
+        if (index >= 0) currentTrackIndex = index;
+        persistPlaybackState(true);
+      });
+
       const bodyChildrenBeforeRender = new Set(document.body.children);
       const capturedNodes = new Set();
       const renderObserver = new MutationObserver((mutations) => {
@@ -217,6 +281,32 @@
       await new Promise((resolve) => requestAnimationFrame(resolve));
       renderObserver.disconnect();
       applyRadioVolume(radioVolume, false);
+
+      if (savedPlayback) {
+        currentTrackIndex = savedPlayback.index;
+        try { webamp.setCurrentTrack(savedPlayback.index); } catch {}
+
+        const restoreTime = Math.max(0, savedPlayback.time);
+        const seek = () => {
+          try { webamp.seekToTime(restoreTime); } catch {}
+        };
+        [0, 180, 550, 1200].forEach((delay) => setTimeout(seek, delay));
+
+        if (savedPlayback.playing) {
+          try { webamp.play(); } catch {}
+          setTimeout(() => {
+            seek();
+            try {
+              if (webamp.getMediaStatus?.() !== 'PLAYING') webamp.play();
+            } catch {}
+          }, 220);
+        } else {
+          try { webamp.pause(); } catch {}
+        }
+      }
+
+      const persistenceTimer = window.setInterval(() => persistPlaybackState(false), 500);
+      window.addEventListener('pagehide', () => window.clearInterval(persistenceTimer), { once: true });
 
       const diffNodes = [...document.body.children].filter((node) =>
         !bodyChildrenBeforeRender.has(node) &&
@@ -252,6 +342,7 @@
       }
 
       renderMinimized();
+      persistPlaybackState(true);
     } catch (error) {
       console.error('SCWW Webamp failed to initialize', error);
       toggle.textContent = 'RADIO // SIGNAL FAILED';
