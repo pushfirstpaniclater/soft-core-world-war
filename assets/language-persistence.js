@@ -74,8 +74,11 @@
 
     const render = () => {
       const raw = footer.textContent || '';
-      const label = raw.replace(/MANTRAS/gi, 'UNFILED MATERIAL');
+      const label = raw
+        .replace(/MANTRAS/gi, 'UNFILED MATERIAL')
+        .replace(/GLYPHES|GLYPHS/gi, 'GAMES');
       const markers = [
+        { text: 'GAMES', href: 'games.html', aria: 'Open games' },
         { text: 'UNFILED MATERIAL', href: 'unfiled-material.html', aria: 'Open unfiled material' },
         { text: 'ARCHIVES', href: 'news-archive.html', aria: 'Open news archives' },
       ];
