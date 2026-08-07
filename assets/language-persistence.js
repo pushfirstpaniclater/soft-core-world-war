@@ -11,9 +11,14 @@
       const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
       if (saved === 'en' || saved === 'fr') {
         language = saved;
-        renderLanguage();
+      } else {
+        language = 'en';
       }
-    } catch {}
+      renderLanguage();
+    } catch {
+      language = 'en';
+      renderLanguage();
+    }
     button.addEventListener('click', () => {
       try { localStorage.setItem(LANGUAGE_STORAGE_KEY, language); } catch {}
     });
