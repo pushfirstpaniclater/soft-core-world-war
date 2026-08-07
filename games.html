@@ -46,7 +46,7 @@
       <div class="settings-panel">
         <div class="settings-row">
           <label class="settings-label volume">VOLUME
-            <input id="gameVolume" type="range" min="0" max="1" step="0.05" value="0.80">
+            <input id="gameVolume" type="range" min="0" max="100" step="1" value="80">
             <span class="settings-value" id="volumeValue">80%</span>
           </label>
           <button id="muteGame" type="button" disabled>🔊 SOUND ON</button>
@@ -108,14 +108,21 @@
     if (!['pixelated','smooth'].includes(settings.rendering)) settings.rendering = 'pixelated';
     settings.autoSave = Boolean(settings.autoSave);
 
-    volume.value = settings.volume;
-    volumeValue.textContent = Math.round(settings.volume * 100) + '%';
+    const uiToGain = (ui) => {
+      const x = Math.max(0, Math.min(100, Number(ui))) / 100;
+      return x * x * x;
+    };
+
+    const gainToUi = (gain) => Math.round(Math.cbrt(Math.max(0, Math.min(1, Number(gain)))) * 100);
+
+    volume.value = gainToUi(settings.volume);
+    volumeValue.textContent = Math.round(Number(volume.value)) + '%';
     aspect.value = settings.aspect;
     rendering.value = settings.rendering;
     autoSave.checked = settings.autoSave;
 
     function persistSettings() {
-      settings.volume = Math.max(0, Math.min(1, Number(volume.value)));
+      settings.volume = uiToGain(volume.value);
       settings.aspect = aspect.value;
       settings.rendering = rendering.value;
       settings.autoSave = autoSave.checked;
@@ -129,25 +136,28 @@
       mute.disabled = !ready;
     }
 
-    function applyVolume(level = Number(volume.value), announce = false) {
-      const next = Math.max(0, Math.min(1, Number(level)));
-      volume.value = String(next);
-      volumeValue.textContent = Math.round(next * 100) + '%';
-      settings.volume = next;
+    function applyVolume(uiLevel = Number(volume.value), announce = false) {
+      const ui = Math.max(0, Math.min(100, Number(uiLevel)));
+      const gain = uiToGain(ui);
+      volume.value = String(ui);
+      volumeValue.textContent = Math.round(ui) + '%';
+      settings.volume = gain;
 
-      try { player?.setVolume?.(next); } catch (error) { console.warn('js-dos setVolume failed', error); }
+      try { player?.setVolume?.(gain); } catch (error) { console.warn('js-dos setVolume failed', error); }
 
       if (ci) {
         try {
-          if (isMuted || next === 0) ci.mute();
+          if (isMuted || gain === 0) ci.mute();
           else ci.unmute();
         } catch (error) { console.warn('js-dos mute state failed', error); }
       }
 
-      mute.textContent = (isMuted || next === 0) ? '🔇 MUTED' : '🔊 SOUND ON';
+      mute.textContent = (isMuted || gain === 0) ? '🔇 MUTED' : '🔊 SOUND ON';
       persistSettings();
-      if (announce && player) status.textContent = 'GAME VOLUME: ' + Math.round(next * 100) + '%';
+      if (announce && player) status.textContent = 'GAME VOLUME: ' + Math.round(ui) + '%';
     }
+
+    const reapplySavedVolume = () => applyVolume(gainToUi(settings.volume));
 
     const scoreProgram = (path) => {
       const p = path.toLowerCase().replace(/\\/g, '/');
@@ -223,24 +233,20 @@
             urlToKey: async () => SAVE_KEY
           },
           onEvent: (event, arg) => {
-            if (event === 'emu-ready') {
-              requestAnimationFrame(() => applyVolume(settings.volume));
-            }
+            if (event === 'emu-ready') requestAnimationFrame(reapplySavedVolume);
             if (event === 'ci-ready') {
               ci = arg;
               setControlsReady(true);
-              applyVolume(settings.volume);
-              setTimeout(() => applyVolume(settings.volume), 150);
+              reapplySavedVolume();
+              setTimeout(reapplySavedVolume, 150);
               status.textContent = 'CABINET 001 ONLINE. AUDIO + SAVE STORAGE CONNECTED.';
             }
-            if (event === 'bnd-play') {
-              setTimeout(() => applyVolume(settings.volume), 50);
-            }
+            if (event === 'bnd-play') setTimeout(reapplySavedVolume, 50);
           }
         });
         badge.textContent = 'ONLINE';
-        applyVolume(settings.volume);
-        setTimeout(() => applyVolume(settings.volume), 400);
+        reapplySavedVolume();
+        setTimeout(reapplySavedVolume, 400);
       } catch (error) {
         console.error(error);
         badge.textContent = 'BOOT ERROR';
@@ -264,7 +270,7 @@
         mute.textContent = '🔇 MUTED';
         status.textContent = 'GAME AUDIO MUTED.';
       } else {
-        applyVolume(settings.volume > 0 ? settings.volume : .8, true);
+        applyVolume(Number(volume.value) > 0 ? Number(volume.value) : 80, true);
       }
     });
 
@@ -288,7 +294,7 @@
       isPaused = !isPaused;
       player.setPaused(isPaused);
       pause.textContent = isPaused ? '▶ RESUME' : 'Ⅱ PAUSE';
-      if (!isPaused) setTimeout(() => applyVolume(settings.volume), 50);
+      if (!isPaused) setTimeout(reapplySavedVolume, 50);
     });
 
     fullscreen.addEventListener('click', () => {
