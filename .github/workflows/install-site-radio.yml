@@ -24,7 +24,7 @@ jobs:
           from pathlib import Path
           import re
 
-          tag = '<script src="/assets/radio.js"></script>'
+          tag = '<script src="/assets/radio.js?v=20260807-persist-v2"></script>'
           radio_tag = re.compile(
               r'\s*<script\s+src=["\'](?:/|(?:\.\./)*|\./)?assets/radio\.js(?:\?[^"\']*)?["\']\s*></script>\s*',
               re.I,
@@ -66,7 +66,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add -A -- '*.html' archive
-            git commit -m "normalize persistent radio across site except games"
+            git commit -m "install persistent radio on every page except games"
             git push origin HEAD:main
           fi
       - name: Publish current site branch
