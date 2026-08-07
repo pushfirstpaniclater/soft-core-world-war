@@ -37,6 +37,8 @@
     { url: '/assets/music/glokk40spaz on earl sweatshirt production.mp3', metaData: { title: 'GLOKK40SPAZ ON EARL SWEATSHIRT PRODUCTION' } },
     { url: '/assets/music/Migos - Fly With A Fish (Streets On Lock 2).mp3', metaData: { artist: 'MIGOS', title: 'FLY WITH A FISH' } },
     { url: '/assets/music/FOUR - FLEXOfficial music Video.mp3', metaData: { artist: 'FOUR', title: 'FLEX' } },
+    { url: '/assets/music/yeat - out the way ( slowed reverb ).mp3', metaData: { artist: 'YEAT', title: 'OUT THE WAY (SLOWED + REVERB)' } },
+    { url: '/assets/music/yeat - monëy so big (slowed reverb).mp3', metaData: { artist: 'YEAT', title: 'MONËY SO BIG (SLOWED + REVERB)' } },
   ];
 
   const style = document.createElement('style');
