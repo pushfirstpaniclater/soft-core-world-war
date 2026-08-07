@@ -7,8 +7,8 @@
     favicon.rel = 'icon';
     document.head.append(favicon);
   }
-  favicon.type = 'image/svg+xml';
-  favicon.href = '/favicon.svg?v=20260806-james';
+  favicon.type = 'image/png';
+  favicon.href = '/assets/james%20favacon.png?v=20260807-james-photo';
 
   const languageScript = document.createElement('script');
   languageScript.src = '/assets/language-persistence.js?v=20260806-2244';
