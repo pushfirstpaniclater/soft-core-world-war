@@ -9,6 +9,7 @@
   <style>
     *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#fafafa;color:#1600ff;font-family:"Lucida Console",Monaco,"Courier New",monospace}body{display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,rgba(0,212,160,.25),transparent 32%),#fafafa}.gate{width:min(92vw,520px);border:2px solid #1600ff;background:rgba(255,255,255,.94);padding:28px;box-shadow:0 0 30px rgba(0,148,255,.5);text-align:center}.anti-sun{width:120px;height:120px;margin:0 auto 20px;border-radius:50%;background:radial-gradient(circle,#00042f 0 3%,#1600ff 10%,#0094ff 35%,#00d4a0 68%,#d7ffff 100%);box-shadow:0 0 20px #0094ff,0 0 48px #00d4a0}.gate h1{margin:0 0 8px;color:#00a06f;font-size:28px}.gate p{color:#db1800;line-height:1.5}.password-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.gate input{width:100%;min-width:0;padding:13px;background:#fff;border:1px solid #ff57a5;color:#111;font:inherit;text-align:center;outline:none}.gate button{margin-top:12px;padding:13px;background:#f7f7f7;border:1px solid #1600ff;color:#1600ff;font:inherit;cursor:pointer}.gate button:hover:not(:disabled){background:#1600ff;color:#fff}.gate button:disabled{opacity:.45;cursor:not-allowed}.password-toggle{width:auto;min-width:82px;margin-top:0!important;border-color:#ff57a5!important;color:#ff57a5!important}.password-toggle:hover{background:#ff57a5!important;color:#fff!important}.submit-button{width:100%}.status{min-height:22px;margin-top:12px;color:#ff57a5}.back{display:inline-block;margin-top:16px;color:#00a06f;text-decoration:none}
   </style>
+<style id="scww-hide-legacy-radio">.player{display:none!important}</style>
 </head>
 <body>
   <main class="gate">
@@ -39,7 +40,7 @@
       form.onsubmit=event=>{event.preventDefault();if(remaining()>0)return;submit.disabled=true;status.textContent='VERIFYING INVERSE SIGNAL...';const entered=normalize(input.value);input.value='';if(entered===EXPECTED_NAME){saveCookie();sessionStorage.setItem(ACCESS_KEY,ACCESS_VALUE);sessionStorage.removeItem(ATTEMPT_KEY);sessionStorage.removeItem(LOCK_KEY);location.replace('/solar-issue-2.html');return}const attempts=Number(sessionStorage.getItem(ATTEMPT_KEY)||0)+1;sessionStorage.setItem(ATTEMPT_KEY,String(attempts));if(attempts>=5){sessionStorage.setItem(ATTEMPT_KEY,'0');sessionStorage.setItem(LOCK_KEY,String(Date.now()+30000));renderLock();return}submit.disabled=false;status.textContent=`ACCESS DENIED — ${5-attempts} ATTEMPTS REMAIN`;input.focus()};
     })();
   </script>
-<script src="/assets/radio.js?v=20260807-seamless-v3"></script>
-<script src="/assets/site-router.js?v=20260807-seamless-v3"></script>
+<script src="/assets/radio.js?v=20260807-seamless-v4"></script>
+<script src="/assets/site-router.js?v=20260807-seamless-v4"></script>
 </body>
 </html>
