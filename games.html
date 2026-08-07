@@ -6,7 +6,7 @@
   <title>SCWW GAMES</title>
   <link rel="stylesheet" href="https://v8.js-dos.com/latest/js-dos.css">
   <style>
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#080908;color:#fff;font-family:"Lucida Console",Monaco,"Courier New",monospace}body{padding:24px 320px 54px 24px;background:radial-gradient(circle at 50% 35%,rgba(255,70,255,.12),transparent 38%),#080908}.wrap{width:min(980px,100%);margin:0 auto;border:2px solid #26ecff;background:rgba(0,0,0,.92);box-shadow:0 0 28px rgba(38,236,255,.25);padding:34px;text-align:center}h1{margin:0;color:#ff46ff;font-size:clamp(34px,8vw,82px);text-shadow:3px 3px #000}.signal{margin:12px 0 30px;color:#ffe900}.cabinet{border:1px dashed #54ff3d;padding:18px;color:#54ff3d;text-align:left}.cabinet-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:14px}.game-title{color:#ff46ff;font-size:clamp(18px,3vw,30px);line-height:1.1}.system{color:#26ecff;font-size:11px;margin-top:6px}.badge{border:1px solid #ffe900;color:#ffe900;padding:5px 7px;font-size:10px;white-space:nowrap}.screen-wrap{border:2px solid #222;background:#000;padding:8px}.screen{width:100%;aspect-ratio:4/3;min-height:320px;background:#000;display:grid;place-items:center;position:relative;overflow:hidden}.placeholder{text-align:center;color:#54ff3d;line-height:1.6;padding:24px}.placeholder strong{display:block;color:#ffe900;font-size:18px;margin-bottom:8px}.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.controls button{border:1px solid #26ecff;background:#050505;color:#26ecff;padding:9px 12px;font:12px/1 "Lucida Console",Monaco,"Courier New",monospace;cursor:pointer}.controls button:hover{background:#26ecff;color:#000}.controls button:disabled{opacity:.45;cursor:not-allowed}.status{margin-top:10px;color:#ffe900;font-size:11px;line-height:1.5}.small{margin-top:14px;color:#26ecff;font-size:11px;line-height:1.5}.detected{color:#54ff3d}.back{display:inline-block;margin-top:28px;color:#ffe900;text-decoration:none}.back:hover{text-decoration:underline}@media(max-width:1050px){body{padding-right:24px}}@media(max-width:620px){body{padding:10px}.wrap{padding:18px}.screen{min-height:240px}.cabinet-head{display:block}.badge{display:inline-block;margin-top:10px}}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#080908;color:#fff;font-family:"Lucida Console",Monaco,"Courier New",monospace}body{padding:24px 320px 54px 24px;background:radial-gradient(circle at 50% 35%,rgba(255,70,255,.12),transparent 38%),#080908}.wrap{width:min(980px,100%);margin:0 auto;border:2px solid #26ecff;background:rgba(0,0,0,.92);box-shadow:0 0 28px rgba(38,236,255,.25);padding:34px;text-align:center}h1{margin:0;color:#ff46ff;font-size:clamp(34px,8vw,82px);text-shadow:3px 3px #000}.signal{margin:12px 0 30px;color:#ffe900}.cabinet{border:1px dashed #54ff3d;padding:18px;color:#54ff3d;text-align:left}.cabinet-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:14px}.game-title{color:#ff46ff;font-size:clamp(18px,3vw,30px);line-height:1.1}.system{color:#26ecff;font-size:11px;margin-top:6px}.badge{border:1px solid #ffe900;color:#ffe900;padding:5px 7px;font-size:10px;white-space:nowrap}.screen-wrap{border:2px solid #222;background:#000;padding:8px}.screen{width:100%;aspect-ratio:4/3;min-height:320px;background:#000;display:grid;place-items:center;position:relative;overflow:hidden}.placeholder{text-align:center;color:#54ff3d;line-height:1.6;padding:24px}.placeholder strong{display:block;color:#ffe900;font-size:18px;margin-bottom:8px}.controls,.settings-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}.controls button,.settings-row button,.settings-row select{border:1px solid #26ecff;background:#050505;color:#26ecff;padding:9px 12px;font:12px/1 "Lucida Console",Monaco,"Courier New",monospace;cursor:pointer}.controls button:hover,.settings-row button:hover,.settings-row select:hover{background:#26ecff;color:#000}.controls button:disabled,.settings-row button:disabled{opacity:.45;cursor:not-allowed}.settings-panel{margin-top:12px;border:1px solid #444;background:#050505;padding:12px;color:#26ecff}.settings-label{display:flex;gap:8px;align-items:center;font-size:11px}.settings-label.volume{min-width:280px;flex:1}.settings-label input[type="range"]{width:min(260px,45vw);accent-color:#54ff3d}.settings-value{color:#ffe900;min-width:36px}.status{margin-top:10px;color:#ffe900;font-size:11px;line-height:1.5}.small{margin-top:14px;color:#26ecff;font-size:11px;line-height:1.5}.detected{color:#54ff3d}.saved{color:#54ff3d}.back{display:inline-block;margin-top:28px;color:#ffe900;text-decoration:none}.back:hover{text-decoration:underline}@media(max-width:1050px){body{padding-right:24px}}@media(max-width:620px){body{padding:10px}.wrap{padding:18px}.screen{min-height:240px}.cabinet-head{display:block}.badge{display:inline-block;margin-top:10px}.settings-label.volume{min-width:100%}}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="https://v8.js-dos.com/latest/emulators/emulators.js"></script>
@@ -38,10 +38,37 @@
 
       <div class="controls">
         <button id="launchGame" type="button" disabled>▶ LAUNCH CABINET</button>
+        <button id="saveGame" type="button" disabled>▣ SAVE</button>
         <button id="fullScreen" type="button" disabled>⛶ FULLSCREEN</button>
+        <button id="pauseGame" type="button" disabled>Ⅱ PAUSE</button>
       </div>
+
+      <div class="settings-panel">
+        <div class="settings-row">
+          <label class="settings-label volume">VOLUME
+            <input id="gameVolume" type="range" min="0" max="1" step="0.05" value="0.80">
+            <span class="settings-value" id="volumeValue">80%</span>
+          </label>
+          <button id="muteGame" type="button" disabled>🔊 SOUND ON</button>
+          <label class="settings-label">ASPECT
+            <select id="aspectSetting">
+              <option value="4/3">4:3</option>
+              <option value="Fit">FIT</option>
+              <option value="AsIs">ORIGINAL</option>
+            </select>
+          </label>
+          <label class="settings-label">PIXELS
+            <select id="renderSetting">
+              <option value="pixelated">CRISP</option>
+              <option value="smooth">SMOOTH</option>
+            </select>
+          </label>
+          <label class="settings-label"><input id="autoSaveSetting" type="checkbox" checked> AUTOSAVE</label>
+        </div>
+      </div>
+
       <div class="status" id="gameStatus">SCANNING DOSBOX_SSF2T.ZIP...</div>
-      <div class="small">SOURCE: <span class="detected">assets/games/DOSBOX_SSF2T.ZIP</span><br><span id="detectedProgram">ENTRYPOINT: DETECTING...</span></div>
+      <div class="small">SOURCE: <span class="detected">assets/games/DOSBOX_SSF2T.ZIP</span><br><span id="detectedProgram">ENTRYPOINT: DETECTING...</span><br><span class="saved">SAVE SLOT: SCWW_SSF2T_V1 // BROWSER LOCAL STORAGE</span></div>
     </section>
 
     <a class="back" href="index.html">← RETURN TO TRANSMISSION</a>
@@ -50,8 +77,18 @@
   <script>
   (() => {
     const ZIP_URL = 'assets/games/DOSBOX_SSF2T.ZIP';
+    const SAVE_KEY = 'scww-ssf2t-v1';
+    const SETTINGS_KEY = 'scwwSsf2tSettingsV1';
     const launch = document.getElementById('launchGame');
+    const save = document.getElementById('saveGame');
     const fullscreen = document.getElementById('fullScreen');
+    const pause = document.getElementById('pauseGame');
+    const mute = document.getElementById('muteGame');
+    const volume = document.getElementById('gameVolume');
+    const volumeValue = document.getElementById('volumeValue');
+    const aspect = document.getElementById('aspectSetting');
+    const rendering = document.getElementById('renderSetting');
+    const autoSave = document.getElementById('autoSaveSetting');
     const badge = document.getElementById('bundleBadge');
     const status = document.getElementById('gameStatus');
     const detectedProgram = document.getElementById('detectedProgram');
@@ -60,6 +97,37 @@
     let entrypoint = '';
     let bundleUrl = '';
     let player = null;
+    let ci = null;
+    let isMuted = false;
+    let isPaused = false;
+
+    let settings = { volume: .8, aspect: '4/3', rendering: 'pixelated', autoSave: true };
+    try { settings = { ...settings, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch {}
+    settings.volume = Math.max(0, Math.min(1, Number(settings.volume) || 0));
+    if (!['4/3','Fit','AsIs'].includes(settings.aspect)) settings.aspect = '4/3';
+    if (!['pixelated','smooth'].includes(settings.rendering)) settings.rendering = 'pixelated';
+    settings.autoSave = Boolean(settings.autoSave);
+
+    volume.value = settings.volume;
+    volumeValue.textContent = Math.round(settings.volume * 100) + '%';
+    aspect.value = settings.aspect;
+    rendering.value = settings.rendering;
+    autoSave.checked = settings.autoSave;
+
+    function persistSettings() {
+      settings.volume = Number(volume.value);
+      settings.aspect = aspect.value;
+      settings.rendering = rendering.value;
+      settings.autoSave = autoSave.checked;
+      try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {}
+    }
+
+    function setControlsReady(ready) {
+      save.disabled = !ready;
+      fullscreen.disabled = !ready;
+      pause.disabled = !ready;
+      mute.disabled = !ready;
+    }
 
     const scoreProgram = (path) => {
       const p = path.toLowerCase().replace(/\\/g, '/');
@@ -82,7 +150,6 @@
         const bytes = await response.arrayBuffer();
         const zip = await JSZip.loadAsync(bytes);
         const names = Object.keys(zip.files).filter((name) => !zip.files[name].dir);
-
         const embeddedBundle = names.some((name) => name.toLowerCase() === '.jsdos/dosbox.conf');
         if (embeddedBundle) {
           entrypoint = '__EMBEDDED_JSDOS__';
@@ -94,7 +161,6 @@
           if (!entrypoint) throw new Error('NO DOS EXECUTABLE FOUND IN ZIP');
           detectedProgram.textContent = 'ENTRYPOINT: ' + entrypoint.replace(/\//g, '\\');
         }
-
         badge.textContent = 'ZIP READY';
         status.textContent = 'SOFTWARE DETECTED. CABINET READY.';
         launch.disabled = false;
@@ -126,11 +192,25 @@
         player = Dos(dosElement, {
           url: bundleUrl,
           autoStart: true,
-          pathPrefix: 'https://v8.js-dos.com/latest/emulators/'
+          pathPrefix: 'https://v8.js-dos.com/latest/emulators/',
+          volume: settings.volume,
+          autoSave: settings.autoSave,
+          imageRendering: settings.rendering,
+          renderAspect: settings.aspect,
+          scaleControls: 1.15,
+          fsChanges: {
+            local: true,
+            urlToKey: async () => SAVE_KEY
+          },
+          onEvent: (event, arg) => {
+            if (event === 'ci-ready') {
+              ci = arg;
+              setControlsReady(true);
+              status.textContent = 'CABINET 001 ONLINE. SAVE STORAGE CONNECTED.';
+            }
+          }
         });
-        fullscreen.disabled = false;
         badge.textContent = 'ONLINE';
-        status.textContent = 'CABINET 001 ONLINE. CLICK THE GAME WINDOW FOR KEYBOARD INPUT.';
       } catch (error) {
         console.error(error);
         badge.textContent = 'BOOT ERROR';
@@ -139,11 +219,71 @@
       }
     });
 
+    volume.addEventListener('input', () => {
+      volumeValue.textContent = Math.round(Number(volume.value) * 100) + '%';
+      if (player) player.setVolume(Number(volume.value));
+      if (isMuted && Number(volume.value) > 0) {
+        isMuted = false;
+        ci?.unmute?.();
+        mute.textContent = '🔊 SOUND ON';
+      }
+      persistSettings();
+    });
+
+    mute.addEventListener('click', () => {
+      if (!ci) return;
+      isMuted = !isMuted;
+      if (isMuted) ci.mute(); else ci.unmute();
+      mute.textContent = isMuted ? '🔇 MUTED' : '🔊 SOUND ON';
+    });
+
+    save.addEventListener('click', async () => {
+      if (!player) return;
+      save.disabled = true;
+      status.textContent = 'WRITING SAVE DATA...';
+      try {
+        const ok = await player.save();
+        status.textContent = ok === false ? 'NO NEW FILESYSTEM CHANGES TO SAVE.' : 'SAVE DATA STORED LOCALLY ✓';
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'SAVE FAILED: ' + (error.message || error);
+      } finally {
+        save.disabled = false;
+      }
+    });
+
+    pause.addEventListener('click', () => {
+      if (!player) return;
+      isPaused = !isPaused;
+      player.setPaused(isPaused);
+      pause.textContent = isPaused ? '▶ RESUME' : 'Ⅱ PAUSE';
+    });
+
     fullscreen.addEventListener('click', () => {
-      if (dosElement.requestFullscreen) dosElement.requestFullscreen();
+      if (player?.setFullScreen) player.setFullScreen(true);
+      else if (dosElement.requestFullscreen) dosElement.requestFullscreen();
+    });
+
+    aspect.addEventListener('change', () => {
+      player?.setRenderAspect?.(aspect.value);
+      persistSettings();
+    });
+
+    rendering.addEventListener('change', () => {
+      player?.setImageRendering?.(rendering.value);
+      persistSettings();
+    });
+
+    autoSave.addEventListener('change', () => {
+      player?.setAutoSave?.(autoSave.checked);
+      persistSettings();
     });
 
     window.addEventListener('pagehide', () => {
+      persistSettings();
+      if (settings.autoSave && player) {
+        try { player.save(); } catch {}
+      }
       if (bundleUrl && bundleUrl.startsWith('blob:')) URL.revokeObjectURL(bundleUrl);
     });
 
