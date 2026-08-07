@@ -48,7 +48,7 @@
     #scww-webamp-toggle{position:fixed;right:12px;top:12px;z-index:10001;pointer-events:auto;border:1px solid #54ff3d;background:#050505;color:#54ff3d;padding:5px 8px;font:10px/1 "Lucida Console",Monaco,"Courier New",monospace;letter-spacing:.05em;cursor:pointer;box-shadow:2px 2px #000}
     #scww-webamp-toggle:hover,#scww-webamp-toggle:focus-visible{background:#54ff3d;color:#000;outline:none}
     #scww-webamp-shell.is-minimized #scww-webamp-stage{display:none}
-    @media(max-width:760px){#scww-webamp-toggle{top:8px;right:8px}}
+    @media(max-width:900px){#scww-webamp-toggle{top:8px;right:8px}}
   `;
   document.head.append(style);
 
@@ -59,8 +59,11 @@
 
   const stage = document.getElementById('scww-webamp-stage');
   const toggle = document.getElementById('scww-webamp-toggle');
-  let minimized = false;
-  try { minimized = localStorage.getItem('scwwWebampMinimizedV1') === 'true'; } catch {}
+  let minimized = window.innerWidth < 900;
+  try {
+    const savedMinimized = localStorage.getItem('scwwWebampMinimizedV1');
+    if (savedMinimized === 'true' || savedMinimized === 'false') minimized = savedMinimized === 'true';
+  } catch {}
 
   function renderMinimized() {
     shell.classList.toggle('is-minimized', minimized);
@@ -100,8 +103,7 @@
         return;
       }
 
-      const radioLeft = Math.max(12, window.innerWidth - 287);
-      const visualizerLeft = Math.max(12, radioLeft - 287);
+      const rightColumnLeft = Math.max(8, window.innerWidth - 283);
 
       const webamp = new Webamp({
         initialTracks: tracks,
@@ -110,17 +112,17 @@
         zIndex: 9999,
         windowLayout: {
           main: {
-            position: { top: 48, left: radioLeft },
+            position: { top: 42, left: rightColumnLeft },
             closed: false,
           },
           playlist: {
-            position: { top: 164, left: radioLeft },
+            position: { top: 158, left: rightColumnLeft },
             size: { extraHeight: 1, extraWidth: 0 },
             closed: false,
           },
           milkdrop: {
-            position: { top: 48, left: visualizerLeft },
-            size: { extraHeight: 3, extraWidth: 0 },
+            position: { top: 318, left: rightColumnLeft },
+            size: { extraHeight: 2, extraWidth: 0 },
             closed: false,
           },
         },
