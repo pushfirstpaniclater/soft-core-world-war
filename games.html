@@ -6,8 +6,10 @@
   <title>SCWW GAMES</title>
   <link rel="stylesheet" href="https://v8.js-dos.com/latest/js-dos.css">
   <style>
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#080908;color:#fff;font-family:"Lucida Console",Monaco,"Courier New",monospace}body{padding:24px 320px 54px 24px;background:radial-gradient(circle at 50% 35%,rgba(255,70,255,.12),transparent 38%),#080908}.wrap{width:min(980px,100%);margin:0 auto;border:2px solid #26ecff;background:rgba(0,0,0,.92);box-shadow:0 0 28px rgba(38,236,255,.25);padding:34px;text-align:center}h1{margin:0;color:#ff46ff;font-size:clamp(34px,8vw,82px);text-shadow:3px 3px #000}.signal{margin:12px 0 30px;color:#ffe900}.cabinet{border:1px dashed #54ff3d;padding:18px;color:#54ff3d;text-align:left}.cabinet-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:14px}.game-title{color:#ff46ff;font-size:clamp(18px,3vw,30px);line-height:1.1}.system{color:#26ecff;font-size:11px;margin-top:6px}.badge{border:1px solid #ffe900;color:#ffe900;padding:5px 7px;font-size:10px;white-space:nowrap}.screen-wrap{border:2px solid #222;background:#000;padding:8px}.screen{width:100%;aspect-ratio:4/3;min-height:320px;background:#000;display:grid;place-items:center;position:relative;overflow:hidden}.placeholder{text-align:center;color:#54ff3d;line-height:1.6;padding:24px}.placeholder strong{display:block;color:#ffe900;font-size:18px;margin-bottom:8px}.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.controls button{border:1px solid #26ecff;background:#050505;color:#26ecff;padding:9px 12px;font:12px/1 "Lucida Console",Monaco,"Courier New",monospace;cursor:pointer}.controls button:hover{background:#26ecff;color:#000}.controls button:disabled{opacity:.45;cursor:not-allowed}.status{margin-top:10px;color:#ffe900;font-size:11px;line-height:1.5}.small{margin-top:14px;color:#26ecff;font-size:11px;line-height:1.5}.back{display:inline-block;margin-top:28px;color:#ffe900;text-decoration:none}.back:hover{text-decoration:underline}@media(max-width:1050px){body{padding-right:24px}}@media(max-width:620px){body{padding:10px}.wrap{padding:18px}.screen{min-height:240px}.cabinet-head{display:block}.badge{display:inline-block;margin-top:10px}}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#080908;color:#fff;font-family:"Lucida Console",Monaco,"Courier New",monospace}body{padding:24px 320px 54px 24px;background:radial-gradient(circle at 50% 35%,rgba(255,70,255,.12),transparent 38%),#080908}.wrap{width:min(980px,100%);margin:0 auto;border:2px solid #26ecff;background:rgba(0,0,0,.92);box-shadow:0 0 28px rgba(38,236,255,.25);padding:34px;text-align:center}h1{margin:0;color:#ff46ff;font-size:clamp(34px,8vw,82px);text-shadow:3px 3px #000}.signal{margin:12px 0 30px;color:#ffe900}.cabinet{border:1px dashed #54ff3d;padding:18px;color:#54ff3d;text-align:left}.cabinet-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:14px}.game-title{color:#ff46ff;font-size:clamp(18px,3vw,30px);line-height:1.1}.system{color:#26ecff;font-size:11px;margin-top:6px}.badge{border:1px solid #ffe900;color:#ffe900;padding:5px 7px;font-size:10px;white-space:nowrap}.screen-wrap{border:2px solid #222;background:#000;padding:8px}.screen{width:100%;aspect-ratio:4/3;min-height:320px;background:#000;display:grid;place-items:center;position:relative;overflow:hidden}.placeholder{text-align:center;color:#54ff3d;line-height:1.6;padding:24px}.placeholder strong{display:block;color:#ffe900;font-size:18px;margin-bottom:8px}.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.controls button{border:1px solid #26ecff;background:#050505;color:#26ecff;padding:9px 12px;font:12px/1 "Lucida Console",Monaco,"Courier New",monospace;cursor:pointer}.controls button:hover{background:#26ecff;color:#000}.controls button:disabled{opacity:.45;cursor:not-allowed}.status{margin-top:10px;color:#ffe900;font-size:11px;line-height:1.5}.small{margin-top:14px;color:#26ecff;font-size:11px;line-height:1.5}.detected{color:#54ff3d}.back{display:inline-block;margin-top:28px;color:#ffe900;text-decoration:none}.back:hover{text-decoration:underline}@media(max-width:1050px){body{padding-right:24px}}@media(max-width:620px){body{padding:10px}.wrap{padding:18px}.screen{min-height:240px}.cabinet-head{display:block}.badge{display:inline-block;margin-top:10px}}
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="https://v8.js-dos.com/latest/emulators/emulators.js"></script>
   <script src="https://v8.js-dos.com/latest/js-dos.js"></script>
 </head>
 <body>
@@ -21,15 +23,15 @@
           <div class="game-title" id="ssf2-title">SUPER STREET FIGHTER II TURBO</div>
           <div class="system">CABINET 001 // JS-DOS // DOS PORT</div>
         </div>
-        <div class="badge" id="bundleBadge">CHECKING BUNDLE...</div>
+        <div class="badge" id="bundleBadge">SCANNING ZIP...</div>
       </div>
 
       <div class="screen-wrap">
         <div class="screen" id="dos">
           <div class="placeholder" id="placeholder">
             <strong>SUPER STREET FIGHTER II TURBO</strong>
-            INSERT SOFTWARE<br>
-            <span class="small">Expected bundle: assets/games/super-street-fighter-2-turbo.jsdos</span>
+            DOSBOX SOFTWARE DETECTED<br>
+            <span class="small">Preparing uploaded archive for js-dos.</span>
           </div>
         </div>
       </div>
@@ -38,8 +40,8 @@
         <button id="launchGame" type="button" disabled>▶ LAUNCH CABINET</button>
         <button id="fullScreen" type="button" disabled>⛶ FULLSCREEN</button>
       </div>
-      <div class="status" id="gameStatus">SEARCHING FOR LOCAL GAME BUNDLE...</div>
-      <div class="small">The emulator is installed. The commercial game data is not bundled with the site; upload your own legally obtained js-dos bundle at the expected path to activate this cabinet.</div>
+      <div class="status" id="gameStatus">SCANNING DOSBOX_SSF2T.ZIP...</div>
+      <div class="small">SOURCE: <span class="detected">assets/games/DOSBOX_SSF2T.ZIP</span><br><span id="detectedProgram">ENTRYPOINT: DETECTING...</span></div>
     </section>
 
     <a class="back" href="index.html">← RETURN TO TRANSMISSION</a>
@@ -47,55 +49,105 @@
 
   <script>
   (() => {
-    const BUNDLE = 'assets/games/super-street-fighter-2-turbo.jsdos';
+    const ZIP_URL = 'assets/games/DOSBOX_SSF2T.ZIP';
     const launch = document.getElementById('launchGame');
     const fullscreen = document.getElementById('fullScreen');
     const badge = document.getElementById('bundleBadge');
     const status = document.getElementById('gameStatus');
+    const detectedProgram = document.getElementById('detectedProgram');
     const dosElement = document.getElementById('dos');
     const placeholder = document.getElementById('placeholder');
+    let entrypoint = '';
+    let bundleUrl = '';
     let player = null;
 
-    async function bundleExists() {
-      try {
-        const res = await fetch(BUNDLE, { method: 'HEAD', cache: 'no-store' });
-        return res.ok;
-      } catch { return false; }
-    }
+    const scoreProgram = (path) => {
+      const p = path.toLowerCase().replace(/\\/g, '/');
+      const base = p.split('/').pop() || p;
+      let score = 0;
+      if (/\.(exe|com|bat)$/.test(base)) score += 10;
+      if (/(ssf|sf2|street|fighter|turbo)/.test(base)) score += 100;
+      if (/(play|start|run|game)/.test(base)) score += 30;
+      if (/\.bat$/.test(base)) score += 8;
+      if (/\.exe$/.test(base)) score += 6;
+      if (/(dosbox|setup|install|uninst|config|sound|setsound|readme|help|test|diagnos|launcher)/.test(base)) score -= 80;
+      if (/(tools?|utils?|drivers?|docs?)/.test(p)) score -= 25;
+      return score;
+    };
 
-    async function checkBundle() {
-      const exists = await bundleExists();
-      if (exists) {
-        badge.textContent = 'BUNDLE READY';
+    async function inspectZip() {
+      try {
+        const response = await fetch(ZIP_URL, { cache: 'no-store' });
+        if (!response.ok) throw new Error('ZIP NOT FOUND');
+        const bytes = await response.arrayBuffer();
+        const zip = await JSZip.loadAsync(bytes);
+        const names = Object.keys(zip.files).filter((name) => !zip.files[name].dir);
+
+        const embeddedBundle = names.some((name) => name.toLowerCase() === '.jsdos/dosbox.conf');
+        if (embeddedBundle) {
+          entrypoint = '__EMBEDDED_JSDOS__';
+          detectedProgram.textContent = 'ENTRYPOINT: EMBEDDED JSDOS CONFIG';
+        } else {
+          const programs = names.filter((name) => /\.(exe|com|bat)$/i.test(name));
+          programs.sort((a, b) => scoreProgram(b) - scoreProgram(a) || a.length - b.length);
+          entrypoint = programs[0] || '';
+          if (!entrypoint) throw new Error('NO DOS EXECUTABLE FOUND IN ZIP');
+          detectedProgram.textContent = 'ENTRYPOINT: ' + entrypoint.replace(/\//g, '\\');
+        }
+
+        badge.textContent = 'ZIP READY';
         status.textContent = 'SOFTWARE DETECTED. CABINET READY.';
         launch.disabled = false;
-      } else {
-        badge.textContent = 'BUNDLE REQUIRED';
-        status.textContent = 'UPLOAD THE .JSDOS BUNDLE TO ACTIVATE CABINET 001.';
+      } catch (error) {
+        console.error(error);
+        badge.textContent = 'ZIP ERROR';
+        status.textContent = 'COULD NOT PREPARE DOSBOX_SSF2T.ZIP: ' + (error.message || error);
       }
+    }
+
+    async function makeBundle() {
+      if (entrypoint === '__EMBEDDED_JSDOS__') return ZIP_URL;
+      status.textContent = 'CONVERTING DOSBOX ZIP TO JSDOS BUNDLE...';
+      emulators.pathPrefix = 'https://v8.js-dos.com/latest/emulators/';
+      const builder = await emulators.bundle();
+      await builder.extract(ZIP_URL, '/');
+      const command = entrypoint.replace(/\//g, '\\');
+      builder.autoexec(command);
+      const bundleBytes = await builder.toUint8Array(true);
+      return URL.createObjectURL(new Blob([bundleBytes], { type: 'application/zip' }));
     }
 
     launch.addEventListener('click', async () => {
       launch.disabled = true;
       status.textContent = 'BOOTING DOS TRANSMISSION...';
-      placeholder?.remove();
       try {
-        player = Dos(dosElement, { url: BUNDLE, autoStart: true });
+        bundleUrl = await makeBundle();
+        placeholder?.remove();
+        player = Dos(dosElement, {
+          url: bundleUrl,
+          autoStart: true,
+          pathPrefix: 'https://v8.js-dos.com/latest/emulators/'
+        });
         fullscreen.disabled = false;
-        status.textContent = 'CABINET 001 ONLINE.';
+        badge.textContent = 'ONLINE';
+        status.textContent = 'CABINET 001 ONLINE. CLICK THE GAME WINDOW FOR KEYBOARD INPUT.';
       } catch (error) {
         console.error(error);
-        status.textContent = 'BOOT FAILED. VERIFY THE JSDOS BUNDLE.';
+        badge.textContent = 'BOOT ERROR';
+        status.textContent = 'BOOT FAILED: ' + (error.message || error);
         launch.disabled = false;
       }
     });
 
     fullscreen.addEventListener('click', () => {
-      const target = dosElement;
-      if (target.requestFullscreen) target.requestFullscreen();
+      if (dosElement.requestFullscreen) dosElement.requestFullscreen();
     });
 
-    checkBundle();
+    window.addEventListener('pagehide', () => {
+      if (bundleUrl && bundleUrl.startsWith('blob:')) URL.revokeObjectURL(bundleUrl);
+    });
+
+    inspectZip();
   })();
   </script>
   <script src="assets/page-autoplay.js"></script>
