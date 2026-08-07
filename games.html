@@ -115,7 +115,7 @@
     autoSave.checked = settings.autoSave;
 
     function persistSettings() {
-      settings.volume = Number(volume.value);
+      settings.volume = Math.max(0, Math.min(1, Number(volume.value)));
       settings.aspect = aspect.value;
       settings.rendering = rendering.value;
       settings.autoSave = autoSave.checked;
@@ -127,6 +127,26 @@
       fullscreen.disabled = !ready;
       pause.disabled = !ready;
       mute.disabled = !ready;
+    }
+
+    function applyVolume(level = Number(volume.value), announce = false) {
+      const next = Math.max(0, Math.min(1, Number(level)));
+      volume.value = String(next);
+      volumeValue.textContent = Math.round(next * 100) + '%';
+      settings.volume = next;
+
+      try { player?.setVolume?.(next); } catch (error) { console.warn('js-dos setVolume failed', error); }
+
+      if (ci) {
+        try {
+          if (isMuted || next === 0) ci.mute();
+          else ci.unmute();
+        } catch (error) { console.warn('js-dos mute state failed', error); }
+      }
+
+      mute.textContent = (isMuted || next === 0) ? '🔇 MUTED' : '🔊 SOUND ON';
+      persistSettings();
+      if (announce && player) status.textContent = 'GAME VOLUME: ' + Math.round(next * 100) + '%';
     }
 
     const scoreProgram = (path) => {
@@ -203,14 +223,24 @@
             urlToKey: async () => SAVE_KEY
           },
           onEvent: (event, arg) => {
+            if (event === 'emu-ready') {
+              requestAnimationFrame(() => applyVolume(settings.volume));
+            }
             if (event === 'ci-ready') {
               ci = arg;
               setControlsReady(true);
-              status.textContent = 'CABINET 001 ONLINE. SAVE STORAGE CONNECTED.';
+              applyVolume(settings.volume);
+              setTimeout(() => applyVolume(settings.volume), 150);
+              status.textContent = 'CABINET 001 ONLINE. AUDIO + SAVE STORAGE CONNECTED.';
+            }
+            if (event === 'bnd-play') {
+              setTimeout(() => applyVolume(settings.volume), 50);
             }
           }
         });
         badge.textContent = 'ONLINE';
+        applyVolume(settings.volume);
+        setTimeout(() => applyVolume(settings.volume), 400);
       } catch (error) {
         console.error(error);
         badge.textContent = 'BOOT ERROR';
@@ -220,21 +250,22 @@
     });
 
     volume.addEventListener('input', () => {
-      volumeValue.textContent = Math.round(Number(volume.value) * 100) + '%';
-      if (player) player.setVolume(Number(volume.value));
-      if (isMuted && Number(volume.value) > 0) {
-        isMuted = false;
-        ci?.unmute?.();
-        mute.textContent = '🔊 SOUND ON';
-      }
-      persistSettings();
+      if (Number(volume.value) > 0 && isMuted) isMuted = false;
+      applyVolume(Number(volume.value), true);
     });
 
+    volume.addEventListener('change', () => applyVolume(Number(volume.value), true));
+
     mute.addEventListener('click', () => {
-      if (!ci) return;
       isMuted = !isMuted;
-      if (isMuted) ci.mute(); else ci.unmute();
-      mute.textContent = isMuted ? '🔇 MUTED' : '🔊 SOUND ON';
+      if (isMuted) {
+        try { ci?.mute?.(); } catch {}
+        try { player?.setVolume?.(0); } catch {}
+        mute.textContent = '🔇 MUTED';
+        status.textContent = 'GAME AUDIO MUTED.';
+      } else {
+        applyVolume(settings.volume > 0 ? settings.volume : .8, true);
+      }
     });
 
     save.addEventListener('click', async () => {
@@ -257,6 +288,7 @@
       isPaused = !isPaused;
       player.setPaused(isPaused);
       pause.textContent = isPaused ? '▶ RESUME' : 'Ⅱ PAUSE';
+      if (!isPaused) setTimeout(() => applyVolume(settings.volume), 50);
     });
 
     fullscreen.addEventListener('click', () => {
