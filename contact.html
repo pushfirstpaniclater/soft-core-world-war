@@ -9,15 +9,15 @@
     main{max-width:980px;margin:0 auto}.top{text-align:center;margin-bottom:18px}.top h1{margin:0;color:#800000;font:700 30px/1.1 Georgia,serif}.top p{margin:6px 0;color:#555;font-size:13px}.rule{border:0;border-top:1px solid #b7c58a;margin:14px 0}
     .identity{max-width:620px;margin:0 auto 16px;padding:10px 12px;background:#d6daf0;border:1px solid #b7c5d9;font:13px/1.4 "Courier New",monospace}.trip{color:#117743;font-weight:700}.fine{color:#666;font-size:11px}
     form{max-width:620px;margin:0 auto 26px;background:#d6daf0;border:1px solid #b7c5d9;padding:12px}.row{display:grid;grid-template-columns:86px 1fr;gap:8px;align-items:start;margin:7px 0}.row label{font-weight:700;font-size:12px;padding-top:7px}input,textarea,button{font:13px/1.35 Arial,Helvetica,sans-serif}input,textarea{width:100%;border:1px solid #999;background:#fff;padding:7px;color:#111}textarea{min-height:145px;resize:vertical}button{background:#eee;border:1px solid #777;padding:7px 12px;cursor:pointer;font-weight:700}button:hover{background:#fff}.status{min-height:18px;margin-top:8px;color:#800000;font-size:12px}.counter{text-align:right;color:#666;font-size:11px}
-    .wall-title{color:#800000;font-weight:700;margin:0 0 8px}.post{margin:0 0 10px;padding:8px 10px;background:#f0e0d6;border:1px solid #d9bfb7;box-shadow:1px 1px 0 rgba(0,0,0,.06)}.post-head{font-size:12px;line-height:1.4}.subject{color:#cc1105;font-weight:700}.poster{color:#117743;font-weight:700}.date{color:#555}.no{color:#800000}.message{white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0 3px;font:14px/1.45 Arial,Helvetica,sans-serif}.empty{color:#666;font-style:italic}.back{display:inline-block;margin-top:16px;color:#34345c;font-size:12px;text-decoration:none}.back:hover{text-decoration:underline}
-    @media(max-width:1050px){body{padding-right:18px}}@media(max-width:620px){body{padding:12px}.row{grid-template-columns:1fr;gap:3px}.row label{padding-top:0}.top h1{font-size:24px}}
+    .wall-title{color:#800000;font-weight:700;margin:0 0 8px}.thread{margin:0 0 16px}.post{margin:0;padding:8px 10px;background:#f0e0d6;border:1px solid #d9bfb7;box-shadow:1px 1px 0 rgba(0,0,0,.06)}.reply{margin:6px 0 0 34px;background:#e8e8f3;border-color:#c7c7d6}.post-head{font-size:12px;line-height:1.4}.subject{color:#cc1105;font-weight:700}.poster{color:#117743;font-weight:700}.date{color:#555}.no{color:#800000}.message{white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0 3px;font:14px/1.45 Arial,Helvetica,sans-serif}.reply-link{margin-left:8px;color:#34345c;background:none;border:0;padding:0;font-size:11px;text-decoration:underline;cursor:pointer}.reply-box{display:none;margin:7px 0 0 34px;background:#d6daf0;border:1px solid #b7c5d9;padding:10px;max-width:620px}.reply-box.active{display:block}.reply-box textarea{min-height:90px}.reply-target{font-size:11px;color:#800000;margin-bottom:6px}.reply-actions{display:flex;gap:6px;align-items:center;margin-top:6px}.reply-status{font-size:11px;color:#800000}.empty{color:#666;font-style:italic}.back{display:inline-block;margin-top:16px;color:#34345c;font-size:12px;text-decoration:none}.back:hover{text-decoration:underline}
+    @media(max-width:1050px){body{padding-right:18px}}@media(max-width:620px){body{padding:12px}.row{grid-template-columns:1fr;gap:3px}.row label{padding-top:0}.top h1{font-size:24px}.reply,.reply-box{margin-left:14px}}
   </style>
 </head>
 <body>
 <main>
   <header class="top">
     <h1>CONTACT / PUBLIC TRANSMISSION WALL</h1>
-    <p>ONE MESSAGE PER TRIPCODE PER DAY. NO ACCOUNT. NO PROFILE. COOKIE IDENTITY ONLY.</p>
+    <p>ONE NEW THREAD PER TRIPCODE PER DAY. REPLIES FORM THREADS. NO ACCOUNT. COOKIE IDENTITY ONLY.</p>
   </header>
   <hr class="rule">
 
@@ -30,11 +30,11 @@
     <div class="row"><label for="subject">SUBJECT</label><input id="subject" name="subject" maxlength="120" required autocomplete="off"></div>
     <div class="row"><label for="message">MESSAGE</label><textarea id="message" name="message" maxlength="2000" required></textarea></div>
     <div class="counter"><span id="count">0</span> / 2000</div>
-    <div class="row"><span></span><button type="submit" id="submitButton">COMMIT TRANSMISSION</button></div>
+    <div class="row"><span></span><button type="submit" id="submitButton">START THREAD</button></div>
     <div class="status" id="status"></div>
   </form>
 
-  <h2 class="wall-title">PUBLIC COMMENTS</h2>
+  <h2 class="wall-title">PUBLIC THREADS</h2>
   <section id="wall"><div class="empty">LOADING TRANSMISSIONS...</div></section>
   <a class="back" href="index.html">← RETURN TO DEPARTMENT</a>
 </main>
@@ -66,16 +66,53 @@
   }
   sha256(tripSecret).then((hash) => $('tripCode').textContent = '!' + hash.slice(0, 10).toUpperCase());
 
-  function postNode(post) {
-    const box = document.createElement('article'); box.className = 'post';
+  function postHead(post, isReply = false) {
     const head = document.createElement('div'); head.className = 'post-head';
     const s = document.createElement('span'); s.className = 'subject'; s.textContent = post.subject;
     const p = document.createElement('span'); p.className = 'poster'; p.textContent = ` ${post.trip_code}`;
     const d = document.createElement('span'); d.className = 'date'; d.textContent = ` ${new Date(post.created_at).toLocaleString()}`;
     const n = document.createElement('span'); n.className = 'no'; n.textContent = ` No.${post.id}`;
     head.append(s, document.createTextNode(' '), p, d, n);
+    if (!isReply) {
+      const reply = document.createElement('button'); reply.type = 'button'; reply.className = 'reply-link'; reply.textContent = 'REPLY'; reply.dataset.replyTo = String(post.id);
+      head.append(reply);
+    }
+    return head;
+  }
+
+  function postNode(post, isReply = false) {
+    const box = document.createElement('article'); box.className = isReply ? 'post reply' : 'post'; box.id = `p${post.id}`;
     const body = document.createElement('div'); body.className = 'message'; body.textContent = post.message;
-    box.append(head, body); return box;
+    box.append(postHead(post, isReply), body); return box;
+  }
+
+  function replyComposer(post) {
+    const box = document.createElement('div'); box.className = 'reply-box'; box.id = `reply-${post.id}`;
+    const target = document.createElement('div'); target.className = 'reply-target'; target.textContent = `REPLYING TO No.${post.id}`;
+    const ta = document.createElement('textarea'); ta.maxLength = 2000; ta.placeholder = `>>${post.id}`;
+    const actions = document.createElement('div'); actions.className = 'reply-actions';
+    const send = document.createElement('button'); send.type = 'button'; send.textContent = 'POST REPLY';
+    const cancel = document.createElement('button'); cancel.type = 'button'; cancel.textContent = 'CANCEL';
+    const rs = document.createElement('span'); rs.className = 'reply-status';
+    cancel.addEventListener('click', () => { box.classList.remove('active'); rs.textContent = ''; });
+    send.addEventListener('click', async () => {
+      const text = ta.value.trim(); if (!text) { rs.textContent = 'MESSAGE REQUIRED'; return; }
+      send.disabled = true; send.textContent = 'POSTING...'; rs.textContent = '';
+      try {
+        const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tripSecret, parentId: post.id, message: text }) });
+        const data = await res.json(); if (!res.ok) throw new Error(data.error || 'REPLY FAILED');
+        ta.value = ''; box.classList.remove('active'); await loadWall();
+      } catch (err) { rs.textContent = err.message || 'REPLY FAILED'; }
+      finally { send.disabled = false; send.textContent = 'POST REPLY'; }
+    });
+    actions.append(send, cancel, rs); box.append(target, ta, actions); return box;
+  }
+
+  function threadNode(post) {
+    const thread = document.createElement('section'); thread.className = 'thread';
+    thread.append(postNode(post, false), replyComposer(post));
+    (post.replies || []).forEach((reply) => thread.append(postNode(reply, true)));
+    return thread;
   }
 
   async function loadWall() {
@@ -85,11 +122,19 @@
       if (!res.ok) throw new Error(data.error || 'WALL OFFLINE');
       wall.replaceChildren();
       if (!data.posts?.length) { const e = document.createElement('div'); e.className = 'empty'; e.textContent = 'NO TRANSMISSIONS YET.'; wall.append(e); return; }
-      data.posts.forEach((post) => wall.append(postNode(post)));
+      data.posts.forEach((post) => wall.append(threadNode(post)));
     } catch (err) {
       wall.innerHTML = '<div class="empty">WALL SIGNAL LOST. RETRY LATER.</div>';
     }
   }
+
+  wall.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-reply-to]'); if (!button) return;
+    const box = $(`reply-${button.dataset.replyTo}`); if (!box) return;
+    document.querySelectorAll('.reply-box.active').forEach((el) => { if (el !== box) el.classList.remove('active'); });
+    box.classList.toggle('active');
+    if (box.classList.contains('active')) box.querySelector('textarea')?.focus();
+  });
 
   message.addEventListener('input', () => $('count').textContent = String(message.value.length));
   form.addEventListener('submit', async (event) => {
@@ -98,11 +143,11 @@
       const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tripSecret, subject: subject.value, message: message.value }) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'TRANSMISSION FAILED');
-      subject.value = ''; message.value = ''; $('count').textContent = '0'; status.textContent = 'TRANSMISSION COMMITTED.'; await loadWall();
+      subject.value = ''; message.value = ''; $('count').textContent = '0'; status.textContent = 'THREAD COMMITTED.'; await loadWall();
     } catch (err) {
       status.textContent = err.message || 'TRANSMISSION FAILED';
     } finally {
-      submit.disabled = false; submit.textContent = 'COMMIT TRANSMISSION';
+      submit.disabled = false; submit.textContent = 'START THREAD';
     }
   });
   loadWall();
