@@ -57,7 +57,7 @@ jobs:
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add '*.html' 'archive/**/*.html'
+            git add -A -- '*.html' archive
             git commit -m "wire persistent radio across site except games"
             git push origin HEAD:main
           fi
