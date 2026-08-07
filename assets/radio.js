@@ -39,6 +39,7 @@
     { url: '/assets/music/FOUR - FLEXOfficial music Video.mp3', metaData: { artist: 'FOUR', title: 'FLEX' } },
     { url: '/assets/music/yeat - out the way ( slowed reverb ).mp3', metaData: { artist: 'YEAT', title: 'OUT THE WAY (SLOWED + REVERB)' } },
     { url: '/assets/music/yeat - monëy so big (slowed reverb).mp3', metaData: { artist: 'YEAT', title: 'MONËY SO BIG (SLOWED + REVERB)' } },
+    { url: '/assets/music/Soulja Boy - HML.mp3', metaData: { artist: 'SOULJA BOY', title: 'HML' } },
   ];
 
   const RADIO_VOLUME_STORAGE_KEY = 'scwwWebampVolumeV1';
