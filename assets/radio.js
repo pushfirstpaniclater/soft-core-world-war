@@ -1,8 +1,17 @@
 (() => {
   'use strict';
 
+  let favicon = document.querySelector('link[rel="icon"]');
+  if (!favicon) {
+    favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    document.head.append(favicon);
+  }
+  favicon.type = 'image/svg+xml';
+  favicon.href = '/favicon.svg?v=20260806-james';
+
   const languageScript = document.createElement('script');
-  languageScript.src = '/assets/language-persistence.js?v=20260804-0820';
+  languageScript.src = '/assets/language-persistence.js?v=20260806-2244';
   languageScript.async = true;
   document.head.append(languageScript);
 
