@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SCWW CONTACT WALL</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#eef2d7;color:#111;font-family:Arial,Helvetica,sans-serif}body{padding:22px 210px 50px 18px;background:linear-gradient(#eef2d7,#dfe7bd)}
+    main{max-width:980px;margin:0 auto}.top{text-align:center;margin-bottom:18px}.top h1{margin:0;color:#800000;font:700 30px/1.1 Georgia,serif}.top p{margin:6px 0;color:#555;font-size:13px}.rule{border:0;border-top:1px solid #b7c58a;margin:14px 0}
+    .identity{max-width:620px;margin:0 auto 16px;padding:10px 12px;background:#d6daf0;border:1px solid #b7c5d9;font:13px/1.4 "Courier New",monospace}.trip{color:#117743;font-weight:700}.fine{color:#666;font-size:11px}
+    form{max-width:620px;margin:0 auto 26px;background:#d6daf0;border:1px solid #b7c5d9;padding:12px}.row{display:grid;grid-template-columns:86px 1fr;gap:8px;align-items:start;margin:7px 0}.row label{font-weight:700;font-size:12px;padding-top:7px}input,textarea,button{font:13px/1.35 Arial,Helvetica,sans-serif}input,textarea{width:100%;border:1px solid #999;background:#fff;padding:7px;color:#111}textarea{min-height:145px;resize:vertical}button{background:#eee;border:1px solid #777;padding:7px 12px;cursor:pointer;font-weight:700}button:hover{background:#fff}.status{min-height:18px;margin-top:8px;color:#800000;font-size:12px}.counter{text-align:right;color:#666;font-size:11px}
+    .wall-title{color:#800000;font-weight:700;margin:0 0 8px}.post{margin:0 0 10px;padding:8px 10px;background:#f0e0d6;border:1px solid #d9bfb7;box-shadow:1px 1px 0 rgba(0,0,0,.06)}.post-head{font-size:12px;line-height:1.4}.subject{color:#cc1105;font-weight:700}.poster{color:#117743;font-weight:700}.date{color:#555}.no{color:#800000}.message{white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0 3px;font:14px/1.45 Arial,Helvetica,sans-serif}.empty{color:#666;font-style:italic}.back{display:inline-block;margin-top:16px;color:#34345c;font-size:12px;text-decoration:none}.back:hover{text-decoration:underline}
+    @media(max-width:1050px){body{padding-right:18px}}@media(max-width:620px){body{padding:12px}.row{grid-template-columns:1fr;gap:3px}.row label{padding-top:0}.top h1{font-size:24px}}
+  </style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <h1>CONTACT / PUBLIC TRANSMISSION WALL</h1>
+    <p>ONE MESSAGE PER TRIPCODE PER DAY. NO ACCOUNT. NO PROFILE. COOKIE IDENTITY ONLY.</p>
+  </header>
+  <hr class="rule">
+
+  <section class="identity" aria-live="polite">
+    YOUR TRIPCODE: <span class="trip" id="tripCode">GENERATING...</span><br>
+    <span class="fine">This browser keeps a random secret in a cookie. The secret itself is never displayed on the wall. Clearing site cookies creates a new identity.</span>
+  </section>
+
+  <form id="postForm">
+    <div class="row"><label for="subject">SUBJECT</label><input id="subject" name="subject" maxlength="120" required autocomplete="off"></div>
+    <div class="row"><label for="message">MESSAGE</label><textarea id="message" name="message" maxlength="2000" required></textarea></div>
+    <div class="counter"><span id="count">0</span> / 2000</div>
+    <div class="row"><span></span><button type="submit" id="submitButton">COMMIT TRANSMISSION</button></div>
+    <div class="status" id="status"></div>
+  </form>
+
+  <h2 class="wall-title">PUBLIC COMMENTS</h2>
+  <section id="wall"><div class="empty">LOADING TRANSMISSIONS...</div></section>
+  <a class="back" href="index.html">← RETURN TO DEPARTMENT</a>
+</main>
+<script>
+(() => {
+  'use strict';
+  const API = 'https://nonbxuddkmoxaivcyfkk.supabase.co/functions/v1/scww-contact-wall';
+  const COOKIE = 'scwwTripSecret';
+  const ONE_YEAR = 60 * 60 * 24 * 365;
+  const $ = (id) => document.getElementById(id);
+  const form = $('postForm'), subject = $('subject'), message = $('message'), status = $('status'), wall = $('wall'), submit = $('submitButton');
+
+  function readCookie(name) {
+    const prefix = encodeURIComponent(name) + '=';
+    return document.cookie.split(';').map((v) => v.trim()).find((v) => v.startsWith(prefix))?.slice(prefix.length) || '';
+  }
+  function randomSecret() {
+    const bytes = new Uint8Array(24); crypto.getRandomValues(bytes);
+    return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+  }
+  let tripSecret = decodeURIComponent(readCookie(COOKIE) || '');
+  if (!tripSecret || tripSecret.length < 16) {
+    tripSecret = randomSecret();
+    document.cookie = `${COOKIE}=${encodeURIComponent(tripSecret)}; Max-Age=${ONE_YEAR}; Path=/; SameSite=Lax; Secure`;
+  }
+  async function sha256(value) {
+    const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+    return Array.from(new Uint8Array(hash), (b) => b.toString(16).padStart(2, '0')).join('');
+  }
+  sha256(tripSecret).then((hash) => $('tripCode').textContent = '!' + hash.slice(0, 10).toUpperCase());
+
+  function postNode(post) {
+    const box = document.createElement('article'); box.className = 'post';
+    const head = document.createElement('div'); head.className = 'post-head';
+    const s = document.createElement('span'); s.className = 'subject'; s.textContent = post.subject;
+    const p = document.createElement('span'); p.className = 'poster'; p.textContent = ` ${post.trip_code}`;
+    const d = document.createElement('span'); d.className = 'date'; d.textContent = ` ${new Date(post.created_at).toLocaleString()}`;
+    const n = document.createElement('span'); n.className = 'no'; n.textContent = ` No.${post.id}`;
+    head.append(s, document.createTextNode(' '), p, d, n);
+    const body = document.createElement('div'); body.className = 'message'; body.textContent = post.message;
+    box.append(head, body); return box;
+  }
+
+  async function loadWall() {
+    try {
+      const res = await fetch(API, { cache: 'no-store' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'WALL OFFLINE');
+      wall.replaceChildren();
+      if (!data.posts?.length) { const e = document.createElement('div'); e.className = 'empty'; e.textContent = 'NO TRANSMISSIONS YET.'; wall.append(e); return; }
+      data.posts.forEach((post) => wall.append(postNode(post)));
+    } catch (err) {
+      wall.innerHTML = '<div class="empty">WALL SIGNAL LOST. RETRY LATER.</div>';
+    }
+  }
+
+  message.addEventListener('input', () => $('count').textContent = String(message.value.length));
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault(); status.textContent = ''; submit.disabled = true; submit.textContent = 'TRANSMITTING...';
+    try {
+      const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tripSecret, subject: subject.value, message: message.value }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'TRANSMISSION FAILED');
+      subject.value = ''; message.value = ''; $('count').textContent = '0'; status.textContent = 'TRANSMISSION COMMITTED.'; await loadWall();
+    } catch (err) {
+      status.textContent = err.message || 'TRANSMISSION FAILED';
+    } finally {
+      submit.disabled = false; submit.textContent = 'COMMIT TRANSMISSION';
+    }
+  });
+  loadWall();
+})();
+</script>
+<script src="assets/radio.js"></script>
+</body>
+</html>
