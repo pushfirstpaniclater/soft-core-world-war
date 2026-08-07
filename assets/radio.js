@@ -89,6 +89,7 @@
 
   const anchor = document.getElementById('scww-webamp-anchor');
   const toggle = document.getElementById('scww-webamp-toggle');
+  const volumeControl = document.getElementById('scww-radio-volume');
   const volumeSlider = document.getElementById('scww-radio-volume-slider');
   const volumeValue = document.getElementById('scww-radio-volume-value');
   let webampRoot = null;
@@ -104,6 +105,7 @@
   function renderMinimized() {
     toggle.textContent = minimized ? 'RADIO + SHOW' : 'RADIO — HIDE';
     toggle.setAttribute('aria-expanded', String(!minimized));
+    volumeControl.style.display = minimized ? 'none' : '';
     for (const node of webampNodes) {
       if (node && node.isConnected) node.style.display = minimized ? 'none' : '';
     }
