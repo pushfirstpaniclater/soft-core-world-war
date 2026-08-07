@@ -44,13 +44,13 @@
   const style = document.createElement('style');
   style.textContent = `
     #scww-webamp-shell{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:visible}
-    #scww-webamp-stage{position:absolute;inset:0;pointer-events:none;overflow:visible;zoom:${COMFORT_SCALE}}
+    #scww-webamp-stage{position:fixed;top:42px;right:12px;width:283px;height:720px;pointer-events:none;overflow:visible;zoom:${COMFORT_SCALE};transform-origin:top right}
     #scww-webamp-stage>*{pointer-events:auto}
     #scww-webamp-stage,#scww-webamp-stage *{-webkit-user-select:none;user-select:none}
     #scww-webamp-toggle{position:fixed;right:12px;top:12px;z-index:10001;pointer-events:auto;border:1px solid #54ff3d;background:#050505;color:#54ff3d;padding:6px 9px;font:11px/1 "Lucida Console",Monaco,"Courier New",monospace;letter-spacing:.05em;cursor:pointer;box-shadow:2px 2px #000}
     #scww-webamp-toggle:hover,#scww-webamp-toggle:focus-visible{background:#54ff3d;color:#000;outline:none}
     #scww-webamp-shell.is-minimized #scww-webamp-stage{display:none}
-    @media(max-width:1100px){#scww-webamp-stage{zoom:1}#scww-webamp-toggle{top:8px;right:8px}}
+    @media(max-width:1100px){#scww-webamp-stage{top:40px;right:8px;zoom:1}#scww-webamp-toggle{top:8px;right:8px}}
   `;
   document.head.append(style);
 
@@ -105,10 +105,6 @@
         return;
       }
 
-      const activeScale = window.innerWidth > 1100 ? COMFORT_SCALE : 1;
-      const logicalViewportWidth = window.innerWidth / activeScale;
-      const rightColumnLeft = Math.max(8, logicalViewportWidth - 283);
-
       const webamp = new Webamp({
         initialTracks: tracks,
         initialSkin: {
@@ -119,20 +115,20 @@
         zIndex: 9999,
         windowLayout: {
           main: {
-            position: { top: 42, left: rightColumnLeft },
+            position: { top: 0, left: 0 },
             closed: false,
           },
           equalizer: {
-            position: { top: 158, left: rightColumnLeft },
+            position: { top: 116, left: 0 },
             closed: false,
           },
           playlist: {
-            position: { top: 274, left: rightColumnLeft },
+            position: { top: 232, left: 0 },
             size: { extraHeight: 1, extraWidth: 0 },
             closed: false,
           },
           milkdrop: {
-            position: { top: 434, left: rightColumnLeft },
+            position: { top: 392, left: 0 },
             size: { extraHeight: 2, extraWidth: 0 },
             closed: false,
           },
