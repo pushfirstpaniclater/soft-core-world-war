@@ -41,25 +41,59 @@
     { url: '/assets/music/yeat - monëy so big (slowed reverb).mp3', metaData: { artist: 'YEAT', title: 'MONËY SO BIG (SLOWED + REVERB)' } },
   ];
 
+  const RADIO_VOLUME_STORAGE_KEY = 'scwwWebampVolumeV1';
+  let radioVolume = 55;
+  try {
+    const savedVolume = Number(localStorage.getItem(RADIO_VOLUME_STORAGE_KEY));
+    if (Number.isFinite(savedVolume) && savedVolume >= 0 && savedVolume <= 100) radioVolume = savedVolume;
+  } catch {}
+
   const style = document.createElement('style');
   style.textContent = `
     #scww-webamp-shell{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:visible}
-    #scww-webamp-anchor{position:fixed;top:42px;right:14px;width:275px;height:620px;pointer-events:none;visibility:hidden}
+    #scww-webamp-anchor{position:fixed;top:88px;right:14px;width:275px;height:620px;pointer-events:none;visibility:hidden}
     #scww-webamp-toggle{position:fixed;right:12px;top:12px;z-index:10001;pointer-events:auto;border:1px solid #54ff3d;background:#050505;color:#54ff3d;padding:6px 9px;font:11px/1 "Lucida Console",Monaco,"Courier New",monospace;letter-spacing:.05em;cursor:pointer;box-shadow:2px 2px #000}
     #scww-webamp-toggle:hover,#scww-webamp-toggle:focus-visible{background:#54ff3d;color:#000;outline:none}
-    @media(max-width:900px){#scww-webamp-anchor{top:40px;right:8px}#scww-webamp-toggle{top:8px;right:8px}}
+    #scww-radio-volume{position:fixed;right:12px;top:43px;width:190px;z-index:10001;pointer-events:auto;border:1px solid #54ff3d;background:#050505;color:#54ff3d;padding:7px 8px 8px;box-shadow:2px 2px #000;font:10px/1 "Lucida Console",Monaco,"Courier New",monospace;user-select:none;-webkit-user-select:none}
+    #scww-radio-volume-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;letter-spacing:.06em}
+    #scww-radio-volume-value{color:#ffe900;min-width:44px;text-align:right}
+    #scww-radio-volume-slider{display:block;width:100%;height:20px;margin:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;touch-action:pan-x}
+    #scww-radio-volume-slider::-webkit-slider-runnable-track{height:5px;background:#111;border:1px solid #54ff3d;box-shadow:inset 1px 1px #000}
+    #scww-radio-volume-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-8px;border:1px solid #54ff3d;border-radius:0;background:#050505;box-shadow:2px 2px #000;cursor:grab}
+    #scww-radio-volume-slider:active::-webkit-slider-thumb{background:#54ff3d;cursor:grabbing}
+    #scww-radio-volume-slider::-moz-range-track{height:5px;background:#111;border:1px solid #54ff3d}
+    #scww-radio-volume-slider::-moz-range-thumb{width:20px;height:20px;border:1px solid #54ff3d;border-radius:0;background:#050505;box-shadow:2px 2px #000;cursor:grab}
+    #scww-radio-volume-slider:focus-visible{outline:1px dashed #ffe900;outline-offset:3px}
+    @media(max-width:900px){
+      #scww-webamp-anchor{top:99px;right:8px}
+      #scww-webamp-toggle{top:8px;right:8px;padding:8px 11px;font-size:12px}
+      #scww-radio-volume{top:46px;right:8px;width:min(230px,calc(100vw - 16px));padding:8px 10px 9px;font-size:11px}
+      #scww-radio-volume-slider{height:28px}
+      #scww-radio-volume-slider::-webkit-slider-runnable-track{height:7px}
+      #scww-radio-volume-slider::-webkit-slider-thumb{width:28px;height:28px;margin-top:-11px}
+      #scww-radio-volume-slider::-moz-range-track{height:7px}
+      #scww-radio-volume-slider::-moz-range-thumb{width:28px;height:28px}
+    }
   `;
   document.head.append(style);
 
   const shell = document.createElement('div');
   shell.id = 'scww-webamp-shell';
-  shell.innerHTML = '<div id="scww-webamp-anchor" aria-hidden="true"></div><button id="scww-webamp-toggle" type="button" aria-expanded="true">RADIO — HIDE</button>';
+  shell.innerHTML = `<div id="scww-webamp-anchor" aria-hidden="true"></div>
+    <button id="scww-webamp-toggle" type="button" aria-expanded="true">RADIO — HIDE</button>
+    <label id="scww-radio-volume" for="scww-radio-volume-slider">
+      <span id="scww-radio-volume-head"><span>RADIO VOL</span><span id="scww-radio-volume-value">${Math.round(radioVolume)}%</span></span>
+      <input id="scww-radio-volume-slider" type="range" min="0" max="100" step="1" value="${radioVolume}" aria-label="Radio volume">
+    </label>`;
   document.body.append(shell);
 
   const anchor = document.getElementById('scww-webamp-anchor');
   const toggle = document.getElementById('scww-webamp-toggle');
+  const volumeSlider = document.getElementById('scww-radio-volume-slider');
+  const volumeValue = document.getElementById('scww-radio-volume-value');
   let webampRoot = null;
   let webampNodes = [];
+  let webampInstance = null;
   let minimized = window.innerWidth < 900;
 
   try {
@@ -75,11 +109,27 @@
     }
   }
 
+  function applyRadioVolume(value, persist = true) {
+    radioVolume = Math.max(0, Math.min(100, Number(value) || 0));
+    volumeSlider.value = String(radioVolume);
+    volumeValue.textContent = Math.round(radioVolume) + '%';
+    try { webampInstance?.setVolume?.(radioVolume); } catch (error) { console.warn('SCWW radio volume failed', error); }
+    if (persist) {
+      try { localStorage.setItem(RADIO_VOLUME_STORAGE_KEY, String(radioVolume)); } catch {}
+    }
+  }
+
   toggle.addEventListener('click', () => {
     minimized = !minimized;
     renderMinimized();
     try { localStorage.setItem('scwwWebampMinimizedV1', String(minimized)); } catch {}
   });
+
+  volumeSlider.addEventListener('input', () => applyRadioVolume(volumeSlider.value));
+  volumeSlider.addEventListener('change', () => applyRadioVolume(volumeSlider.value));
+  volumeSlider.addEventListener('pointerdown', (event) => event.stopPropagation());
+  volumeSlider.addEventListener('touchstart', (event) => event.stopPropagation(), { passive: true });
+
   renderMinimized();
 
   let previousBodyUserSelect = '';
@@ -138,7 +188,9 @@
         },
       });
 
+      webampInstance = webamp;
       window.scwwWebamp = webamp;
+      applyRadioVolume(radioVolume, false);
 
       const bodyChildrenBeforeRender = new Set(document.body.children);
       const capturedNodes = new Set();
@@ -162,6 +214,7 @@
       await webamp.renderWhenReady(anchor);
       await new Promise((resolve) => requestAnimationFrame(resolve));
       renderObserver.disconnect();
+      applyRadioVolume(radioVolume, false);
 
       const diffNodes = [...document.body.children].filter((node) =>
         !bodyChildrenBeforeRender.has(node) &&
