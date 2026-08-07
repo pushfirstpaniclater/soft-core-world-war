@@ -111,6 +111,9 @@
 
       const webamp = new Webamp({
         initialTracks: tracks,
+        initialSkin: {
+          url: "/assets/Neon%20Genesis%20Evangelion%20-%20God's%20in%20his%20Heaven%2001.wsz",
+        },
         enableMediaSession: true,
         enableHotkeys: true,
         zIndex: 9999,
